@@ -64,34 +64,96 @@ int main(int args, char **argv) {
 			continue;
 		}
 		
+		// camera 
 		if(!line[0].compare("camera")) {
-			line = getLine(&inFile);
 			// location
 			line = getLine(&inFile);
+			string x = line[1].substr(1, line[1].size()-2);
+			string y = line[2].substr(0, line[2].size()-1);
+			string z = line[3].substr(0, line[3].size()-1);
+			camera.location = glm::vec3(atoi(x.c_str()), atoi(y.c_str()), atoi(z.c_str()));
 			// up
 			line = getLine(&inFile);
+			x = line[1].substr(1, line[1].size()-2);
+			y = line[2].substr(0, line[2].size()-1);
+			z = line[3].substr(0, line[3].size()-1);
+			camera.up = glm::vec3(atoi(x.c_str()), atoi(y.c_str()), atoi(z.c_str()));
 			// right
 			line = getLine(&inFile);
+			x = line[1].substr(1, line[1].size()-2);
+			y = line[2].substr(0, line[2].size()-1);
+			z = line[3].substr(0, line[3].size()-1);
+			camera.right = glm::vec3(atoi(x.c_str()), atoi(y.c_str()), atoi(z.c_str()));
 			// look_at
+			line = getLine(&inFile);
+			x = line[1].substr(1, line[1].size()-2);
+			y = line[2].substr(0, line[2].size()-1);
+			z = line[3].substr(0, line[3].size()-1);
+			camera.lookAt = glm::vec3(atoi(x.c_str()), atoi(y.c_str()), atoi(z.c_str()));
 		}
 		else if (!line[0].compare("light_source")) {
-			
+			// position
+			string x = line[1].substr(3, line[1].size()-4);
+			string y = line[2].substr(0, line[2].size()-1);
+			string z = line[3].substr(0, line[3].size()-1);
+			light.position = glm::vec3(atoi(x.c_str()), atoi(y.c_str()), atoi(z.c_str()));
+			// color
+			x = line[6].substr(1, line[6].size()-2);
+			y = line[7].substr(0, line[7].size()-1);
+			z = line[8].substr(0, line[8].size()-2);
+			light.color = glm::vec3(atoi(x.c_str()), atoi(y.c_str()), atoi(z.c_str()));
 		}
 		else if (!line[0].compare("sphere")){
+			Sphere sphere;
 			// center, radius
-			line = getLine(&inFile);
+			string x = line[2].substr(1, line[2].size()-2);
+			string y = line[3].substr(0, line[3].size()-1);
+			string z = line[4].substr(0, line[4].size()-2);
+			string rad = line[5];
+			sphere.center = glm::vec3(atoi(x.c_str()), atoi(y.c_str()), atoi(z.c_str()));
+			sphere.radius = atoi(rad.c_str());
 			// pigment
 			line = getLine(&inFile);
+			x = line[4].substr(1, line[4].size()-2);
+			y = line[5].substr(0, line[5].size()-1);
+			z = line[6].substr(0, line[6].size()-2);
+			sphere.pigment = glm::vec3(atoi(x.c_str()), atoi(y.c_str()), atoi(z.c_str()));
 			// finish
 			line = getLine(&inFile);
+			x = line[2];
+			y = line[4].substr(0, line[4].size()-1);
+			sphere.ambient = atoi(x.c_str());
+			sphere.diffuse = atoi(y.c_str());
 			// translate
+			line = getLine(&inFile);
+			x = line[1].substr(1, line[1].size()-2);
+			y = line[2].substr(0, line[2].size()-1);
+			z = line[3].substr(0, line[3].size()-1);
+			sphere.position = glm::vec3(atoi(x.c_str()), atoi(y.c_str()), atoi(z.c_str()));
+			spheres.push_back(sphere);
 		}
 		else if (!line[0].compare("plane")) {
-			// normal, distane
-			line = getLine(&inFile);
+			Plane plane;
+			// normal, distance
+			string x = line[1].substr(2, line[1].size()-2);
+			string y = line[2].substr(0, line[2].size()-1);
+			string z = line[3].substr(0, line[3].size()-2);
+			string d = line[4];
+			plane.normal = glm::vec3(atoi(x.c_str()), atoi(y.c_str()), atoi(z.c_str()));
+			plane.distance = atoi(d.c_str());
 			// pigment
 			line = getLine(&inFile);
+			x = line[3].substr(1, line[3].size()-2);
+			y = line[4].substr(0, line[4].size()-1);
+			z = line[5].substr(0, line[5].size()-2);
+			plane.pigment = glm::vec3(atoi(x.c_str()), atoi(y.c_str()), atoi(z.c_str()));
 			// finish
+			line = getLine(&inFile);
+			x = line[2];
+			y = line[4];
+			plane.ambient = atoi(x.c_str());
+			plane.diffuse = atoi(y.c_str());
+			planes.push_back(plane);
 		}
 	}
 	inFile.close();
