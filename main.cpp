@@ -5,7 +5,10 @@
 #include <fstream>	// read file input
 #include <vector>	// vectors
 
-#include "Structs.h"	// All the povray objects
+#include "Camera.h"
+#include "Light.h"
+#include "Sphere.h"
+#include "Plane.h"
 
 // window dimensions
 int window_width;
