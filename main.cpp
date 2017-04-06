@@ -3,7 +3,7 @@
 #include <sstream>	// sstream
 #include <string.h>	// strcpy
 #include <fstream>	// read file input
-#include <vector>		// vectors
+#include <vector>	// vectors
 
 #include "Structs.h"	// All the povray objects
 
