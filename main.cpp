@@ -1,9 +1,9 @@
-
-
 #include <iostream>	// std::cout
 #include <stdlib.h>	// atoi
+#include <sstream>	// sstream
 #include <string.h>	// strcpy
 #include <fstream>	// read file input
+#include <vector>		// vectors
 
 #include "Structs.h"	// All the povray objects
 
@@ -15,6 +15,21 @@ int window_height;
 char file_name[256];
 
 using namespace std;
+
+vector<string> getLine(ifstream *file) {
+	char line[256];
+	file->getline(line, 256);
+	stringstream sstream(line);
+
+	vector<string> words;
+	string word;
+	
+	while(sstream >> word) {
+		words.push_back(word);
+	}
+
+	return words;
+}
 
 int main(int args, char **argv) {
 
@@ -34,13 +49,51 @@ int main(int args, char **argv) {
 
 	/* Parse file */
 
+	// Set up objects
+	Camera camera;
+	Light light;
+	vector<Sphere> spheres;
+	vector<Plane>  planes;
+
 	ifstream inFile (file_name);
-	char line[256];
+	string word;
 	while(inFile) {
-		inFile.getline(line, 256);
-		cout << line << endl;
+
+		vector<string> line = getLine(&inFile);
+		if (line.size() <= 0) {
+			continue;
+		}
+		
+		if(!line[0].compare("camera")) {
+			line = getLine(&inFile);
+			// location
+			line = getLine(&inFile);
+			// up
+			line = getLine(&inFile);
+			// right
+			line = getLine(&inFile);
+			// look_at
+		}
+		else if (!line[0].compare("light_source")) {
+			
+		}
+		else if (!line[0].compare("sphere")){
+			// center, radius
+			line = getLine(&inFile);
+			// pigment
+			line = getLine(&inFile);
+			// finish
+			line = getLine(&inFile);
+			// translate
+		}
+		else if (!line[0].compare("plane")) {
+			// normal, distane
+			line = getLine(&inFile);
+			// pigment
+			line = getLine(&inFile);
+			// finish
+		}
 	}
-	
 	inFile.close();
 
 
