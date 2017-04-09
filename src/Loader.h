@@ -2,10 +2,10 @@
 #ifndef _LOADER_H_
 #define _LOADER_H_
 
-#include <fstream>   //read file input
+#include <fstream>   // read file input
 #include <sstream>   // sstream 
-#include <stdlib.h>  //strtof
-#include <vector> // vector
+#include <stdlib.h>  // strtof
+#include <vector> 	// vector
 
 #include "Scene.h"
 

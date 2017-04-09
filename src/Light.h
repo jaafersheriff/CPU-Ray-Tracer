@@ -3,7 +3,7 @@
 #define _LIGHT_H_
 
 #include <glm/glm.hpp>	// vec3
-#include <iostream>		// print
+#include <iostream>	// print
 
 class Light {
 public: 

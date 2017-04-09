@@ -3,7 +3,7 @@
 #define _CAMERA_H_
 
 #include <glm/glm.hpp>	// vec3
-#include <iostream>		// print
+#include <iostream>	// print
 class Camera {
 public:
 	Camera();
