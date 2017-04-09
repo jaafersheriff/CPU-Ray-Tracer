@@ -2,11 +2,13 @@
 #ifndef _PLANE_H_
 #define _PLANE_H_
 
-#include <glm/glm.hpp>
+#include "GeoObject.h"
 
-class Plane {
+class Plane: public GeoObject {
 public:
 	Plane();
+
+	void print();
 
 	glm::vec3 normal;
 	float distance;
