@@ -75,11 +75,13 @@ void Loader::parse(const char *file_name, Scene &scene) {
          sphere->diffuse = strtof(y.c_str(), 0);
          // translate
          line = getLine(&inFile);
-         x = line[1].substr(1, line[1].size()-2);
-         y = line[2].substr(0, line[2].size()-1);
-         z = line[3].substr(0, line[3].size()-1);
-         sphere->translate = glm::vec3(strtof(x.c_str(), 0), strtof(y.c_str(), 0), strtof(z.c_str(), 0));
-         scene.objects.push_back(sphere);
+			if (!line[0].compare("translate")) {
+         	x = line[1].substr(1, line[1].size()-2);
+         	y = line[2].substr(0, line[2].size()-1);
+         	z = line[3].substr(0, line[3].size()-1);
+         	sphere->translate = glm::vec3(strtof(x.c_str(), 0), strtof(y.c_str(), 0), strtof(z.c_str(), 0));
+         }
+			scene.objects.push_back(sphere);
       }
       else if (!line[0].compare("plane")) {
          Plane *plane = new Plane;
