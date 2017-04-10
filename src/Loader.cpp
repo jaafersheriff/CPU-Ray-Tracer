@@ -106,6 +106,15 @@ void Loader::parse(const char *file_name, Scene &scene) {
          plane->diffuse = strtof(y.c_str(), 0);
          scene.objects.push_back(plane);
       }
+		else if (!line[0].compare("box")) {
+			// TODO
+		}
+		else if (!line[0].compare("cone")) {
+			// TODO
+		}
+		else if (!line[0].compare("triangle")) {
+			// TODO
+		}
    }
    inFile.close();
 }
