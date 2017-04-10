@@ -20,7 +20,7 @@ void Cone::print() {
 		cout << "}" << endl;
 	cout << "- Base Radius: " << baseRadius << endl;
 	cout << "- Cap: {";
-		cout << cap.x << " " << cap.y << " " cap.z;
+		cout << cap.x << " " << cap.y << " " << cap.z;
 		cout << "}" << endl;
 	cout << "- Cap Radius: " << capRadius << endl;
 	cout << "- Color: {";

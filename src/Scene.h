@@ -10,6 +10,7 @@
 #include "GeoObject.h"
 #include "Sphere.h"
 #include "Plane.h"
+#include "Box.h"
 
 class Scene {
 public:

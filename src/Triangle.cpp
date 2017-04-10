@@ -4,9 +4,9 @@ using namespace glm;
 using namespace std;
 
 Triangle::Triangle() {
-	this->vert1 = vec3(0, 0, 0);
-	this->vert2 = vec3(0, 0, 0);
-	this->vert3 = vec3(0, 0, 0);
+	this->corner1 = vec3(0, 0, 0);
+	this->corner2 = vec3(0, 0, 0);
+	this->corner3 = vec3(0, 0, 0);
 	this->scale = vec3(0, 0, 0);
 	this->rotate = vec3(0, 0, 0);
 	this->color = vec3(0, 0, 0);
@@ -20,7 +20,7 @@ void Triangle::print() {
 		cout << corner1.x << " " << corner1.y << " " << corner1.z;
 		cout << "}" << endl;
 	cout << "- Corner 2: {";
-		cout << corner2.x << " " corner2.y << " " << corner2.z;
+		cout << corner2.x << " " << corner2.y << " " << corner2.z;
 		cout << "}" << endl;
 	cout << "- Corner 3: {";
 		cout << corner3.x << " " << corner3.y << " " << corner3.z;

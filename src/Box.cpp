@@ -33,5 +33,5 @@ void Box::print() {
 	cout << "- Transform:" << endl;
 		cout << "\t-Translate {";
 			cout << translate.x << " " << translate.y << " " << translate.z;
-			cout << "}' << endl;
+			cout << "}" << endl;
 }
