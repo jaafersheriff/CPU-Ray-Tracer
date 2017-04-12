@@ -13,6 +13,19 @@ Sphere::Sphere() {
 	this->diffuse = 0;
 }
 
+float Sphere::intersect(Ray &ray) {
+	float A = dot(ray.direction, ray.direction);
+	vec3 pc = ray.position-center;
+	float B = dot(ray.direction + ray.direction, pc);
+	float C = dot(pc, pc) - radius*radius;
+
+	float det = sqrt(B*B-4*A*C);
+	float t1 = -B+det/(2*A);
+	float t2 = -B-det/(2*A);
+	
+	return t1 > t2 ? t1 : t2;
+}
+
 void Sphere::print() {
 	cout << "- Type: Sphere" << endl;
 	cout << "- Center: {";

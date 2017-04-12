@@ -17,7 +17,7 @@ using namespace std;
 
 int main(int args, char **argv) {
 
-	render = args == 4 && !strcmp(argv[1], "render");
+	render = args == 5 && !strcmp(argv[1], "render");
 	sceneInfo = args == 3 && !strcmp(argv[1], "sceneinfo");
 	pixelRay = args == 7 && !strcmp(argv[1], "pixelray");
 	firstHit = args == 7 && !strcmp(argv[1], "firsthit");

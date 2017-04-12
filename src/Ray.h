@@ -8,8 +8,9 @@ public:
 	Ray();
 
 	void print();
+	glm::vec3 intersection(float);
 
-	int pixel_x, pixel_y;
+	glm::vec3 position;
 	glm::vec3 direction;
 };
 

@@ -13,6 +13,10 @@ Plane::Plane() {
 	this->diffuse = 0;
 }
 
+float Plane::intersect(Ray &ray) {
+	return (distance-dot(ray.position, normal))/dot(ray.direction, normal);
+}
+
 void Plane::print() {
 	cout << "- Type: Plane" << endl;
 	cout << "- Normal: {";

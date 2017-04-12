@@ -8,6 +8,7 @@ public:
 	Plane();
 
 	void print();
+	float intersect(Ray &);
 
 	glm::vec3 normal;
 	float distance;

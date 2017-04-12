@@ -6,8 +6,8 @@
 class Renderer {
 public:
 	Renderer();
-
-	Ray createRay(const int window_width, const int window_height, const int pixel_x, const int pixel_y);
+	
+	Ray* createRay(const int window_width, const int window_height, const int pixel_x, const int pixel_y);
 };
 
 #endif
