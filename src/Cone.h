@@ -1,4 +1,3 @@
-#pragma once
 #ifndef _CONE_H_
 #define _CONE_H_
 

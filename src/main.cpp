@@ -38,7 +38,12 @@ int main(int args, char **argv) {
 		scene.print();
 	}
 	if (pixelRay) {
-		// TODO
+		int window_width = atoi(argv[3]);
+		int window_height = atoi(argv[4]);
+		int pixel_x = atoi(argv[5]);
+		int pixel_y = atoi(argv[6]);
+		// TODO: Ray ray = renderer.createRay(window_width, window_height, pixel_x, pixel_y);
+		// TODO: ray.print();
 	}
 	if (firstHit) {
 		// TODO

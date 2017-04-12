@@ -1,4 +1,3 @@
-#pragma once
 #ifndef _BOX_H_
 #define _BOX_H_
 

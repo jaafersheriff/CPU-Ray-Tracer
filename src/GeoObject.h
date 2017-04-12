@@ -1,4 +1,3 @@
-#pragma once
 #ifndef _GEOOBJECT_H_
 #define _GEOOBJECT_H_
 

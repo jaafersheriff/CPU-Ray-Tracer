@@ -1,4 +1,3 @@
-#pragma once
 #ifndef _LOADER_H_
 #define _LOADER_H_
 
@@ -13,6 +12,7 @@ class Loader {
 public:
 	Loader(){};
 
+	void createVetor(const string, const string, const string);
 	void parse(const char *file_name, Scene &scene);
 private:
 	std::vector<std::string> getLine(std::ifstream *file);
