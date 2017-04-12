@@ -12,7 +12,7 @@ class Loader {
 public:
 	Loader(){};
 
-	void createVetor(const string, const string, const string);
+	glm::vec3 createVector(const std::string, const std::string, const std::string);
 	void parse(const char *file_name, Scene &scene);
 private:
 	std::vector<std::string> getLine(std::ifstream *file);

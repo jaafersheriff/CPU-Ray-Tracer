@@ -2,7 +2,7 @@
 
 using namespace std;
 
-void Loader::createVector(const string x, const string y, const string z) {
+glm::vec3 Loader::createVector(const string x, const string y, const string z) {
 	return glm::vec3(strtof(x.c_str(), 0), strtof(y.c_str(), 0), strtof(z.c_str(), 0));
 }
 
@@ -53,7 +53,7 @@ void Loader::parse(const char *file_name, Scene &scene) {
          x = line[6].substr(1, line[6].size()-2);
          y = line[7].substr(0, line[7].size()-1);
          z = line[8].substr(0, line[8].size()-2);
-         light->color = createVetor(x, y, z);
+         light->color = createVector(x, y, z);
 			scene.lights.push_back(light);
       }
       else if (!line[0].compare("sphere")){
