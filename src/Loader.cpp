@@ -8,7 +8,32 @@ vec3 Loader::createVector(const string x, const string y, const string z) {
 }
 
 Plane* Loader::createPlane(vector<string> line, ifstream& file) {
-   // TODO
+   Plane *plane = new Plane;
+   // normal, distance
+   string x = line[1].substr(2, line[1].size()-2);
+   string y = line[2].substr(0, line[2].size()-1);
+   string z = line[3].substr(0, line[3].size()-2);
+   string d = line[4];
+   plane->normal = createVector(x, y, z);
+   plane->distance = strtof(d.c_str(), 0);
+
+   while(line[0].compare("}")) {
+      if (!line[0].compare("pigment")) {
+         x = line[3].substr(1, line[3].size()-2);
+         y = line[4].substr(0, line[4].size()-1);
+         z = line[5].substr(0, line[5].size()-2);
+         plane->pigment = createVector(x, y, z);
+            
+      }
+      if (!line[0].compare("finish")) {
+         x = line[2];
+         y = line[4];
+         plane->ambient = strtof(x.c_str(), 0);
+         plane->diffuse = strtof(y.c_str(), 0);         
+      }
+      line = getLine(&file);
+   }
+   return plane;
 }
 
 Sphere* Loader::createSphere(vector<string> line, ifstream& file) {
@@ -20,13 +45,13 @@ Sphere* Loader::createSphere(vector<string> line, ifstream& file) {
    string rad = line[5];
    sphere->center = createVector(x, y, z);
    sphere->radius = strtof(rad.c_str(), 0);
-   
+
    while(line[0].compare("}")) {
       if (!line[0].compare("pigment")) {
          x = line[4].substr(1, line[4].size()-2);
          y = line[5].substr(0, line[5].size()-1);
          z = line[6].substr(0, line[6].size()-2);
-         sphere->pigment = createVector(x, y, z);
+         sphere->pigment = createVector(x, y, z);               
       }
       if (!line[0].compare("finish")) {
          x = line[2];
@@ -40,6 +65,7 @@ Sphere* Loader::createSphere(vector<string> line, ifstream& file) {
          z = line[3].substr(0, line[3].size()-1);
          sphere->translate = createVector(x, y, z);
       }
+      line = getLine(&file);
    }
 
    return sphere;
@@ -54,13 +80,10 @@ Light* Loader::createLight(vector<string> line, ifstream& file) {
    light->position = createVector(x, y, z);
    // color 
    if (!line[4].compare("color")) {
-      // rgb
-      if (!line[5].compare("rgb")) {
-         x = line[6].substr(1, line[6].size()-2);
-         y = line[7].substr(0, line[7].size()-1);
-         z = line[8].substr(0, line[8].size()-2);
-         light->color = createVector(x, y, z);
-      }
+      x = line[6].substr(1, line[6].size()-2);
+      y = line[7].substr(0, line[7].size()-1);
+      z = line[8].substr(0, line[8].size()-2);
+      light->color = createVector(x, y, z);
    }
 
    return light;
@@ -107,7 +130,6 @@ void Loader::parse(const char *file_name, Scene &scene) {
          continue;
       }
       
-      // camera 
       if(!line[0].compare("camera")) {
          scene.camera = createCamera(line, inFile);
       }
@@ -118,27 +140,7 @@ void Loader::parse(const char *file_name, Scene &scene) {
 			scene.objects.push_back(createSphere(line, inFile));
       }
       else if (!line[0].compare("plane")) {
-         Plane *plane = new Plane;
-         // normal, distance
-         string x = line[1].substr(2, line[1].size()-2);
-         string y = line[2].substr(0, line[2].size()-1);
-         string z = line[3].substr(0, line[3].size()-2);
-         string d = line[4];
-         plane->normal = createVector(x, y, z);
-         plane->distance = strtof(d.c_str(), 0);
-         // pigment
-         line = getLine(&inFile);
-         x = line[3].substr(1, line[3].size()-2);
-         y = line[4].substr(0, line[4].size()-1);
-         z = line[5].substr(0, line[5].size()-2);
-         plane->pigment = createVector(x, y, z);
-         // finish
-         line = getLine(&inFile);
-         x = line[2];
-         y = line[4];
-         plane->ambient = strtof(x.c_str(), 0);
-         plane->diffuse = strtof(y.c_str(), 0);
-         scene.objects.push_back(plane);
+         scene.objects.push_back(createPlane(line, inFile));
       }
 		else if (!line[0].compare("box")) {
 			// TODO
