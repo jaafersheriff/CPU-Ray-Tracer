@@ -17,7 +17,7 @@ public:
 
 	void print();
 
-	Camera camera;
+	Camera *camera;
 	std::vector<Light *> lights;
 	std::vector<GeoObject *> objects;
 };

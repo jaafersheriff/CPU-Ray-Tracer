@@ -16,6 +16,10 @@ public:
 	void parse(const char *file_name, Scene &scene);
 private:
 	std::vector<std::string> getLine(std::ifstream *file);
+   Camera* createCamera(std::vector<std::string>, std::ifstream &file);
+   Light*  createLight(std::vector<std::string>, std::ifstream &file);
+   Sphere* createSphere(std::vector<std::string>, std::ifstream &file);
+   Plane*  createPlane(std::vector<std::string>, std::ifstream &file);
 };
 
 #endif

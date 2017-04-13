@@ -4,7 +4,7 @@ using namespace std;
 
 void Scene::print() {
 	// Print camera
-	camera.print();
+	camera->print();
 
 	// Lights
 	cout << endl << lights.size() << " light(s)" << endl;  

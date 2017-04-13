@@ -1,9 +1,50 @@
 #include "Loader.h"
 
+using namespace glm;
 using namespace std;
 
-glm::vec3 Loader::createVector(const string x, const string y, const string z) {
-	return glm::vec3(strtof(x.c_str(), 0), strtof(y.c_str(), 0), strtof(z.c_str(), 0));
+vec3 Loader::createVector(const string x, const string y, const string z) {
+	return vec3(strtof(x.c_str(), 0), strtof(y.c_str(), 0), strtof(z.c_str(), 0));
+}
+
+Plane* Loader::createPlane(vector<string> line, ifstream& file) {
+   // TODO
+}
+
+Sphere* Loader::createSphere(vector<string> line, ifstream& file) {
+   // TODO
+}
+
+Camera* Loader::createCamera(vector<string> line, ifstream& file) {
+   Camera *camera = new Camera();
+   while(line[0].compare("}")) {
+      if (!line[0].compare("location")) {
+         string x = line[1].substr(1, line[1].size()-2);
+         string y = line[2].substr(0, line[2].size()-1);
+         string z = line[3].substr(0, line[3].size()-1);
+         camera->location = createVector(x, y, z); 
+      }
+      if (!line[0].compare("up")) {
+         string x = line[1].substr(1, line[1].size()-2);
+         string y = line[2].substr(0, line[2].size()-1);
+         string z = line[3].substr(0, line[3].size()-1);
+         camera->up = createVector(x, y, z);
+      } 
+      if (!line[0].compare("right")) {
+         string x = line[1].substr(1, line[1].size()-2);
+         string y = line[2].substr(0, line[2].size()-1);
+         string z = line[3].substr(0, line[3].size()-1);
+         camera->right = createVector(x, y, z);
+      }
+      if (!line[0].compare("look_at")) {
+         string x = line[1].substr(1, line[1].size()-2);
+         string y = line[2].substr(0, line[2].size()-1);
+         string z = line[3].substr(0, line[3].size()-1);
+         camera->lookAt = createVector(x, y, z);
+      }
+      line = getLine(&file);
+   }
+   return camera;
 }
 
 void Loader::parse(const char *file_name, Scene &scene) {
@@ -17,30 +58,7 @@ void Loader::parse(const char *file_name, Scene &scene) {
       
       // camera 
       if(!line[0].compare("camera")) {
-         // location
-         line = getLine(&inFile);
-         string x = line[1].substr(1, line[1].size()-2);
-         string y = line[2].substr(0, line[2].size()-1);
-         string z = line[3].substr(0, line[3].size()-1);
-         scene.camera.location = createVector(x, y, z); 
-         // up
-         line = getLine(&inFile);
-         x = line[1].substr(1, line[1].size()-2);
-         y = line[2].substr(0, line[2].size()-1);
-         z = line[3].substr(0, line[3].size()-1);
-         scene.camera.up = createVector(x, y, z);
-         // right
-         line = getLine(&inFile);
-         x = line[1].substr(1, line[1].size()-2);
-         y = line[2].substr(0, line[2].size()-1);
-         z = line[3].substr(0, line[3].size()-1);
-			scene.camera.right = createVector(x, y, z);
-         // look_at
-         line = getLine(&inFile);
-         x = line[1].substr(1, line[1].size()-2);
-         y = line[2].substr(0, line[2].size()-1);
-         z = line[3].substr(0, line[3].size()-1);
-         scene.camera.lookAt = createVector(x, y, z);
+         scene.camera = createCamera(line, inFile);
       }
       else if (!line[0].compare("light_source")) {
 			Light *light = new Light;
