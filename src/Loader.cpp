@@ -15,6 +15,27 @@ Sphere* Loader::createSphere(vector<string> line, ifstream& file) {
    // TODO
 }
 
+Light* Loader::createLight(vector<string> line, ifstream& file) {
+   Light *light = new Light;
+   // position
+   string x = line[1].substr(2, line[1].size()-3);
+   string y = line[2].substr(0, line[2].size()-1);
+   string z = line[3].substr(0, line[3].size()-1);
+   light->position = createVector(x, y, z);
+   // color 
+   if (!line[4].compare("color")) {
+      // rgb
+      if (!line[5].compare("rgb")) {
+         x = line[6].substr(1, line[6].size()-2);
+         y = line[7].substr(0, line[7].size()-1);
+         z = line[8].substr(0, line[8].size()-2);
+         light->color = createVector(x, y, z);
+      }
+   }
+   
+   return light;
+}
+
 Camera* Loader::createCamera(vector<string> line, ifstream& file) {
    Camera *camera = new Camera();
    while(line[0].compare("}")) {
@@ -61,18 +82,7 @@ void Loader::parse(const char *file_name, Scene &scene) {
          scene.camera = createCamera(line, inFile);
       }
       else if (!line[0].compare("light_source")) {
-			Light *light = new Light;
-         // position
-         string x = line[1].substr(2, line[1].size()-3);
-         string y = line[2].substr(0, line[2].size()-1);
-         string z = line[3].substr(0, line[3].size()-1);
-         light->position = createVector(x, y, z);
-         // color
-         x = line[6].substr(1, line[6].size()-2);
-         y = line[7].substr(0, line[7].size()-1);
-         z = line[8].substr(0, line[8].size()-2);
-         light->color = createVector(x, y, z);
-			scene.lights.push_back(light);
+			scene.lights.push_back(createLight(line, inFile));
       }
       else if (!line[0].compare("sphere")){
          Sphere *sphere = new Sphere;
