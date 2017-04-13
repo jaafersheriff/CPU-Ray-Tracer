@@ -28,12 +28,12 @@ void Plane::print() {
 		cout << pigment.x << " " << pigment.y << " " << pigment.z;
 		cout << "}" << endl;	
 	cout << "- Material:" << endl;
-		cout << "\t- Ambient: ";
+		cout << "  - Ambient: ";
 			cout << ambient << endl;
-		cout << "\t- Diffuse: ";
+		cout << "  - Diffuse: ";
 			cout << diffuse << endl;
 	cout << "- Transform:" << endl;
-		cout << "\t Translate: {";
+		cout << "  - Translate: {";
 			cout << translate.x << " " << translate.y << " " << translate.z;
 		cout << "}" << endl;
 }
