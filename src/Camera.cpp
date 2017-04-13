@@ -11,7 +11,7 @@ Camera::Camera() {
 }
 
 void Camera::print() {
-	cout << "Camera: " << endl;
+	cout << "Camera:" << endl;
 	cout << "- Location: {";
 		cout << location.x << " " << location.y << " " << location.z;
 		cout << "}" << endl;
