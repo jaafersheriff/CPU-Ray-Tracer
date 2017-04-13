@@ -23,7 +23,7 @@ float Sphere::intersect(Ray &ray) {
 	float t1 = -B+det/(2*A);
 	float t2 = -B-det/(2*A);
 	
-	return t1 > t2 ? t1 : t2;
+	return t1 <= t2 ? t1 : t2;
 }
 
 void Sphere::print() {
@@ -37,12 +37,12 @@ void Sphere::print() {
 		cout << pigment.x << " " << pigment.y << " " << pigment.z;
 		cout << "}" << endl;
 	cout << "- Material:" << endl;
-		cout << "\t- Ambient: ";
+		cout << "  - Ambient: ";
 			cout << ambient << endl;
-		cout << "\t- Diffuse: ";
+		cout << "  - Diffuse: ";
 			cout << diffuse << endl;
 	cout << "- Transform:" << endl;
-		cout << "\t- Translate: {"; 
+		cout << "  - Translate: {"; 
 			cout << translate.x << " " << translate.y << " " << translate.z;
 			cout << "}" << endl;
 }
