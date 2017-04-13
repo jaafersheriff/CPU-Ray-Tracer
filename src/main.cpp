@@ -29,26 +29,27 @@ int main(int args, char **argv) {
 	/* Parse file, create scene */
 	loader.parse(argv[2], scene);
 
+	if (sceneInfo) {
+		scene.print();
+	}
+	if (pixelRay || firstHit) {
+		int window_width = atoi(argv[3]);
+		int window_height = atoi(argv[4]);
+		int pixel_x = atoi(argv[5]);
+		int pixel_y = atoi(argv[6]);
+		Ray ray = scene.createRay(window_width, window_height, pixel_x, pixel_y);
+		cout << "Pixel [" << pixel_x << ", " << pixel_y << "] ";
+		ray.print();
+		if (firstHit) {
+			Intersection in = scene.findIntersection(ray);
+			cout << "T = " << in.t << endl;
+			//cout << "Object Type: " << in.object->type; 
+		}
+ 	}
 	if (render) {
 		int window_width = atoi(argv[3]);
 		int window_height = atoi(argv[4]);
 		// TODO: renderer.render(scene, window_width, window_height);
 	}
-	if (sceneInfo) {
-		scene.print();
-	}
-	if (pixelRay) {
-		int window_width = atoi(argv[3]);
-		int window_height = atoi(argv[4]);
-		int pixel_x = atoi(argv[5]);
-		int pixel_y = atoi(argv[6]);
-		// TODO: Ray ray = renderer.createRay(window_width, window_height, pixel_x, pixel_y);
-		// TODO: ray.print();
-	}
-	if (firstHit) {
-		// TODO
-	}
-
 	return 0;
-
 }

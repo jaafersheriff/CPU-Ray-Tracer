@@ -6,10 +6,13 @@
 
 #include "Camera.h"
 #include "Light.h"
+
 #include "GeoObject.h"
 #include "Sphere.h"
 #include "Plane.h"
 #include "Box.h"
+
+#include "Intersection.h"
 
 class Scene {
 public:
@@ -20,6 +23,9 @@ public:
 	Camera *camera;
 	std::vector<Light *> lights;
 	std::vector<GeoObject *> objects;
+
+   Ray createRay(const int window_width, const int window_height, const int pixel_x, const int pixel_y);
+   Intersection findIntersection(Ray ray);
 };
 
 #endif

@@ -11,9 +11,10 @@ class GeoObject {
 public:
 	GeoObject() {};
 
+   glm::vec3 translate;
+   
 	virtual void print() = 0;
 	virtual float intersect(Ray &) = 0;
-	glm::vec3 translate;
 };
 
 #endif

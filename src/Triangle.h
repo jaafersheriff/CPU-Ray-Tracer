@@ -7,6 +7,7 @@ class Triangle: public GeoObject {
 public:
 	Triangle();
 
+	
 	void print();
 
 	glm::vec3 corner1;
