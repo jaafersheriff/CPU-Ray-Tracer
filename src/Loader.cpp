@@ -12,7 +12,37 @@ Plane* Loader::createPlane(vector<string> line, ifstream& file) {
 }
 
 Sphere* Loader::createSphere(vector<string> line, ifstream& file) {
-   // TODO
+   Sphere *sphere = new Sphere;
+   // center, radius
+   string x = line[2].substr(1, line[2].size()-2);
+   string y = line[3].substr(0, line[3].size()-1);
+   string z = line[4].substr(0, line[4].size()-2);
+   string rad = line[5];
+   sphere->center = createVector(x, y, z);
+   sphere->radius = strtof(rad.c_str(), 0);
+   
+   while(line[0].compare("}")) {
+      if (!line[0].compare("pigment")) {
+         x = line[4].substr(1, line[4].size()-2);
+         y = line[5].substr(0, line[5].size()-1);
+         z = line[6].substr(0, line[6].size()-2);
+         sphere->pigment = createVector(x, y, z);
+      }
+      if (!line[0].compare("finish")) {
+         x = line[2];
+         y = line[4].substr(0, line[4].size()-1);
+         sphere->ambient = strtof(x.c_str(), 0);
+         sphere->diffuse = strtof(y.c_str(), 0);
+      }
+      if (!line[0].compare("translate")) {
+         x = line[1].substr(1, line[1].size()-2);
+         y = line[2].substr(0, line[2].size()-1);
+         z = line[3].substr(0, line[3].size()-1);
+         sphere->translate = createVector(x, y, z);
+      }
+   }
+
+   return sphere;
 }
 
 Light* Loader::createLight(vector<string> line, ifstream& file) {
@@ -32,7 +62,7 @@ Light* Loader::createLight(vector<string> line, ifstream& file) {
          light->color = createVector(x, y, z);
       }
    }
-   
+
    return light;
 }
 
@@ -85,35 +115,7 @@ void Loader::parse(const char *file_name, Scene &scene) {
 			scene.lights.push_back(createLight(line, inFile));
       }
       else if (!line[0].compare("sphere")){
-         Sphere *sphere = new Sphere;
-         // center, radius
-         string x = line[2].substr(1, line[2].size()-2);
-         string y = line[3].substr(0, line[3].size()-1);
-         string z = line[4].substr(0, line[4].size()-2);
-         string rad = line[5];
-         sphere->center = createVector(x, y, z);
-         sphere->radius = strtof(rad.c_str(), 0);
-         // pigment
-         line = getLine(&inFile);
-         x = line[4].substr(1, line[4].size()-2);
-         y = line[5].substr(0, line[5].size()-1);
-         z = line[6].substr(0, line[6].size()-2);
-         sphere->pigment = createVector(x, y, z);
-         // finish
-         line = getLine(&inFile);
-         x = line[2];
-         y = line[4].substr(0, line[4].size()-1);
-         sphere->ambient = strtof(x.c_str(), 0);
-         sphere->diffuse = strtof(y.c_str(), 0);
-         // translate
-         line = getLine(&inFile);
-			if (!line[0].compare("translate")) {
-         	x = line[1].substr(1, line[1].size()-2);
-         	y = line[2].substr(0, line[2].size()-1);
-         	z = line[3].substr(0, line[3].size()-1);
-         	sphere->translate = createVector(x, y, z);
-         }
-			scene.objects.push_back(sphere);
+			scene.objects.push_back(createSphere(line, inFile));
       }
       else if (!line[0].compare("plane")) {
          Plane *plane = new Plane;
