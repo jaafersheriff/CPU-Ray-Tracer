@@ -16,9 +16,7 @@ Plane::Plane() {
 }
 
 float Plane::intersect(Ray &ray) {
-	float num = distance - dot(ray.position, normal);
-	float den = dot(ray.direction, normal);
-	return num/den;
+	return (distance - dot(ray.position, normal))/(dot(ray.direction, normal));
 }
 
 void Plane::print() {
@@ -36,9 +34,4 @@ void Plane::print() {
 			cout << ambient << endl;
 		cout << "  - Diffuse: ";
 			cout << diffuse << endl;
-/*	cout << "- Transform:" << endl;
-		cout << "  - Translate: {";
-			cout << translate.x << " " << translate.y << " " << translate.z;
-		cout << "}" << endl;
-*/
 }

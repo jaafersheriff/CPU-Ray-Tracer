@@ -7,10 +7,14 @@ using namespace std;
 using namespace glm;
 
 Intersection Scene::findIntersection(Ray ray) {
+	// Create empty intersection object
 	Intersection intersection;
 	intersection.ray = ray;
 	intersection.t = INFINITY;
+	// Loop through all objects
 	for (int i = 0; i < objects.size(); i++) {
+		// If intersection with current object is closer to camera than current intersection
+		// Replace intersection
 		float curr_t = objects[i]->intersect(ray);
 		if (curr_t < intersection.t && curr_t >= 0) {
 			intersection.t = curr_t;
@@ -23,8 +27,10 @@ Intersection Scene::findIntersection(Ray ray) {
 Ray Scene::createRay(const int width, const int height, const int x, const int y) {
 	Ray ray;
 
+	// p0
 	ray.position = camera->location;
 
+	// direction
 	float u = (x + 0.5)/width - 0.5;
 	float v = (y + 0.5)/height - 0.5;
 	vec3 w = normalize(vec3(camera->lookAt - camera->location));
@@ -46,13 +52,17 @@ void Scene::render(const int width, const int height) {
 			unsigned char green = 0;
 			unsigned char blue  = 0;
 
-			/* Calculate color */
+			/*=== Calculate color ===*/
+			// Create a ray from camera to pixel
+			// Create an Intersection object using that ray
 			Intersection in = findIntersection(createRay(width, height, x, y));
+			// If the ray intersected an object, color the pixel using the object's RGB values
 			if (in.hit()) {
 				red = (unsigned char) 255*clamp(in.object->color.x, 0.0f, 1.0f);
 				green = (unsigned char) 255*clamp(in.object->color.y, 0.0f, 1.0f);
 				blue = (unsigned char) 255*clamp(in.object->color.z, 0.0f, 1.0f);
 			}
+			/*=======================*/
 
 			data[(size.x * numChannels) * (size.y - 1 - y) + numChannels * x + 0] = red;
 			data[(size.x * numChannels) * (size.y - 1 - y) + numChannels * x + 1] = green;
@@ -67,7 +77,6 @@ void Scene::render(const int width, const int height) {
 void Scene::print() {
 	// Print camera
 	camera->print();
-
 	cout << endl << "---" << endl;
 
 	// Lights
@@ -76,7 +85,6 @@ void Scene::print() {
 		cout << endl << "Light[" << i << "]:" << endl;
 		lights[i]->print();
 	}
-
 	cout << endl << "---" << endl;
 
 	// Print objects

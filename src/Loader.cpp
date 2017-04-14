@@ -8,22 +8,25 @@ vec3 Loader::createVector(const string x, const string y, const string z) {
 }
 
 Plane* Loader::createPlane(vector<string> line, ifstream& file) {
+   // Create empty Plane object pointer
    Plane *plane = new Plane;
-   // normal, distance
+
+   // Normal
    string x = line[1].substr(2, line[1].size()-2);
    string y = line[2].substr(0, line[2].size()-1);
    string z = line[3].substr(0, line[3].size()-2);
-   string d = line[4];
    plane->normal = createVector(x, y, z);
+   // Distance
+   string d = line[4];
    plane->distance = strtof(d.c_str(), 0);
 
+   // Continue parsing/storing file components until we reach '}' line
    while(line[0].compare("}")) {
       if (!line[0].compare("pigment")) {
          x = line[3].substr(1, line[3].size()-2);
          y = line[4].substr(0, line[4].size()-1);
          z = line[5].substr(0, line[5].size()-2);
-         plane->color = createVector(x, y, z);
-            
+         plane->color = createVector(x, y, z);            
       }
       if (!line[0].compare("finish")) {
          x = line[2];
@@ -37,15 +40,19 @@ Plane* Loader::createPlane(vector<string> line, ifstream& file) {
 }
 
 Sphere* Loader::createSphere(vector<string> line, ifstream& file) {
+   // Create empty Sphere object pointer
    Sphere *sphere = new Sphere;
-   // center, radius
+
+   // Center
    string x = line[2].substr(1, line[2].size()-2);
    string y = line[3].substr(0, line[3].size()-1);
    string z = line[4].substr(0, line[4].size()-2);
-   string rad = line[5];
    sphere->center = createVector(x, y, z);
+   // Radius
+   string rad = line[5];
    sphere->radius = strtof(rad.c_str(), 0);
 
+   // Continue parsing/storing file components until we reach '}' line
    while(line[0].compare("}")) {
       if (!line[0].compare("pigment")) {
          x = line[4].substr(1, line[4].size()-2);
@@ -67,30 +74,33 @@ Sphere* Loader::createSphere(vector<string> line, ifstream& file) {
       }
       line = getLine(&file);
    }
-
    return sphere;
 }
 
 Light* Loader::createLight(vector<string> line, ifstream& file) {
+   // Create empty Light object pointer
    Light *light = new Light;
-   // position
+
+   // Position
    string x = line[1].substr(2, line[1].size()-3);
    string y = line[2].substr(0, line[2].size()-1);
    string z = line[3].substr(0, line[3].size()-1);
    light->position = createVector(x, y, z);
-   // color 
+   // Color 
    if (!line[4].compare("color")) {
       x = line[6].substr(1, line[6].size()-2);
       y = line[7].substr(0, line[7].size()-1);
       z = line[8].substr(0, line[8].size()-2);
       light->color = createVector(x, y, z);
    }
-
    return light;
 }
 
 Camera* Loader::createCamera(vector<string> line, ifstream& file) {
+   // Create empty Camera object pointer
    Camera *camera = new Camera();
+
+   // Continue parsing/storing file components until we reach '}' line
    while(line[0].compare("}")) {
       if (!line[0].compare("location")) {
          string x = line[1].substr(1, line[1].size()-2);
@@ -122,10 +132,16 @@ Camera* Loader::createCamera(vector<string> line, ifstream& file) {
 }
 
 void Loader::parse(const char *file_name, Scene &scene) {
+   // Create file pointer
    ifstream inFile(file_name);
    string word;
+
+   // Walk through file line by line 
    while(inFile) {
+      // Store line as vector<string> separating by whitespace
       vector<string> line = getLine(&inFile);
+
+      // Skip empty lines
       if (line.size() <= 0) {
          continue;
       }

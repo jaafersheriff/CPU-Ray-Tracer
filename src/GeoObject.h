@@ -11,8 +11,6 @@ class GeoObject {
 public:
 	GeoObject() {};
 
-   std::string type;
-
    glm::vec3 translate;
    glm::vec3 color;
    

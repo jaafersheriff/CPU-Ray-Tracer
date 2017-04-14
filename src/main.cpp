@@ -17,7 +17,8 @@ int firstHit = 0;
 using namespace std;
 
 int main(int args, char **argv) {
-
+	
+	// Catch command line arguments
 	render = !strcmp(argv[1], "render");
 	sceneInfo = !strcmp(argv[1], "sceneinfo");
 	pixelRay = !strcmp(argv[1], "pixelray");
@@ -27,7 +28,9 @@ int main(int args, char **argv) {
 		return 1;
 	}	
 
-	/* Parse file, create scene */
+	cout << setprecision(4);
+
+	// Parse file + create scene
 	loader.parse(argv[2], scene);
 
 	if (sceneInfo) {
@@ -39,7 +42,6 @@ int main(int args, char **argv) {
 		int pixel_x = atoi(argv[5]);
 		int pixel_y = atoi(argv[6]);
 		Ray ray = scene.createRay(window_width, window_height, pixel_x, pixel_y);
-		cout << setprecision(4);
 		cout << "Pixel: [" << pixel_x << ", " << pixel_y << "] ";
 		ray.print();
 		if (firstHit) {
