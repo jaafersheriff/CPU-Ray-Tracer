@@ -22,7 +22,7 @@ Plane* Loader::createPlane(vector<string> line, ifstream& file) {
          x = line[3].substr(1, line[3].size()-2);
          y = line[4].substr(0, line[4].size()-1);
          z = line[5].substr(0, line[5].size()-2);
-         plane->pigment = createVector(x, y, z);
+         plane->color = createVector(x, y, z);
             
       }
       if (!line[0].compare("finish")) {
@@ -51,7 +51,7 @@ Sphere* Loader::createSphere(vector<string> line, ifstream& file) {
          x = line[4].substr(1, line[4].size()-2);
          y = line[5].substr(0, line[5].size()-1);
          z = line[6].substr(0, line[6].size()-2);
-         sphere->pigment = createVector(x, y, z);               
+         sphere->color = createVector(x, y, z);               
       }
       if (!line[0].compare("finish")) {
          x = line[2];

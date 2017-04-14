@@ -5,6 +5,10 @@
 
 class Intersection {
 public:
+
+   void print();
+   bool hit() { return t != INFINITY; };
+
    Ray ray;
    GeoObject *object;
    float t;

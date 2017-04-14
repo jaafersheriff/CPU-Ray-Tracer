@@ -1,0 +1,53 @@
+Camera:
+- Location: {0 0 14}
+- Up: {0 1 0}
+- Right: {1.333 0 0}
+- Look at: {0 0 0}
+
+---
+
+1 light(s)
+
+Light[0]:
+- Location: {-100 100 100}
+- Color: {1.5 1.5 1.5}
+
+---
+
+4 object(s)
+
+Object[0]:
+- Type: Sphere
+- Center: {0 0 0}
+- Radius: 1.01
+- Color: {1 1 1}
+- Material:
+  - Ambient: 0.2
+  - Diffuse: 0.4
+
+Object[1]:
+- Type: Sphere
+- Center: {0 0 -1.5}
+- Radius: 2.25
+- Color: {0 0 0}
+- Material:
+  - Ambient: 0.2
+  - Diffuse: 0.4
+
+Object[2]:
+- Type: Sphere
+- Center: {0 0 -4.5}
+- Radius: 3.75
+- Color: {0.25 0.25 0.25}
+- Material:
+  - Ambient: 0.2
+  - Diffuse: 0.4
+
+Object[3]:
+- Type: Sphere
+- Center: {-5.5 3 0}
+- Radius: 1.1
+- Color: {0.12 0.34 0.56}
+- Material:
+  - Ambient: 0.2
+  - Diffuse: 0.4

@@ -26,6 +26,7 @@ public:
 
    Ray createRay(const int window_width, const int window_height, const int pixel_x, const int pixel_y);
    Intersection findIntersection(Ray ray);
+   void render(const int window_width, const int window_height);
 };
 
 #endif
