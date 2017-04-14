@@ -12,6 +12,7 @@ then
 		else
 			echo "Failed test $i"
 			cat err
+			break
 		rm mytest$i.out
 		rm err
 		fi

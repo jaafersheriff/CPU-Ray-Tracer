@@ -1,6 +1,7 @@
 #include <iostream>	// std::cout
 #include <string.h>	// strcpy
 #include <vector>	// vectors
+#include <iomanip>	//set precision
 
 #include "Loader.h"
 #include "Scene.h"
@@ -38,6 +39,7 @@ int main(int args, char **argv) {
 		int pixel_x = atoi(argv[5]);
 		int pixel_y = atoi(argv[6]);
 		Ray ray = scene.createRay(window_width, window_height, pixel_x, pixel_y);
+		cout << setprecision(4);
 		cout << "Pixel: [" << pixel_x << ", " << pixel_y << "] ";
 		ray.print();
 		if (firstHit) {

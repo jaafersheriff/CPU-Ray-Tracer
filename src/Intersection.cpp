@@ -10,7 +10,7 @@ void Intersection::print() {
    
    cout << "T = " << t << endl;
    cout << "Object Type: " << object->type << endl; 
-   cout << "Color: (" << object->color.x << " " << object->color.y 
-   << " " << object->color.z << ")" << endl;
+   cout << "Color: " << object->color.x << " " << object->color.y 
+   << " " << object->color.z << endl;
 
 }

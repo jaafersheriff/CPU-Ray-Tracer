@@ -12,7 +12,7 @@ Intersection Scene::findIntersection(Ray ray) {
 	intersection.t = INFINITY;
 	for (int i = 0; i < objects.size(); i++) {
 		float curr_t = objects[i]->intersect(ray);
-		if (curr_t < intersection.t) {
+		if (curr_t < intersection.t && curr_t >= 0) {
 			intersection.t = curr_t;
 			intersection.object = objects[i];
 		}
