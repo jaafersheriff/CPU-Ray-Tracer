@@ -13,7 +13,6 @@ public:
 	float baseRadius;
 	glm::vec3 cap;
 	float capRadius;
-	glm::vec3 color;
 	glm::vec3 scale;
 	glm::vec3 rotate;
 };

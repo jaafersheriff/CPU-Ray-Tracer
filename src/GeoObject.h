@@ -11,7 +11,10 @@ class GeoObject {
 public:
 	GeoObject() {};
 
+   std::string type;
+
    glm::vec3 translate;
+   glm::vec3 color;
    
 	virtual void print() = 0;
 	virtual float intersect(Ray &) = 0;

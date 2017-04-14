@@ -4,11 +4,13 @@ using namespace glm;
 using namespace std;
 
 Sphere::Sphere() {
-	this->translate = vec3(0, 0, 0);
+	this->type = "Sphere";
 
+	this->translate = vec3(0, 0, 0);
+	this->color = vec3(0, 0, 0);
+	
 	this->center = vec3(0, 0, 0);
 	this->radius = 0;
-	this->pigment = vec3(0, 0, 0);
 	this->ambient = 0;
 	this->diffuse = 0;
 }
@@ -34,7 +36,7 @@ void Sphere::print() {
 	cout << "- Radius: ";
 		cout << radius << endl;
 	cout << "- Color: {";
-		cout << pigment.x << " " << pigment.y << " " << pigment.z;
+		cout << color.x << " " << color.y << " " << color.z;
 		cout << "}" << endl;
 	cout << "- Material:" << endl;
 		cout << "  - Ambient: ";

@@ -15,7 +15,6 @@ public:
 	glm::vec3 corner3;
 	glm::vec3 scale;
 	glm::vec3 rotate;
-	glm::vec3 color;
 	float ambient;
 	float diffuse;
 };

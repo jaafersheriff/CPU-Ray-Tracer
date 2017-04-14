@@ -10,7 +10,6 @@ public:
 	void print();
 
 	glm::vec3 corner1, corner2;
-	glm::vec3 color;
 	float ambient, diffuse;
 	glm::vec3 rotate;
 };

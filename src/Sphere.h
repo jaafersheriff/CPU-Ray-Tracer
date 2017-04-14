@@ -12,7 +12,6 @@ public:
 
 	glm::vec3 center;
 	float radius;
-	glm::vec3 pigment;
 	float ambient;
 	float diffuse;
 };

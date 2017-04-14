@@ -4,11 +4,13 @@ using namespace glm;
 using namespace std;
 
 Plane::Plane() {
+	this->type = "Plane";
+	
 	this->translate = vec3(0, 0, 0);
+	this->color = vec3(0, 0, 0);
 
 	this->normal = vec3(0, 0, 0);
 	this->distance = 0;
-	this->pigment = vec3(0, 0, 0);
 	this->ambient = 0;
 	this->diffuse = 0;
 }
@@ -25,7 +27,7 @@ void Plane::print() {
 	cout << "- Distance: ";
 		cout << distance << endl;
 	cout << "- Color: {";
-		cout << pigment.x << " " << pigment.y << " " << pigment.z;
+		cout << color.x << " " << color.y << " " << color.z;
 		cout << "}" << endl;	
 	cout << "- Material:" << endl;
 		cout << "  - Ambient: ";
