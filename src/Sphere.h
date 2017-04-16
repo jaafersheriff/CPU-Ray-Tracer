@@ -8,7 +8,7 @@ public:
 	Sphere();
 
 	void print();
-	float intersect(Ray &);
+	float intersect(const Ray &);
 
 	glm::vec3 center;
 	float radius;

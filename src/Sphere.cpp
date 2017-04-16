@@ -15,7 +15,7 @@ Sphere::Sphere() {
 	this->diffuse = 0;
 }
 
-float Sphere::intersect(Ray &ray) {
+float Sphere::intersect(const Ray &ray) {
 	vec3 pc = ray.position-center;
 
 	float A = dot(ray.direction, ray.direction);

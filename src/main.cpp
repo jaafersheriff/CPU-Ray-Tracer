@@ -3,9 +3,11 @@
 #include <vector>	// vectors
 #include <iomanip>	//set precision
 
+#include "Renderer.h"
 #include "Loader.h"
 #include "Scene.h"
 
+Renderer renderer;
 Loader loader;
 Scene scene;
 
@@ -45,14 +47,15 @@ int main(int args, char **argv) {
 		cout << "Pixel: [" << pixel_x << ", " << pixel_y << "] ";
 		ray.print();
 		if (firstHit) {
-			Intersection in = scene.findIntersection(ray);
+			Intersection in;
+			scene.findIntersection(in, ray);
 			in.print();
 		}
  	}
 	if (render) {
 		int window_width = atoi(argv[3]);
 		int window_height = atoi(argv[4]);
-		scene.render(window_width, window_height);
+		renderer.render(scene, window_width, window_height);
 	}
 	return 0;
 }

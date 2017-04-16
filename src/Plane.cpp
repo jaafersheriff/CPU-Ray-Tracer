@@ -14,7 +14,7 @@ Plane::Plane() {
 	this->diffuse = 0;
 }
 
-float Plane::intersect(Ray &ray) {
+float Plane::intersect(const Ray &ray) {
 	return (distance - dot(ray.position, normal))/(dot(ray.direction, normal));
 }
 

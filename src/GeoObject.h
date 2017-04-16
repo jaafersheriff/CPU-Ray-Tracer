@@ -17,7 +17,7 @@ public:
    glm::vec3 color;
    
 	virtual void print() = 0;
-	virtual float intersect(Ray &) = 0;
+	virtual float intersect(const Ray &) = 0;
 };
 
 #endif

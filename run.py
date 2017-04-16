@@ -17,6 +17,5 @@ if (runLine("g++ src/*.cpp -I/cygdrive/c/Users/jaafe/Documents/Code/libs/glm-0.9
     if (len(sys.argv) > 1 and sys.argv[1] == "render"):
         runLine("cygstart.exe output.png");
 else:
-    runLine("echo ERROR!");
-    runLine("cat compileOut");
+    runLine("\ncat compileOut");
 runLine("rm compileOut");

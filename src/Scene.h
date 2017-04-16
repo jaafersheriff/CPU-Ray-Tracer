@@ -30,10 +30,10 @@ public:
    Ray createRay(const int window_width, const int window_height, const int pixel_x, const int pixel_y);
 
    // Creates an Intersection object provided a Ray
-   Intersection findIntersection(Ray ray);
+   void findIntersection(Intersection &, const Ray &);
 
-   // Creates output image 
-   void render(const int window_width, const int window_height);
+	// Calculates the color in the world at an Intersection
+	glm::vec3 findColor(Intersection &);
 };
 
 #endif
