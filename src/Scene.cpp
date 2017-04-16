@@ -56,11 +56,12 @@ void Scene::render(const int width, const int height) {
 			// Create a ray from camera to pixel
 			// Create an Intersection object using that ray
 			Intersection in = findIntersection(createRay(width, height, x, y));
+			
 			// If the ray intersected an object, color the pixel using the object's RGB values
 			if (in.hit()) {
-				red = (unsigned char) 255*clamp(in.object->color.x, 0.0f, 1.0f);
-				green = (unsigned char) 255*clamp(in.object->color.y, 0.0f, 1.0f);
-				blue = (unsigned char) 255*clamp(in.object->color.z, 0.0f, 1.0f);
+				red   = (unsigned char) round(in.object->color.r * 255.f);
+				green = (unsigned char) round(in.object->color.g * 255.f);
+				blue  = (unsigned char) round(in.object->color.b * 255.f);
 			}
 			/*=======================*/
 

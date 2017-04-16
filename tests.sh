@@ -13,10 +13,10 @@ then
 			echo "Failed test $i"
 			cat err
 			break
-		rm mytest$i.out
-		rm err
 		fi
 	done
+	rm mytest*
+	rm err
 else
    echo "Failed compiliation"
 fi
