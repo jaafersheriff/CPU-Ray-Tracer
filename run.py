@@ -14,7 +14,7 @@ if (runLine("g++ src/*.cpp -I/cygdrive/c/Users/jaafe/Documents/Code/libs/glm-0.9
     for i in range (1, len(sys.argv)):
         args += sys.argv[i] + " ";
     runLine("./build/raytrace " + args);
-    if (sys.argv[1] == "render"):
+    if (len(sys.argv) > 1 and sys.argv[1] == "render"):
         runLine("cygstart.exe output.png");
 else:
     runLine("echo ERROR!");

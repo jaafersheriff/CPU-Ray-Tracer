@@ -5,7 +5,6 @@ using namespace std;
 
 Cone::Cone() {
 	this->type = "Cone";
-	
 	this->color = vec3(0, 0, 0);
 
 	this->base = vec3(0, 0, 0);

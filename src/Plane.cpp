@@ -5,7 +5,6 @@ using namespace std;
 
 Plane::Plane() {
 	this->type = "Plane";
-	
 	this->translate = vec3(0, 0, 0);
 	this->color = vec3(0, 0, 0);
 
