@@ -18,7 +18,7 @@ Plane::Plane() {
 }
 
 vec3 Plane::findNormal(const vec3 intersection_point) {
-	return vec3(normal);
+	return normal;
 }
 
 
