@@ -5,14 +5,22 @@ using namespace std;
 
 Plane::Plane() {
 	this->type = "Plane";
+
 	this->translate = vec3(0, 0, 0);
 	this->color = vec3(0, 0, 0);
-
-	this->normal = vec3(0, 0, 0);
-	this->distance = 0;
 	this->ambient = 0;
 	this->diffuse = 0;
+	this->specular = 0;
+	this->shininess = 1;
+	
+	this->normal = vec3(0, 0, 0);
+	this->distance = 0;
 }
+
+vec3 Plane::findNormal(const vec3 intersection_point) {
+	return vec3(normal);
+}
+
 
 float Plane::intersect(const Ray &ray) {
 	return (distance - dot(ray.position, normal))/(dot(ray.direction, normal));

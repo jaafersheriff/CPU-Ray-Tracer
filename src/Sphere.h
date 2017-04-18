@@ -9,11 +9,10 @@ public:
 
 	void print();
 	float intersect(const Ray &);
+   glm::vec3 findNormal(const glm::vec3 intersection_point);
 
 	glm::vec3 center;
 	float radius;
-	float ambient;
-	float diffuse;
 };
 
 #endif

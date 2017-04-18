@@ -43,12 +43,11 @@ int main(int args, char **argv) {
 		int window_height = atoi(argv[4]);
 		int pixel_x = atoi(argv[5]);
 		int pixel_y = atoi(argv[6]);
-		Ray ray = scene.createRay(window_width, window_height, pixel_x, pixel_y);
+		Ray ray = scene.createCameraRay(window_width, window_height, pixel_x, pixel_y);
 		cout << "Pixel: [" << pixel_x << ", " << pixel_y << "] ";
 		ray.print();
 		if (firstHit) {
-			Intersection in;
-			scene.findIntersection(in, ray);
+			Intersection in = scene.findIntersection(ray);
 			in.print();
 		}
  	}

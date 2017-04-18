@@ -18,6 +18,7 @@ public:
    Ray ray;
    GeoObject *object;
    float t;
+   glm::vec3 point;
 };
 
 #endif

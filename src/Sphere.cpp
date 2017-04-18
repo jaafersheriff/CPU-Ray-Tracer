@@ -8,12 +8,19 @@ Sphere::Sphere() {
 
 	this->translate = vec3(0, 0, 0);
 	this->color = vec3(0, 0, 0);
-	
-	this->center = vec3(0, 0, 0);
-	this->radius = 0;
 	this->ambient = 0;
 	this->diffuse = 0;
+	this->specular = 0;
+	this->shininess = 1;
+		
+	this->center = vec3(0, 0, 0);
+	this->radius = 0;
 }
+
+vec3 Sphere::findNormal(const vec3 intersection_point) {
+	return normalize(intersection_point - center);
+}
+
 
 float Sphere::intersect(const Ray &ray) {
 	vec3 pc = ray.position-center;

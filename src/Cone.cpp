@@ -5,7 +5,13 @@ using namespace std;
 
 Cone::Cone() {
 	this->type = "Cone";
+
+	this->translate = vec3(0, 0, 0);
 	this->color = vec3(0, 0, 0);
+	this->ambient = 0;
+	this->diffuse = 0;
+	this->specular = 0;
+	this->shininess = 1;
 
 	this->base = vec3(0, 0, 0);
 	this->baseRadius = 0;

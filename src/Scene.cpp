@@ -8,8 +8,9 @@ vec3 Scene::findColor(Intersection &in) {
 	return in.object[0].color;
 } 
 
-void Scene::findIntersection(Intersection &in, const Ray &ray) {
+Intersection Scene::findIntersection(Ray &ray) {
 	// Create empty intersection object
+	Intersection in;
 	in.ray = ray;
 	in.t = INFINITY;
 	// Loop through all objects
@@ -17,14 +18,17 @@ void Scene::findIntersection(Intersection &in, const Ray &ray) {
 		// If intersection with current object is closer to camera than current intersection
 		// Replace intersection
 		float curr_t = objects[i]->intersect(ray);
-		if (curr_t < in.t && curr_t >= 0) {
+		if (curr_t < in.t && curr_t > 0) {
 			in.t = curr_t;
 			in.object = objects[i];
 		}
 	}
+	// Set final intersection point and return
+	in.point = ray.intersection_point(in.t);
+	return in;
 }
 
-Ray Scene::createRay(const int width, const int height, const int x, const int y) {
+Ray Scene::createCameraRay(const int width, const int height, const int x, const int y) {
 	Ray ray;
 
 	// p0

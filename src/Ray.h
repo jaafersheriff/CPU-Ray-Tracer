@@ -7,6 +7,7 @@
 class Ray {
 public:
 	Ray();
+   Ray(glm::vec3 position, glm::vec3 direction);
 
 	void print();
    glm::vec3 intersection_point(float);

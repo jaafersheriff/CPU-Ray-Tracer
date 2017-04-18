@@ -1,4 +1,6 @@
 build/
 tests/
-raytrace.exe.dump
+raytrace.*
 *.png
+*.py
+*.sh

@@ -27,10 +27,10 @@ public:
 	std::vector<GeoObject *> objects;
 
    // Creates a ray from the camera's position to the pixel
-   Ray createRay(const int window_width, const int window_height, const int pixel_x, const int pixel_y);
+   Ray createCameraRay(const int window_width, const int window_height, const int pixel_x, const int pixel_y);
 
    // Creates an Intersection object provided a Ray
-   void findIntersection(Intersection &, const Ray &);
+   Intersection findIntersection(Ray &);
 
 	// Calculates the color in the world at an Intersection
 	glm::vec3 findColor(Intersection &);

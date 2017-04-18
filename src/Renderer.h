@@ -12,6 +12,7 @@ class Renderer {
 public:
 	Renderer() {};
 
+   glm::vec3 findColor(Scene &, const glm::ivec2, const int, const int);
 	void render(Scene &, const int, const int);
 };
 

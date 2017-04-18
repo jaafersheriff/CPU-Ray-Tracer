@@ -5,6 +5,42 @@
 
 using namespace glm;
 
+vec3 Renderer::findColor(Scene &scene, const ivec2 window_size, const int pixel_x, const int pixel_y) {
+	// Set default output color to be black
+	vec3 out_color = vec3(0, 0, 0);
+
+	// Find intersection from camera to object
+	Ray camera_ray = scene.createCameraRay(window_size.x, window_size.y, pixel_x, pixel_y);
+	Intersection camera_intersection = scene.findIntersection(camera_ray);
+
+	if (camera_intersection.hit()) {
+		out_color = camera_intersection.object->color * camera_intersection.object->ambient;
+
+		// Calculate ray from intersection point to light position
+		for (int i = 0; i < scene.lights.size(); i++) {
+			Light *light = scene.lights[i];
+			vec3 light_dir = normalize(light->position - camera_intersection.point);
+			Ray light_ray(camera_intersection.point, light_dir);
+			Intersection light_intersection = scene.findIntersection(light_ray);
+
+			// Blinn-Phong if there are no objects blocking the light
+			if (!light_intersection.hit()) {
+				vec3 half = normalize(light_dir - camera_ray.direction);
+				vec3 norm = camera_intersection.object->findNormal(camera_intersection.point);
+				
+				// Diffuse
+				vec3 diffuse = camera_intersection.object->color * camera_intersection.object->diffuse * light->color;
+				out_color = out_color + diffuse * max(0.f, dot(norm, light_dir));
+				// Specular
+				vec3 specular = camera_intersection.object->color * camera_intersection.object->specular * light->color;
+				out_color = out_color + specular * pow(max(0.f, dot(half, norm)), camera_intersection.object->shininess);
+			}
+		}
+	}
+
+	return out_color;
+}
+
 void Renderer::render(Scene &scene, const int window_width, const int window_height) {
 	const int numChannels = 3;
 	const std::string fileName = "output.png";
@@ -14,23 +50,13 @@ void Renderer::render(Scene &scene, const int window_width, const int window_hei
 	
 	for (int y = 0; y < size.y; y++) {
 		for (int x = 0; x < size.x; x++) {
-			unsigned char red   = 0;
-			unsigned char green = 0;
-			unsigned char blue  = 0;
 
 			// Calculate color
-			// Create a ray from camera to pixel
-			Ray ray = scene.createRay(size.x, size.y, x, y);
-			// Create an intersection using the ray and scene
-			Intersection *in = new Intersection;
-		 	scene.findIntersection(*in, ray);
+			vec3 color = findColor(scene, size, x, y);
 
-			// If the ray intersects an object, find the color at the intersection point
-			if (in->hit()) {
-				red   = (unsigned char) round(in->object->color.r * 255.f);
-				green = (unsigned char) round(in->object->color.g * 255.f);
-				blue  = (unsigned char) round(in->object->color.b * 255.f);
-			}
+			unsigned char red   = (unsigned char) round(color.r * 255.f);
+			unsigned char green = (unsigned char) round(color.g * 255.f);
+			unsigned char blue  = (unsigned char) round(color.b * 255.f);
 
 			int pixel = (size.x * numChannels) * (size.y - 1 - y) + numChannels * x;
 			data[pixel + 0] = red;

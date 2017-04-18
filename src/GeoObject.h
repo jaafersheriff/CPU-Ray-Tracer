@@ -15,9 +15,14 @@ public:
 
    glm::vec3 translate;
    glm::vec3 color;
+   float ambient;
+   float diffuse;
+   float specular;
+   float shininess;
    
 	virtual void print() = 0;
 	virtual float intersect(const Ray &) = 0;
+   virtual glm::vec3 findNormal(const glm::vec3 intersection_point) = 0;
 };
 
 #endif
