@@ -2,4 +2,3 @@ build/
 tests/
 raytrace.exe.dump
 *.png
-*.pov
