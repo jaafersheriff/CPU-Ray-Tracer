@@ -106,7 +106,7 @@ Camera* Loader::createCamera(vector<string> line, ifstream& file) {
          string x = line[1].substr(1, line[1].size()-2);
          string y = line[2].substr(0, line[2].size()-1);
          string z = line[3].substr(0, line[3].size()-1);
-         camera->location = createVector(x, y, z); 
+         camera->location = createVector(x, y, z);
       }
       if (!line[0].compare("up")) {
          string x = line[1].substr(1, line[1].size()-2);
@@ -133,7 +133,10 @@ Camera* Loader::createCamera(vector<string> line, ifstream& file) {
 
 void Loader::parse(const char *file_name, Scene &scene) {
    // Create file pointer
-   ifstream inFile(file_name);
+   ifstream inFile(file_name, ios::in | ios::binary);
+	if (!inFile) {
+		cout << "Error opening file: " << file_name << endl;
+	}
    string word;
 
    // Walk through file line by line 
