@@ -1,1 +1,1 @@
-# CSC-473-Project-1
+# CSC-473-Raytracer
