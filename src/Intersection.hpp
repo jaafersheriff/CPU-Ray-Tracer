@@ -4,7 +4,7 @@
 #ifndef _INTERSECTION_H_
 #define _INTERSECTION_H_
 
-#include "GeoObject.h"
+#include "GeoObject.hpp"
 
 class Intersection {
 public:

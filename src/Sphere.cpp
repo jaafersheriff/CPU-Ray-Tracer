@@ -1,4 +1,4 @@
-#include "Sphere.h"
+#include "Sphere.hpp"
 
 using namespace glm;
 using namespace std;

@@ -1,7 +1,7 @@
 #ifndef _BOX_H_
 #define _BOX_H_
 
-#include "GeoObject.h"
+#include "GeoObject.hpp"
 
 class Box: public GeoObject {
 public:

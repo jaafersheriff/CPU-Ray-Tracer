@@ -1,4 +1,4 @@
-#include "Camera.h"
+#include "Camera.hpp"
 
 using namespace std;
 using namespace glm;

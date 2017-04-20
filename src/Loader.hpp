@@ -6,7 +6,7 @@
 #include <stdlib.h>  // strtof
 #include <vector> 	// vector
 
-#include "Scene.h"
+#include "Scene.hpp"
 
 class Loader {
 public:

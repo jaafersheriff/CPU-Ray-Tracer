@@ -1,4 +1,4 @@
-#include "Intersection.h"
+#include "Intersection.hpp"
 
 using namespace std;
 

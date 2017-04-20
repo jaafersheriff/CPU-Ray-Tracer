@@ -6,15 +6,15 @@
 #include <iostream>	// cout
 #include <vector>	// vector
 
-#include "Camera.h"
-#include "Light.h"
+#include "Camera.hpp"
+#include "Light.hpp"
 
-#include "GeoObject.h"
-#include "Sphere.h"
-#include "Plane.h"
-#include "Box.h"
+#include "GeoObject.hpp"
+#include "Sphere.hpp"
+#include "Plane.hpp"
+#include "Box.hpp"
 
-#include "Intersection.h"
+#include "Intersection.hpp"
 
 class Scene {
 public:

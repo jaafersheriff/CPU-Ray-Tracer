@@ -1,7 +1,7 @@
 #ifndef _PLANE_H_
 #define _PLANE_H_
 
-#include "GeoObject.h"
+#include "GeoObject.hpp"
 
 class Plane: public GeoObject {
 public:

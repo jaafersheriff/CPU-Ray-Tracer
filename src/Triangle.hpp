@@ -1,7 +1,7 @@
 #ifndef _TRIANGLE_H_
 #define _TRIANGLE_H_
 
-#include "GeoObject.h"
+#include "GeoObject.hpp"
 
 class Triangle: public GeoObject {
 public:

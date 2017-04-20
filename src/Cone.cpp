@@ -1,4 +1,4 @@
-#include "Cone.h"
+#include "Cone.hpp"
 
 using namespace glm;
 using namespace std;

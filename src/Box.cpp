@@ -1,4 +1,4 @@
-#include "Box.h"
+#include "Box.hpp"
 
 using namespace glm;
 using namespace std;

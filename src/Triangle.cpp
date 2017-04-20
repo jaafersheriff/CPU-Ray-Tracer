@@ -1,4 +1,4 @@
-#include "Triangle.h"
+#include "Triangle.hpp"
 
 using namespace glm;
 using namespace std;

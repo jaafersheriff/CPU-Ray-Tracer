@@ -1,4 +1,4 @@
-#include "Plane.h"
+#include "Plane.hpp"
 
 using namespace glm;
 using namespace std;

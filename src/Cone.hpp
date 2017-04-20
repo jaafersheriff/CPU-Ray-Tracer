@@ -1,7 +1,7 @@
 #ifndef _CONE_H_
 #define _CONE_H_
 
-#include "GeoObject.h"
+#include "GeoObject.hpp"
 
 class Cone: public GeoObject {
 public:

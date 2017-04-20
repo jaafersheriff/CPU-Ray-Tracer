@@ -1,4 +1,4 @@
-#include "Ray.h"
+#include "Ray.hpp"
 
 using namespace std;
 using namespace glm;

@@ -5,7 +5,7 @@
 
 #include <glm/glm.hpp>	// vec3
 
-#include "Ray.h"
+#include "Ray.hpp"
 
 class GeoObject {
 public:

@@ -5,8 +5,8 @@
 
 #include <glm/glm.hpp>
 
-#include "Scene.h"
-#include "Intersection.h"
+#include "Scene.hpp"
+#include "Intersection.hpp"
 
 class Renderer {
 public:
