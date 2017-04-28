@@ -4,6 +4,7 @@
 #include <iomanip>	//set precision
 
 #include "Renderer.hpp"
+#include "Intersection.hpp"
 #include "Loader.hpp"
 #include "Scene.hpp"
 
@@ -35,33 +36,13 @@ int main(int args, char **argv) {
 	arg_flags[2] = !strcmp(argv[1], "pixelray");
 	arg_flags[3] = !strcmp(argv[1], "firsthit");
 	arg_flags[4] = !strcmp(argv[1], "pixelcolor");
-	renderer.BRDF = !strcmp(argv[args-1], "-altbrdf");
+	renderer.BRDF_flag = !strcmp(argv[args-1], "-altbrdf");
 
 	cout << setprecision(4);
 
 	// Parse file + create scene
 	loader.parse(argv[2], scene);
 
-	// Sceneinfo
-	if (arg_flags[1]) {
-		scene.print();
-	}
-
-	// Pixelray 
-	if (arg_flags[2] || arg_flags[3]) {
-		int window_width = atoi(argv[3]);
-		int window_height = atoi(argv[4]);
-		int pixel_x = atoi(argv[5]);
-		int pixel_y = atoi(argv[6]);
-		Ray ray = scene.createCameraRay(window_width, window_height, pixel_x, pixel_y);
-		cout << "Pixel: [" << pixel_x << ", " << pixel_y << "] ";
-		ray.print();
-		// Firsthit
-		if (arg_flags[3]) {
-			Intersection in = scene.findIntersection(ray);
-			in.print();
-		}
- 	}
 
  	// Render
 	if (arg_flags[0]) {
@@ -69,5 +50,34 @@ int main(int args, char **argv) {
 		int window_height = atoi(argv[4]);
 		renderer.render(scene, window_width, window_height);
 	}
+
+	// Sceneinfo
+	if (arg_flags[1]) {
+		scene.print();
+	}
+
+	// Pixelray 
+	if (arg_flags[2] || arg_flags[3] || arg_flags[4]) {
+		int window_width = atoi(argv[3]);
+		int window_height = atoi(argv[4]);
+		int pixel_x = atoi(argv[5]);
+		int pixel_y = atoi(argv[6]);
+		Ray ray = scene.createCameraRay(window_width, window_height, pixel_x, pixel_y);
+		Intersection in(&scene, ray);
+		cout << "Pixel: [" << pixel_x << ", " << pixel_y << "] ";
+		ray.print();
+		// Firsthit
+		if (arg_flags[3]) {
+			in.print();
+		   cout << "Color: " << in.object->color.x << " " << in.object->color.y 
+		   << " " << in.object->color.z << endl;
+		}
+		// Pixelcolor
+		if (arg_flags[4]) {
+			in.print();
+			cout << "Color: " << endl;//renderer.findcolor()
+		}
+ 	}
+
 	return 0;
 	}

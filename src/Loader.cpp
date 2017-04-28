@@ -15,7 +15,7 @@ Plane* Loader::createPlane(vector<string> line, ifstream& file) {
    string x = line[1].substr(2, line[1].size()-2);
    string y = line[2].substr(0, line[2].size()-1);
    string z = line[3].substr(0, line[3].size()-2);
-   plane->normal = createVector(x, y, z);
+   plane->normal = normalize(createVector(x, y, z));
    // Distance
    string d = line[4];
    plane->distance = strtof(d.c_str(), 0);
@@ -29,10 +29,19 @@ Plane* Loader::createPlane(vector<string> line, ifstream& file) {
          plane->color = createVector(x, y, z);            
       }
       if (!line[0].compare("finish")) {
-         x = line[2];
-         y = line[4];
-         plane->ambient = strtof(x.c_str(), 0);
-         plane->diffuse = strtof(y.c_str(), 0);         
+         if (line.size() >= 3 && !line[1].compare("{ambient")) {
+            plane->ambient = strtof(line[2].c_str(), 0);
+         }
+         if (line.size() >= 5 && !line[3].compare("diffuse")) {
+            plane->diffuse = strtof(line[4].c_str(), 0);         
+         }
+         if (line.size() >= 7 && !line[5].compare("specular")) {
+            plane->specular = strtof(line[6].c_str(), 0);
+         }
+         if (line.size() >= 9 && !line[7].compare("roughness")) {
+            string r = line[8].substr(0, line[8].size()-1);
+            plane->roughness = strtof(r.c_str(), 0);
+         }
       }
       line = getLine(&file);
    }
@@ -61,10 +70,19 @@ Sphere* Loader::createSphere(vector<string> line, ifstream& file) {
          sphere->color = createVector(x, y, z);               
       }
       if (!line[0].compare("finish")) {
-         x = line[2];
-         y = line[4].substr(0, line[4].size()-1);
-         sphere->ambient = strtof(x.c_str(), 0);
-         sphere->diffuse = strtof(y.c_str(), 0);
+         if (line.size() >= 3 && !line[1].compare("{ambient")) {
+            sphere->ambient = strtof(line[2].c_str(), 0);
+         }
+         if (line.size() >= 5 && !line[3].compare("diffuse")) {
+            sphere->diffuse = strtof(line[4].c_str(), 0);         
+         }
+         if (line.size() >= 7 && !line[5].compare("specular")) {
+            sphere->specular = strtof(line[6].c_str(), 0);
+         }
+         if (line.size() >= 9 && !line[7].compare("roughness")) {
+            string r = line[8].substr(0, line[8].size()-1);
+            sphere->roughness = strtof(r.c_str(), 0);
+         }
       }
       if (!line[0].compare("translate")) {
          x = line[1].substr(1, line[1].size()-2);
@@ -148,7 +166,7 @@ void Loader::parse(const char *file_name, Scene &scene) {
       if (line.size() <= 0) {
          continue;
       }
-      
+
       if(!line[0].compare("camera")) {
          scene.camera = createCamera(line, inFile);
       }

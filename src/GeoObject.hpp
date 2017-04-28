@@ -18,6 +18,7 @@ public:
    float ambient;
    float diffuse;
    float specular;
+   float roughness;
    float shininess;
    
 	virtual void print() = 0;

@@ -35,6 +35,6 @@ plane {<1, 0, 0>, -5
 
 //left sphere
 sphere { <-5, 3, 0>, 1.1
-  pigment { color rgb <0.12, 0.34, 0.56>}
+  pigment { color rgb <1, 0, 1>}
   finish {ambient 0.2 diffuse 0.4}
 }

@@ -12,6 +12,7 @@ Plane::Plane() {
 	this->diffuse = 0;
 	this->specular = 0;
 	this->shininess = 1;
+	this->roughness = 0;
 	
 	this->normal = vec3(0, 0, 0);
 	this->distance = 0;

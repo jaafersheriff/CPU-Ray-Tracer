@@ -14,8 +14,6 @@
 #include "Plane.hpp"
 #include "Box.hpp"
 
-#include "Intersection.hpp"
-
 class Scene {
 public:
 	Scene() {};
@@ -29,11 +27,8 @@ public:
    // Creates a ray from the camera's position to the pixel
    Ray createCameraRay(const int window_width, const int window_height, const int pixel_x, const int pixel_y);
 
-   // Creates an Intersection object provided a Ray
-   Intersection findIntersection(Ray &);
-
 	// Calculates the color in the world at an Intersection
-	glm::vec3 findColor(Intersection &);
+	glm::vec3 findColor(const glm::ivec2, const int, const int, const int);
 };
 
 #endif

@@ -1,31 +1,40 @@
 #include "Scene.hpp"
+#include "Intersection.hpp"
+#include "BRDF.hpp"
 
-using namespace std;
 using namespace glm;
 
-/* This function will eventually be huge */
-vec3 Scene::findColor(Intersection &in) {
-	return in.object[0].color;
-} 
+vec3 Scene::findColor(const ivec2 window_size, const int pixel_x, const int pixel_y, const int BRDF_flag) {
+	// Find intersection from camera to object
+	Ray camera_ray = createCameraRay(window_size.x, window_size.y, pixel_x, pixel_y);
+	Intersection camera_in(this, camera_ray); 
 
-Intersection Scene::findIntersection(Ray &ray) {
-	// Create empty intersection object
-	Intersection in;
-	in.ray = ray;
-	in.t = INFINITY;
-	// Loop through all objects
-	for (int i = 0; i < objects.size(); i++) {
-		// If intersection with current object is closer to camera than current intersection
-		// Replace intersection
-		float curr_t = objects[i]->intersect(ray);
-		if (curr_t < in.t && curr_t > 0) {
-			in.t = curr_t;
-			in.object = objects[i];
+	// If no intersection from camera to object, return black
+	if (!camera_in.hit()) {
+		return vec3(0, 0, 0);
+	}
+
+	// Ambient 
+	vec3 out_color = camera_in.object->color * camera_in.object->ambient;
+
+	// Calculate ray from object to each light
+	for (int i = 0; i < lights.size(); i++) {
+		Light *light = lights[i];
+		vec3 light_dir = normalize(light->position - camera_in.point);
+		Ray light_ray(camera_in.point, light_dir);
+		Intersection light_in(this, light_ray);		
+
+		// If no objects are blocking incoming light, BRDF
+		if (!light_in.hit() || distance(camera_in.point, light->position) < distance(camera_in.point, light_in.point)) {
+			if (BRDF_flag) {
+				out_color += CookTorrance(light, camera_in);
+			} else {
+				out_color += BlinnPhong(light, camera_in);
+			}
 		}
 	}
-	// Set final intersection point and return
-	in.point = ray.intersection_point(in.t);
-	return in;
+
+	return out_color;
 }
 
 Ray Scene::createCameraRay(const int width, const int height, const int x, const int y) {
@@ -46,20 +55,20 @@ Ray Scene::createCameraRay(const int width, const int height, const int x, const
 void Scene::print() {
 	// Print camera
 	camera->print();
-	cout << endl << "---" << endl;
+	std::cout << std::endl << "---" << std::endl;
 
 	// Lights
-	cout << endl << lights.size() << " light(s)" << endl;  
+	std::cout << std::endl << lights.size() << " light(s)" << std::endl;  
 	for(int i = 0; i < lights.size(); i++) {
-		cout << endl << "Light[" << i << "]:" << endl;
+		std::cout << std::endl << "Light[" << i << "]:" << std::endl;
 		lights[i]->print();
 	}
-	cout << endl << "---" << endl;
+	std::cout << std::endl << "---" << std::endl;
 
 	// Print objects
-	cout << endl << objects.size() << " object(s)" << endl;
+	std::cout << std::endl << objects.size() << " object(s)" << std::endl;
 	for(int i = 0; i < objects.size(); i++) {
-		cout << endl << "Object[" << i << "]:" << endl;
+		std::cout << std::endl << "Object[" << i << "]:" << std::endl;
 		objects[i]->print();
 	}                            
 }

@@ -12,6 +12,7 @@ Sphere::Sphere() {
 	this->diffuse = 0;
 	this->specular = 0;
 	this->shininess = 1;
+	this->roughness = 0;
 		
 	this->center = vec3(0, 0, 0);
 	this->radius = 0;
