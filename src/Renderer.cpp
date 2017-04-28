@@ -9,10 +9,6 @@ vec3 Renderer::calculateColor(Scene &scene, const ivec2 size, const int x, const
 	// Calculate color
 	vec3 color = scene.findColor(size, x, y, BRDF_flag);
 
-	// Scale RGB
-	color.r = round(color.r * 255.f);
-	color.g = round(color.g * 255.f);
-	color.b = round(color.b * 255.f);
 
 	return color;
 }
@@ -29,6 +25,10 @@ void Renderer::render(Scene &scene, const int window_width, const int window_hei
 
 			// Calculate color
 			vec3 color = calculateColor(scene, size, x, y, BRDF_flag);
+	// Scale RGB
+	color.r = round(color.r * 255.f);
+	color.g = round(color.g * 255.f);
+	color.b = round(color.b * 255.f);
 
 			// Set pixel color
 			unsigned char red   = (unsigned char) color.r;
