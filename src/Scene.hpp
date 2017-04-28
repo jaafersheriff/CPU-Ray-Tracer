@@ -12,7 +12,6 @@
 #include "GeoObject.hpp"
 #include "Sphere.hpp"
 #include "Plane.hpp"
-#include "Box.hpp"
 
 class Scene {
 public:

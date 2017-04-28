@@ -9,7 +9,7 @@ Intersection::Intersection(Scene* scene, Ray& ray) {
    this->t = INFINITY;
 
    // Loop through all objects in scene
-   for (int i = 0; i < scene->objects.size(); i++) {
+   for (unsigned int i = 0; i < scene->objects.size(); i++) {
       // If intersection with current object is closer to camera than current intersection
       // Replace intersection
       float curr_t = scene->objects[i]->intersect(ray);

@@ -18,7 +18,7 @@ vec3 Scene::findColor(const ivec2 window_size, const int pixel_x, const int pixe
 	vec3 out_color = camera_in.object->color * camera_in.object->ambient;
 
 	// Calculate ray from object to each light
-	for (int i = 0; i < lights.size(); i++) {
+	for (unsigned int i = 0; i < lights.size(); i++) {
 		Light *light = lights[i];
 		vec3 light_dir = normalize(light->position - camera_in.point);
 		Ray light_ray(camera_in.point, light_dir);
@@ -59,7 +59,7 @@ void Scene::print() {
 
 	// Lights
 	std::cout << std::endl << lights.size() << " light(s)" << std::endl;  
-	for(int i = 0; i < lights.size(); i++) {
+	for(unsigned int i = 0; i < lights.size(); i++) {
 		std::cout << std::endl << "Light[" << i << "]:" << std::endl;
 		lights[i]->print();
 	}
@@ -67,7 +67,7 @@ void Scene::print() {
 
 	// Print objects
 	std::cout << std::endl << objects.size() << " object(s)" << std::endl;
-	for(int i = 0; i < objects.size(); i++) {
+	for(unsigned int i = 0; i < objects.size(); i++) {
 		std::cout << std::endl << "Object[" << i << "]:" << std::endl;
 		objects[i]->print();
 	}                            
