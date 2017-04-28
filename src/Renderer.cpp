@@ -5,6 +5,18 @@
 
 using namespace glm;
 
+vec3 Renderer::calculateColor(Scene &scene, const ivec2 size, const int x, const int y, int BRDF_flag) {
+	// Calculate color
+	vec3 color = scene.findColor(size, x, y, BRDF_flag);
+
+	// Scale RGB
+	color.r = round(color.r * 255.f);
+	color.g = round(color.g * 255.f);
+	color.b = round(color.b * 255.f);
+
+	return color;
+}
+
 void Renderer::render(Scene &scene, const int window_width, const int window_height) {
 	const int numChannels = 3;
 	const std::string fileName = "output.png";
@@ -16,12 +28,12 @@ void Renderer::render(Scene &scene, const int window_width, const int window_hei
 		for (int x = 0; x < size.x; x++) {
 
 			// Calculate color
-			vec3 color = scene.findColor(size, x, y, BRDF_flag);
+			vec3 color = calculateColor(scene, size, x, y, BRDF_flag);
 
 			// Set pixel color
-			unsigned char red   = (unsigned char) round(color.r * 255.f);
-			unsigned char green = (unsigned char) round(color.g * 255.f);
-			unsigned char blue  = (unsigned char) round(color.b * 255.f);
+			unsigned char red   = (unsigned char) color.r;
+			unsigned char green = (unsigned char) color.g;
+			unsigned char blue  = (unsigned char) color.g;
 			int pixel = (size.x * numChannels) * (size.y - 1 - y) + numChannels * x;
 			data[pixel + 0] = red;
 			data[pixel + 1] = green;
@@ -33,4 +45,13 @@ void Renderer::render(Scene &scene, const int window_width, const int window_hei
 		std::cout << "FAILED WRITING IMAGE" << std::endl;
 	}
 	delete[] data;
+}
+
+void Renderer::print() {
+	std::cout << "BRDF: ";
+	if (BRDF_flag)
+		std::cout << "Cook-Torranec";
+	else
+		std::cout << "Blinn-Phong";
+	std::cout << std::endl;
 }

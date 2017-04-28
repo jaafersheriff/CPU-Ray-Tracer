@@ -3,6 +3,8 @@
 #include <vector>	// vectors
 #include <iomanip>	//set precision
 
+#include <glm/glm.hpp>
+
 #include "Renderer.hpp"
 #include "Intersection.hpp"
 #include "Loader.hpp"
@@ -66,16 +68,12 @@ int main(int args, char **argv) {
 		Intersection in(&scene, ray);
 		cout << "Pixel: [" << pixel_x << ", " << pixel_y << "] ";
 		ray.print();
-		// Firsthit
-		if (arg_flags[3]) {
+		// Firsthit or Pixelcolor
+		if (arg_flags[3] || arg_flags[4]) {
 			in.print();
-		   cout << "Color: " << in.object->color.x << " " << in.object->color.y 
-		   << " " << in.object->color.z << endl;
-		}
-		// Pixelcolor
-		if (arg_flags[4]) {
-			in.print();
-			cout << "Color: " << endl;//renderer.findcolor()
+			renderer.print();
+			glm::vec3 color = renderer.calculateColor(scene, glm::ivec2(window_width, window_height), pixel_x, pixel_y, renderer.BRDF_flag);
+		   cout << "Color: (" << color.x << " " << color.y  << " " << color.z << ")" << endl;
 		}
  	}
 

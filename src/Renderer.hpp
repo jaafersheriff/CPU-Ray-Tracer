@@ -3,6 +3,7 @@
 #ifndef _RENDERER_H_
 #define _RENDERER_H_
 
+#include <iostream> 
 #include <glm/glm.hpp>
 
 #include "Scene.hpp"
@@ -18,7 +19,11 @@ public:
       BRDF_flag = 0;
    };
 
-	void render(Scene &, const int, const int);
+   glm::vec3 calculateColor(Scene &, const glm::ivec2, const int, const int, int);
+	
+   void render(Scene &, const int, const int);
+
+   void print();
 };
 
 #endif
