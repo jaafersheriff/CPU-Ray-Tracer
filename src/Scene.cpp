@@ -4,7 +4,7 @@
 
 using namespace glm;
 
-vec3 Scene::BRDF(const ivec2 window_size, const int pixel_x, const int pixel_y, const int BRDF_flag) {
+vec3 Scene::findColor(const ivec2 window_size, const int pixel_x, const int pixel_y, const int BRDF_flag) {
 	// Find intersection from camera to object
 	Ray camera_ray = createCameraRay(window_size.x, window_size.y, pixel_x, pixel_y);
 	Intersection camera_in(this, camera_ray); 

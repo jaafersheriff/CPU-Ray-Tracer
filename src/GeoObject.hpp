@@ -9,7 +9,15 @@
 
 class GeoObject {
 public:
-	GeoObject() {};
+	GeoObject() {
+      this->translate = glm::vec3(0, 0, 0);
+      this->color = glm::vec3(0, 0, 0);
+      this->ambient = 0;
+      this->diffuse = 0;
+      this->specular = 0;
+      this->shininess = 0;
+      this->roughness = 0;
+   };
 
 	std::string type;
 

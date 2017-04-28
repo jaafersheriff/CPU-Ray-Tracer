@@ -3,16 +3,8 @@
 using namespace glm;
 using namespace std;
 
-Plane::Plane() {
+Plane::Plane() : GeoObject() {
 	this->type = "Plane";
-
-	this->translate = vec3(0, 0, 0);
-	this->color = vec3(0, 0, 0);
-	this->ambient = 0;
-	this->diffuse = 0;
-	this->specular = 0;
-	this->shininess = 1;
-	this->roughness = 0;
 	
 	this->normal = vec3(0, 0, 0);
 	this->distance = 0;

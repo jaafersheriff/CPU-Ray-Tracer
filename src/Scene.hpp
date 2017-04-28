@@ -27,7 +27,7 @@ public:
    Ray createCameraRay(const int window_width, const int window_height, const int pixel_x, const int pixel_y);
 
 	// Calculates the color in the world at an Intersection
-	glm::vec3 BRDF(const glm::ivec2, const int, const int, const int);
+	glm::vec3 findColor(const glm::ivec2, const int, const int, const int);
 };
 
 #endif

@@ -3,16 +3,8 @@
 using namespace glm;
 using namespace std;
 
-Sphere::Sphere() {
+Sphere::Sphere() : GeoObject() {
 	this->type = "Sphere";
-
-	this->translate = vec3(0, 0, 0);
-	this->color = vec3(0, 0, 0);
-	this->ambient = 0;
-	this->diffuse = 0;
-	this->specular = 0;
-	this->shininess = 1;
-	this->roughness = 0;
 		
 	this->center = vec3(0, 0, 0);
 	this->radius = 0;
