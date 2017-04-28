@@ -72,8 +72,9 @@ int main(int args, char **argv) {
 		if (arg_flags[3] || arg_flags[4]) {
 			in.print();
 			renderer.print();
-			glm::vec3 color = renderer.calculateColor(scene, glm::ivec2(window_width, window_height), pixel_x, pixel_y, renderer.BRDF_flag);
-		   cout << "Color: (" << color.x << " " << color.y  << " " << color.z << ")" << endl;
+			const glm::ivec2 size = glm::ivec2(window_width, window_height);
+			glm::vec3 color = renderer.calculateColor(scene, size, pixel_x, pixel_y, renderer.BRDF_flag);
+		   cout << "Color: (" << color.x << ", " << color.y  << ", " << color.z << ")" << endl;
 		}
  	}
 
