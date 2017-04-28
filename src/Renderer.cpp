@@ -1,20 +1,19 @@
 #include "Renderer.hpp"
+#include <algorithm>
 
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 #include "stb_image_write.h" 
 
 using namespace glm;
 
-#include <iostream>
-using namespace std;
 vec3 Renderer::calculateColor(Scene &scene, const ivec2 size, const int x, const int y, int BRDF_flag) {
 	// Calculate color
-	vec3 color = scene.findColor(size, x, y, BRDF_flag);
+	vec3 color = scene.BRDF(size, x, y, BRDF_flag);
 
 	// Scale RGB
-	color.r = round(color.r * 255.f);
-	color.g = round(color.g * 255.f);
-	color.b = round(color.b * 255.f);
+	color.r = round(clamp(color.r, 0.f, 1.f) * 255.f);
+	color.g = round(clamp(color.g, 0.f, 1.f) * 255.f);
+	color.b = round(clamp(color.b, 0.f, 1.f) * 255.f);
 
 	return color;
 }
