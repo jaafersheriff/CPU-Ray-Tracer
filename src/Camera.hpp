@@ -3,7 +3,7 @@
 
 #include <glm/glm.hpp>	// vec3
 #include <iostream>	// print
-#include <iomanip>	// setprecision
+
 class Camera {
 public:
 	Camera();
