@@ -31,15 +31,15 @@ glm::vec3 CookTorrance(Light *light, Intersection &object_in) {
    }
 
    // Diffuse
-   glm::vec3 diffuse = object_in.object->color * (1-object_in.object->specular);
+   glm::vec3 diffuse = object_in.object->color * (1-object_in.object->metallic);
 
    // Specular
    // D
    float D = 0;
    if (HdotN > 0 && object_in.object->roughness > 0) {
       float r_squared = object_in.object->roughness*object_in.object->roughness;
-      D = pow(HdotN, 2/r_squared - 2);
-      D /= (PI * r_squared);
+      D = pow(HdotN, 2/(r_squared*r_squared) - 2);
+      D /= (PI * r_squared * r_squared);
    }
    // G
    float G = 1;
@@ -52,10 +52,10 @@ glm::vec3 CookTorrance(Light *light, Intersection &object_in) {
    float F_z = 0.2f;    // TODO: f_z = index of refraction
    float F = F_z + (1-F_z) * pow(1-VdotH, 5);
 
-   float specular = (D*G*F) / (4*NdotL*NdotV);
+   glm::vec3 specular = object_in.object->color * (D*G*F) / (4*NdotL*NdotV);
 
    // s
-   specular *= object_in.object->specular;
+   specular *= object_in.object->metallic;
 
    return light->color * NdotL * (diffuse + specular);
 }
