@@ -55,7 +55,7 @@ glm::vec3 CookTorrance(Light *light, Intersection &object_in) {
    glm::vec3 specular = object_in.object->color * (D*G*F) / (4*NdotL*NdotV);
 
    // s
-   specular *= object_in.object->metallic;
+   specular *= (object_in.object->metallic);
 
    return light->color * NdotL * (diffuse + specular);
 }

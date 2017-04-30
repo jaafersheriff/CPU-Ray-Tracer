@@ -1,7 +1,5 @@
 #include "Intersection.hpp"
 
-using namespace std;
-
 #define EPSILON 0.0001f
 
 Intersection::Intersection(Scene* scene, Ray& ray) {
@@ -24,10 +22,10 @@ Intersection::Intersection(Scene* scene, Ray& ray) {
 
 void Intersection::print() {
    if (!hit()) {
-      cout << "No Hit" << endl;
+      std::cout << "No Hit" << std::endl;
       return;
    }
    
-   cout << "T = " << t << endl;
-   cout << "Object Type: " << object->type << endl; 
+   std::cout << "T = " << t << std::endl;
+   std::cout << "Object Type: " << object->type << std::endl; 
 }

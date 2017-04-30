@@ -1,4 +1,4 @@
-#include <iostream>	// std::cout
+#include <iostream>	// std::std::cout
 #include <string.h>	// strcpy
 #include <vector>	// vectors
 #include <iomanip>	//set precision
@@ -22,8 +22,6 @@ Scene scene;
 */
 int arg_flags[4] = {0};
 
-using namespace std;
-
 int main(int args, char **argv) {
 	// Catch empty line args
 	if (args == 1) {
@@ -37,7 +35,7 @@ int main(int args, char **argv) {
 	arg_flags[3] = !strcmp(argv[1], "firsthit") || !strcmp(argv[1], "pixelcolor");
 	renderer.BRDF_flag = !strcmp(argv[args-1], "-altbrdf");
 
-	cout << setprecision(4);
+	std::cout << std::setprecision(4);
 
 	// Parse file + create scene
 	loader.parse(argv[2], scene);
@@ -62,7 +60,7 @@ int main(int args, char **argv) {
 		int pixel_y = atoi(argv[6]);
 		Ray ray = scene.createCameraRay(window_width, window_height, pixel_x, pixel_y);
 		Intersection in(&scene, ray);
-		cout << "Pixel: [" << pixel_x << ", " << pixel_y << "] ";
+		std::cout << "Pixel: [" << pixel_x << ", " << pixel_y << "] ";
 		ray.print();
 		// Firsthit
 		if (arg_flags[3]) {
@@ -70,7 +68,7 @@ int main(int args, char **argv) {
 			renderer.print();
 			const glm::ivec2 size = glm::ivec2(window_width, window_height);
 			glm::vec3 color = renderer.calculateColor(scene, size, pixel_x, pixel_y, renderer.BRDF_flag);
-		   cout << "Color: (" << color.x << ", " << color.y  << ", " << color.z << ")" << endl;
+		   std::cout << "Color: (" << color.x << ", " << color.y  << ", " << color.z << ")" << std::endl;
 		}
  	}
 

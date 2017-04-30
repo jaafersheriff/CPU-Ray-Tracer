@@ -4,16 +4,14 @@
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 #include "stb_image_write.h" 
 
-using namespace glm;
-
-vec3 Renderer::calculateColor(Scene &scene, const ivec2 size, const int x, const int y, int BRDF_flag) {
+glm::vec3 Renderer::calculateColor(Scene &scene, const glm::ivec2 size, const int x, const int y, int BRDF_flag) {
 	// Calculate color
-	vec3 color = scene.findColor(size, x, y, BRDF_flag);
+	glm::vec3 color = scene.findColor(size, x, y, BRDF_flag);
 
 	// Scale RGB
-	color.r = round(clamp(color.r, 0.f, 1.f) * 255.f);
-	color.g = round(clamp(color.g, 0.f, 1.f) * 255.f);
-	color.b = round(clamp(color.b, 0.f, 1.f) * 255.f);
+	color.r = round(glm::clamp(color.r, 0.f, 1.f) * 255.f);
+	color.g = round(glm::clamp(color.g, 0.f, 1.f) * 255.f);
+	color.b = round(glm::clamp(color.b, 0.f, 1.f) * 255.f);
 
 	return color;
 }
@@ -21,7 +19,7 @@ vec3 Renderer::calculateColor(Scene &scene, const ivec2 size, const int x, const
 void Renderer::render(Scene &scene, const int window_width, const int window_height) {
 	const int numChannels = 3;
 	const std::string fileName = "output.png";
-	const ivec2 size = ivec2(window_width, window_height);
+	const glm::ivec2 size = glm::ivec2(window_width, window_height);
 
 	unsigned char *data = new unsigned char[size.x * size.y * numChannels];
 	
@@ -29,7 +27,7 @@ void Renderer::render(Scene &scene, const int window_width, const int window_hei
 		for (int x = 0; x < size.x; x++) {
 
 			// Calculate color
-			vec3 color = calculateColor(scene, size, x, y, BRDF_flag);
+			glm::vec3 color = calculateColor(scene, size, x, y, BRDF_flag);
 
 			// Set pixel color
 			unsigned char red   = (unsigned char) color.r;

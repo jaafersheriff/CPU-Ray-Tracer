@@ -1,16 +1,13 @@
 #include "Plane.hpp"
 
-using namespace glm;
-using namespace std;
-
 Plane::Plane() : GeoObject() {
 	this->type = "Plane";
 	
-	this->normal = vec3(0, 0, 0);
+	this->normal = glm::vec3(0, 0, 0);
 	this->distance = 0;
 }
 
-vec3 Plane::findNormal(const vec3 intersection_point) {
+glm::vec3 Plane::findNormal(const glm::vec3 intersection_point) {
 	return normal;
 }
 
@@ -20,14 +17,14 @@ float Plane::intersect(const Ray &ray) {
 }
 
 void Plane::print() {
-	cout << "- Type: Plane" << endl;
-	cout << "- Normal: {";
-		cout << normal.x << " " << normal.y << " " << normal.z;
-		cout << "}" << endl;
-	cout << "- Distance: ";
-		cout << distance << endl;
-	cout << "- Color: {";
-		cout << color.x << " " << color.y << " " << color.z;
-		cout << "}" << endl;
+	std::cout << "- Type: Plane" << std::endl;
+	std::cout << "- Normal: {";
+		std::cout << normal.x << " " << normal.y << " " << normal.z;
+		std::cout << "}" << std::endl;
+	std::cout << "- Distance: ";
+		std::cout << distance << std::endl;
+	std::cout << "- Color: {";
+		std::cout << color.x << " " << color.y << " " << color.z;
+		std::cout << "}" << std::endl;
 	GeoPrint();
 }

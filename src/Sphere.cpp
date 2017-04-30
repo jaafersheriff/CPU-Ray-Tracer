@@ -1,22 +1,19 @@
 #include "Sphere.hpp"
 
-using namespace glm;
-using namespace std;
-
 Sphere::Sphere() : GeoObject() {
 	this->type = "Sphere";
 		
-	this->center = vec3(0, 0, 0);
+	this->center = glm::vec3(0, 0, 0);
 	this->radius = 0;
 }
 
-vec3 Sphere::findNormal(const vec3 intersection_point) {
+glm::vec3 Sphere::findNormal(const glm::vec3 intersection_point) {
 	return normalize(intersection_point - center);
 }
 
 
 float Sphere::intersect(const Ray &ray) {
-	vec3 pc = ray.position-center;
+	glm::vec3 pc = ray.position-center;
 
 	float A = dot(ray.direction, ray.direction);
 	float B = dot(ray.direction + ray.direction, pc);
@@ -30,14 +27,14 @@ float Sphere::intersect(const Ray &ray) {
 }
 
 void Sphere::print() {
-	cout << "- Type: Sphere" << endl;
-	cout << "- Center: {";
-		cout << center.x << " " << center.y << " " << center.z;
-		cout << "}" << endl;
-	cout << "- Radius: ";
-		cout << radius << endl;
-	cout << "- Color: {";
-		cout << color.x << " " << color.y << " " << color.z;
-		cout << "}" << endl;
+	std::cout << "- Type: Sphere" << std::endl;
+	std::cout << "- Center: {";
+		std::cout << center.x << " " << center.y << " " << center.z;
+		std::cout << "}" << std::endl;
+	std::cout << "- Radius: ";
+		std::cout << radius << std::endl;
+	std::cout << "- Color: {";
+		std::cout << color.x << " " << color.y << " " << color.z;
+		std::cout << "}" << std::endl;
 	GeoPrint();
 }
