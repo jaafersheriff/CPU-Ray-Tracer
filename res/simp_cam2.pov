@@ -1,10 +1,10 @@
 // cs174, assignment 1 sample file (RIGHT HANDED)
 
-//default camera pointing down negative z - case 0
+//camera pointing down negative x - case 2
 camera {
-location  <0, 0, 14>
+location  <14, 0,0>
 up        <0,  1,  0>
-right     <1.33333, 0,  0>
+right     <0, 0,  -1.3333>
 look_at   <0, 0, 0>
 }
 
