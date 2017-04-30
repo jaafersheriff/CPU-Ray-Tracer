@@ -49,7 +49,7 @@ glm::vec3 CookTorrance(Light *light, Intersection &object_in) {
    }
 
    // F
-   float F_z = 0.2f;    // TODO: f_z = index of refraction
+   float F_z = object_in.object->ior;
    float F = F_z + (1-F_z) * pow(1-VdotH, 5);
 
    glm::vec3 specular = object_in.object->color * (D*G*F) / (4*NdotL*NdotV);
