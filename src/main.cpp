@@ -34,7 +34,7 @@ int main(int args, char **argv) {
 	arg_flags[0] = !strcmp(argv[1], "render");
 	arg_flags[1] = !strcmp(argv[1], "sceneinfo");
 	arg_flags[2] = !strcmp(argv[1], "pixelray");
-	arg_flags[3] = !strcmp(argv[1], "firsthit");
+	arg_flags[3] = !strcmp(argv[1], "firsthit") || !strcmp(argv[1], "pixelcolor");
 	renderer.BRDF_flag = !strcmp(argv[args-1], "-altbrdf");
 
 	cout << setprecision(4);
