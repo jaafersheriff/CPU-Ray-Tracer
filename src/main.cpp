@@ -19,14 +19,12 @@ Scene scene;
  1 - sceneinfo
  2 - pixelray
  3 - firsthit
- 4 - pixelcolor
 */
 int arg_flags[4] = {0};
 
 using namespace std;
 
 int main(int args, char **argv) {
-	
 	// Catch empty line args
 	if (args == 1) {
 		return 1;
@@ -37,14 +35,12 @@ int main(int args, char **argv) {
 	arg_flags[1] = !strcmp(argv[1], "sceneinfo");
 	arg_flags[2] = !strcmp(argv[1], "pixelray");
 	arg_flags[3] = !strcmp(argv[1], "firsthit");
-	arg_flags[4] = !strcmp(argv[1], "pixelcolor");
 	renderer.BRDF_flag = !strcmp(argv[args-1], "-altbrdf");
 
 	cout << setprecision(4);
 
 	// Parse file + create scene
 	loader.parse(argv[2], scene);
-
 
  	// Render
 	if (arg_flags[0]) {
@@ -59,7 +55,7 @@ int main(int args, char **argv) {
 	}
 
 	// Pixelray 
-	if (arg_flags[2] || arg_flags[3] || arg_flags[4]) {
+	if (arg_flags[2] || arg_flags[3]) {
 		int window_width = atoi(argv[3]);
 		int window_height = atoi(argv[4]);
 		int pixel_x = atoi(argv[5]);
@@ -68,8 +64,8 @@ int main(int args, char **argv) {
 		Intersection in(&scene, ray);
 		cout << "Pixel: [" << pixel_x << ", " << pixel_y << "] ";
 		ray.print();
-		// Firsthit or Pixelcolor
-		if (arg_flags[3] || arg_flags[4]) {
+		// Firsthit
+		if (arg_flags[3]) {
 			in.print();
 			renderer.print();
 			const glm::ivec2 size = glm::ivec2(window_width, window_height);
