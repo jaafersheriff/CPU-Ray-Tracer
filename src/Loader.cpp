@@ -3,8 +3,43 @@
 using namespace glm;
 using namespace std;
 
+
 vec3 Loader::createVector(const string x, const string y, const string z) {
 	return vec3(strtof(x.c_str(), 0), strtof(y.c_str(), 0), strtof(z.c_str(), 0));
+}
+
+float Loader::findFloat(string word) {
+   if (word.find("}") != string::npos) {
+      string w = word.substr(0, word.size()-1);
+      return strtof(w.c_str(), 0);
+   } 
+
+   return strtof(word.c_str(), 0);
+}
+
+Loader::Finish Loader::createFinish(vector<string> line) {
+   Finish f;
+   for (unsigned int i = 1; i < line.size(); i++) {
+      if (line[i].find("ambient") != string::npos) {
+         f.ambient = findFloat(line[i+1]);
+      }
+      if (line[i].find("diffuse") != string::npos) {
+         f.diffuse = findFloat(line[i+1]);
+      }
+      if (line[i].find("specular") != string::npos) {
+         f.specular = findFloat(line[i+1]);
+      }
+      if (line[i].find("roughness") != string::npos) {
+         f.roughness = findFloat(line[i+1]);
+      }
+      if (line[i].find("metallic") != string::npos) {
+         f.metallic = findFloat(line[i+1]);
+      }
+      if (line[i].find("ior") != string::npos) {
+         f.ior = findFloat(line[i+1]);
+      }
+   }
+   return f;
 }
 
 Plane* Loader::createPlane(vector<string> line, ifstream& file) {
@@ -29,19 +64,13 @@ Plane* Loader::createPlane(vector<string> line, ifstream& file) {
          plane->color = createVector(x, y, z);            
       }
       if (!line[0].compare("finish")) {
-         if (line.size() >= 3 && !line[1].compare("{ambient")) {
-            plane->ambient = strtof(line[2].c_str(), 0);
-         }
-         if (line.size() >= 5 && !line[3].compare("diffuse")) {
-            plane->diffuse = strtof(line[4].c_str(), 0);         
-         }
-         if (line.size() >= 7 && !line[5].compare("specular")) {
-            plane->specular = strtof(line[6].c_str(), 0);
-         }
-         if (line.size() >= 9 && !line[7].compare("roughness")) {
-            string r = line[8].substr(0, line[8].size()-1);
-            plane->roughness = strtof(r.c_str(), 0);
-         }
+         Finish finish = createFinish(line);
+         plane->ambient = finish.ambient;
+         plane->diffuse = finish.diffuse;
+         plane->specular = finish.specular;
+         plane->roughness = finish.roughness;
+         plane->metallic = finish.metallic;
+         plane->ior = finish.ior;
       }
       line = getLine(&file);
    }
@@ -70,19 +99,13 @@ Sphere* Loader::createSphere(vector<string> line, ifstream& file) {
          sphere->color = createVector(x, y, z);               
       }
       if (!line[0].compare("finish")) {
-         if (line.size() >= 3 && !line[1].compare("{ambient")) {
-            sphere->ambient = strtof(line[2].c_str(), 0);
-         }
-         if (line.size() >= 5 && !line[3].compare("diffuse")) {
-            sphere->diffuse = strtof(line[4].c_str(), 0);         
-         }
-         if (line.size() >= 7 && !line[5].compare("specular")) {
-            sphere->specular = strtof(line[6].c_str(), 0);
-         }
-         if (line.size() >= 9 && !line[7].compare("roughness")) {
-            string r = line[8].substr(0, line[8].size()-1);
-            sphere->roughness = strtof(r.c_str(), 0);
-         }
+         Finish finish = createFinish(line);
+         sphere->ambient = finish.ambient;
+         sphere->diffuse = finish.diffuse;
+         sphere->specular = finish.specular;
+         sphere->roughness = finish.roughness;
+         sphere->metallic = finish.metallic;
+         sphere->ior = finish.ior;
       }
       if (!line[0].compare("translate")) {
          x = line[1].substr(1, line[1].size()-2);
@@ -92,6 +115,7 @@ Sphere* Loader::createSphere(vector<string> line, ifstream& file) {
       }
       line = getLine(&file);
    }
+
    return sphere;
 }
 
