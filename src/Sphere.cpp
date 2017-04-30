@@ -39,9 +39,5 @@ void Sphere::print() {
 	cout << "- Color: {";
 		cout << color.x << " " << color.y << " " << color.z;
 		cout << "}" << endl;
-	cout << "- Material:" << endl;
-		cout << "  - Ambient: ";
-			cout << ambient << endl;
-		cout << "  - Diffuse: ";
-			cout << diffuse << endl;
+	GeoPrint();
 }
