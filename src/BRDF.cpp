@@ -39,7 +39,7 @@ glm::vec3 CookTorrance(Light *light, Intersection &object_in) {
    if (HdotN > 0 && object_in.object->roughness > 0) {
       float r_squared = object_in.object->roughness*object_in.object->roughness;
       D = pow(HdotN, 2/(r_squared*r_squared) - 2);
-      D /= (PI * r_squared * r_squared);
+      D /= (PI * r_squared*r_squared);
    }
    // G
    float G = 1;
@@ -49,7 +49,7 @@ glm::vec3 CookTorrance(Light *light, Intersection &object_in) {
    }
 
    // F
-   float F_z = object_in.object->ior;
+   float F_z = pow(object_in.object->ior-1, 2)/pow(object_in.object->ior+1, 2);
    float F = F_z + (1-F_z) * pow(1-VdotH, 5);
 
    glm::vec3 specular = object_in.object->color * (D*G*F) / (4*NdotL*NdotV);
