@@ -23,14 +23,15 @@ struct Finish {
 public:
 	Loader(){};
 
-   // Return a vec3 of three strings assuming they represent floating point values
-   glm::vec3 createVector(const std::string, const std::string, const std::string);
-
    // Walk through an input file creating a Scene object
 	void parse(const char *file_name, Scene &scene);
+
 private:
-   // Finds a float inside a string -- catches brackets { } within string
-   float findFloat(std::string word);
+   std::vector<float> findFloatsInLine(std::vector<std::string>);
+
+
+   // Finds a float inside a string
+   std::vector<float> findFloatsInWord(std::string word);
 
    // Returns a Finish struct containing all GeoObject finish properties
    Finish createFinish(std::vector<std::string>);
