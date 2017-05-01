@@ -15,7 +15,7 @@ public:
       this->ambient = 0;
       this->diffuse = 0;
       this->specular = 0;
-      this->shininess = 0;
+      this->shininess = 1;
       this->roughness = 0;
       this->metallic = 0;
       this->ior = 0;

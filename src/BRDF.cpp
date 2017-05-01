@@ -1,26 +1,37 @@
 #include "BRDF.hpp"
 
 glm::vec3 BlinnPhong(Light *light, Intersection &object_in) {
-   glm::vec3 light_dir = normalize(light->position - object_in.point);
+   glm::vec3 light_dir = glm::normalize(light->position - object_in.point);
    glm::vec3 norm = object_in.object->findNormal(object_in.point);
-   glm::vec3 half = normalize(light_dir - object_in.ray.direction);
-   float NdotL = std::max(0.f, dot(norm, light_dir));
-   float HdotN = std::max(0.f, dot(half, norm));   
+   glm::vec3 half = glm::normalize(light_dir - object_in.ray.direction);
+   float NdotL = dot(norm, light_dir);
+   float HdotN = dot(half, norm);   
    
    // Diffuse
-   glm::vec3 ret = NdotL * object_in.object->color * object_in.object->diffuse * light->color;
+   glm::vec3 diffuse;
+   if (!NdotL || !object_in.object->diffuse) {
+      diffuse = glm::vec3(0, 0, 0);
+   }
+   else {
+      diffuse = object_in.object->diffuse * object_in.object->color * NdotL * light->color;
+   }
 
    // Specular
-   glm::vec3 specular = object_in.object->color * object_in.object->specular * light->color;
-   ret += specular * (float) pow(HdotN, object_in.object->shininess);
+   glm::vec3 specular;
+   if (!HdotN || !object_in.object->specular) {
+      specular = glm::vec3(0, 0, 0);
+   }
+   else {
+      specular =  object_in.object->specular * object_in.object->color  * (float) pow(HdotN, object_in.object->shininess) * light->color;      
+   }
 
-   return ret;
+   return diffuse + specular;
 }
 
 glm::vec3 CookTorrance(Light *light, Intersection &object_in) {
    glm::vec3 light_dir = glm::normalize(light->position - object_in.point);
    glm::vec3 norm = object_in.object->findNormal(object_in.point);
-   glm::vec3 half = normalize(light_dir - object_in.ray.direction);
+   glm::vec3 half = glm::normalize(light_dir - object_in.ray.direction);
    float NdotL = std::max(0.f, dot(norm, light_dir));
    float NdotV = std::max(0.f, dot(norm, -object_in.ray.direction));
    float HdotN = std::max(0.f, dot(half, norm));
@@ -55,7 +66,7 @@ glm::vec3 CookTorrance(Light *light, Intersection &object_in) {
    glm::vec3 specular = object_in.object->color * (D*G*F) / (4*NdotL*NdotV);
 
    // s
-   specular *= (object_in.object->metallic);
+   specular *= object_in.object->metallic;
 
    return light->color * NdotL * (diffuse + specular);
 }
