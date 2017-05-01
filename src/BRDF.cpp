@@ -3,7 +3,7 @@
 glm::vec3 BlinnPhong(Light *light, Intersection &object_in) {
    glm::vec3 light_dir = glm::normalize(light->position - object_in.point);
    glm::vec3 norm = object_in.object->findNormal(object_in.point);
-   glm::vec3 half = glm::normalize(light_dir - object_in.ray.direction);
+   glm::vec3 half = glm::normalize(light_dir - glm::normalize(object_in.ray.direction));
    float NdotL = dot(norm, light_dir);
    float HdotN = dot(half, norm);   
    
@@ -23,8 +23,7 @@ glm::vec3 BlinnPhong(Light *light, Intersection &object_in) {
    }
    else {
       float r_squared = object_in.object->roughness*object_in.object->roughness;
-      specular =  (object_in.object->specular) * object_in.object->color  * (float) pow(HdotN, 2/(r_squared*r_squared) - 2) * light->color;      
-      specular /= (PI * r_squared*r_squared);
+      specular = object_in.object->specular * object_in.object->color  * (float) pow(HdotN, 2/r_squared - 2) * light->color;      
    }
 
    return diffuse + specular;
@@ -34,10 +33,10 @@ glm::vec3 CookTorrance(Light *light, Intersection &object_in) {
    glm::vec3 light_dir = glm::normalize(light->position - object_in.point);
    glm::vec3 norm = object_in.object->findNormal(object_in.point);
    glm::vec3 half = glm::normalize(light_dir - object_in.ray.direction);
-   float NdotL = std::max(0.f, dot(norm, light_dir));
-   float NdotV = std::max(0.f, dot(norm, -object_in.ray.direction));
-   float HdotN = std::max(0.f, dot(half, norm));
-   float VdotH = std::max(0.f, dot(-object_in.ray.direction, half));
+   float NdotL = dot(norm, light_dir);
+   float NdotV = dot(norm, -object_in.ray.direction);
+   float HdotN = dot(half, norm);
+   float VdotH = dot(-object_in.ray.direction, half);
 
    if (NdotL == 0.0f) {
       return glm::vec3(0, 0, 0);
@@ -49,14 +48,14 @@ glm::vec3 CookTorrance(Light *light, Intersection &object_in) {
    // Specular
    // D
    float D = 0;
-   if (HdotN > 0 && object_in.object->roughness > 0) {
+   if (!HdotN && !object_in.object->roughness) {
       float r_squared = object_in.object->roughness*object_in.object->roughness;
       D = pow(HdotN, 2/(r_squared*r_squared) - 2);
       D /= (PI * r_squared*r_squared);
    }
    // G
    float G = 1;
-   if (VdotH > 0 && NdotV > 0 && HdotN > 0) {
+   if (!VdotH && !NdotV && !HdotN) {
       G = std::min(G, 2*HdotN*NdotV/VdotH);
       G = std::min(G, 2*HdotN*NdotL/VdotH);
    }
