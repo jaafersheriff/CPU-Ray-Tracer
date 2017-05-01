@@ -3,9 +3,9 @@
 glm::vec3 BlinnPhong(Light *light, Intersection &object_in) {
    glm::vec3 light_dir = glm::normalize(light->position - object_in.point);
    glm::vec3 norm = object_in.object->findNormal(object_in.point);
-   glm::vec3 half = glm::normalize(light_dir - glm::normalize(object_in.ray.direction));
-   float NdotL = dot(norm, light_dir);
-   float HdotN = dot(half, norm);   
+   glm::vec3 half = glm::normalize(light_dir - object_in.ray.direction);
+   float NdotL = std::max(0.f, dot(norm, light_dir));
+   float HdotN = std::max(0.f, dot(half, norm));
    
    // Diffuse
    glm::vec3 diffuse;
@@ -33,7 +33,7 @@ glm::vec3 CookTorrance(Light *light, Intersection &object_in) {
    glm::vec3 light_dir = glm::normalize(light->position - object_in.point);
    glm::vec3 norm = object_in.object->findNormal(object_in.point);
    glm::vec3 half = glm::normalize(light_dir - object_in.ray.direction);
-   float NdotL = dot(norm, light_dir);
+   float NdotL = std::max(0.f, dot(norm, light_dir));
    float NdotV = dot(norm, -object_in.ray.direction);
    float HdotN = dot(half, norm);
    float VdotH = dot(-object_in.ray.direction, half);
