@@ -20,7 +20,7 @@ vec3 Scene::findColor(const ivec2 window_size, const int pixel_x, const int pixe
 	// Calculate ray from object to each light
 	for (unsigned int i = 0; i < lights.size(); i++) {
 		Light *light = lights[i];
-		vec3 light_dir = normalize(light->position - camera_in.point);
+		vec3 light_dir = glm::normalize(light->position - camera_in.point);
 		Ray light_ray(camera_in.point, light_dir);
 		Intersection light_in(this, light_ray);		
 
@@ -46,8 +46,8 @@ Ray Scene::createCameraRay(const int width, const int height, const int x, const
 	// direction
 	float u = (x + 0.5)/width - 0.5;
 	float v = (y + 0.5)/height - 0.5;
-	vec3 w = normalize(vec3(camera->lookAt - camera->location));
-	ray.direction = normalize(vec3(u*camera->right + v*camera->up + w));
+	vec3 w = glm::normalize(vec3(camera->lookAt - camera->location));
+	ray.direction = glm::normalize(vec3(u*camera->right + v*camera->up + w));
 
 	return ray;
 }

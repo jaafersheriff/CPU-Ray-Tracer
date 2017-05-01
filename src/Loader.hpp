@@ -27,10 +27,10 @@ public:
 	void parse(const char *file_name, Scene &scene);
 
 private:
+   // Find all floats inside a line
    std::vector<float> findFloatsInLine(std::vector<std::string>);
 
-
-   // Finds a float inside a string
+   // Find all floats inside a word
    std::vector<float> findFloatsInWord(std::string word);
 
    // Returns a Finish struct containing all GeoObject finish properties

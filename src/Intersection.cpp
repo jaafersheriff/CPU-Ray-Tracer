@@ -11,7 +11,7 @@ Intersection::Intersection(Scene* scene, Ray& ray) {
       // If intersection with current object is closer to camera than current intersection
       // Replace intersection
       float curr_t = scene->objects[i]->intersect(ray);
-      if (curr_t < this->t && curr_t > EPSILON) {
+      if (curr_t > EPSILON && curr_t < this->t) {
          this->t = curr_t;
          this->object = scene->objects[i];
       }
