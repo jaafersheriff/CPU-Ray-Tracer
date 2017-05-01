@@ -24,6 +24,7 @@ glm::vec3 BlinnPhong(Light *light, Intersection &object_in) {
    else {
       float r_squared = object_in.object->roughness*object_in.object->roughness;
       specular =  (object_in.object->specular) * object_in.object->color  * (float) pow(HdotN, 2/(r_squared*r_squared) - 2) * light->color;      
+      specular /= (PI * r_squared*r_squared);
    }
 
    return diffuse + specular;
