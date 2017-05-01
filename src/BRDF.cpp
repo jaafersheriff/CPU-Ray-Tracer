@@ -34,11 +34,11 @@ glm::vec3 CookTorrance(Light *light, Intersection &object_in) {
    glm::vec3 norm = object_in.object->findNormal(object_in.point);
    glm::vec3 half = glm::normalize(light_dir - object_in.ray.direction);
    float NdotL = std::max(0.f, dot(norm, light_dir));
-   float NdotV = dot(norm, -object_in.ray.direction);
-   float HdotN = dot(half, norm);
-   float VdotH = dot(-object_in.ray.direction, half);
+   float HdotN = std::max(0.f, dot(half, norm));
+   float NdotV = std::max(0.f, dot(norm, -object_in.ray.direction));
+   float VdotH = std::max(0.f, dot(-object_in.ray.direction, half));
 
-   if (NdotL == 0.0f) {
+   if (NdotL == 0.f) {
       return glm::vec3(0, 0, 0);
    }
 
@@ -46,28 +46,25 @@ glm::vec3 CookTorrance(Light *light, Intersection &object_in) {
    glm::vec3 diffuse = object_in.object->color * (1-object_in.object->metallic);
 
    // Specular
-   // D
-   float D = 0;
-   if (!HdotN && !object_in.object->roughness) {
+   // D - Blinn
+   float D = 0.f;
+   if (HdotN > 0.f && object_in.object->roughness > 0.f) {
       float r_squared = object_in.object->roughness*object_in.object->roughness;
-      D = pow(HdotN, 2/(r_squared*r_squared) - 2);
-      D /= (PI * r_squared*r_squared);
+      D = pow(HdotN, 2/(r_squared*r_squared) - 2)/(PI * r_squared*r_squared);
    }
+
    // G
-   float G = 1;
-   if (!VdotH && !NdotV && !HdotN) {
-      G = std::min(G, 2*HdotN*NdotV/VdotH);
-      G = std::min(G, 2*HdotN*NdotL/VdotH);
-   }
+   float G = 1.f;
+   G = std::min(G, 2.f*HdotN*NdotV/VdotH);
+   G = std::min(G, 2.f*HdotN*NdotL/VdotH);
 
    // F
-   float F_z = pow(object_in.object->ior-1, 2)/pow(object_in.object->ior+1, 2);
-   float F = F_z + (1-F_z) * pow(1-VdotH, 5);
+   float F_z = pow(object_in.object->ior-1.f, 2.f)/pow(object_in.object->ior+1.f, 2.f);
+   float F = F_z + (1.f-F_z) * pow(1.f-VdotH, 5.f);
 
-   glm::vec3 specular = object_in.object->color * (D*G*F) / (4*NdotL*NdotV);
+   glm::vec3 specular = object_in.object->color * object_in.object->metallic;
+   specular *= (D*G*F) / (4.f*NdotL*NdotV);
 
-   // s
-   specular *= object_in.object->metallic;
 
    return light->color * NdotL * (diffuse + specular);
 }

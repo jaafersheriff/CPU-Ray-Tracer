@@ -15,7 +15,6 @@ public:
       this->ambient = 0;
       this->diffuse = 0;
       this->specular = 0;
-      this->shininess = 0;
       this->roughness = 0;
       this->metallic = 0;
       this->ior = 0;
@@ -29,7 +28,6 @@ public:
    float diffuse;
    float specular;
    float roughness;
-   float shininess;
    float metallic;
    float ior;
    
