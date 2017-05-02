@@ -23,8 +23,5 @@ void Plane::print() {
 		std::cout << "}" << std::endl;
 	std::cout << "- Distance: ";
 		std::cout << distance << std::endl;
-	std::cout << "- Color: {";
-		std::cout << color.x << " " << color.y << " " << color.z;
-		std::cout << "}" << std::endl;
 	GeoPrint();
 }

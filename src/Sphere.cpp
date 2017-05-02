@@ -33,8 +33,5 @@ void Sphere::print() {
 		std::cout << "}" << std::endl;
 	std::cout << "- Radius: ";
 		std::cout << radius << std::endl;
-	std::cout << "- Color: {";
-		std::cout << color.x << " " << color.y << " " << color.z;
-		std::cout << "}" << std::endl;
 	GeoPrint();
 }
