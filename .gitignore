@@ -1,6 +1,9 @@
 build/
 tests/
+res/
+
 raytrace.*
+
 *.png
 *.py
 *.sh

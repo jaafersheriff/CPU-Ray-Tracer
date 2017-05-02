@@ -17,7 +17,7 @@ public:
       this->specular = 0;
       this->roughness = 0;
       this->metallic = 0;
-      this->ior = 0;
+      this->ior = 1;
    };
 
 	std::string type;
