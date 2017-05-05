@@ -2,6 +2,9 @@ build/
 tests/
 res/
 
+.scannerwork/
+sonar-project.properties
+
 raytrace.*
 
 *.png
