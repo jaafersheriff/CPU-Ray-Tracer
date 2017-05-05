@@ -17,6 +17,7 @@ struct Finish {
    float specular = 0;
    float roughness = 0;
    float metallic = 0;
+   float reflection = 0;
    float ior = 0;
 };
 

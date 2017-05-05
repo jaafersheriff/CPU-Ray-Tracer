@@ -1,5 +1,4 @@
 #include "Loader.hpp"
-#include <cmath>  // isnan
 
 using namespace glm;
 using namespace std;
@@ -21,6 +20,9 @@ Loader::Finish Loader::createFinish(vector<string> line) {
       }
       if (line[i].find("metallic") != string::npos) {
          f.metallic = findFloatsInWord(line[i+1])[0];
+      }
+      if (line[i].find("reflection") != string::npos) {
+         f.reflection = findFloatsInWord(line[i+1])[0];
       }
       if (line[i].find("ior") != string::npos) {
          f.ior = findFloatsInWord(line[i+1])[0];
@@ -54,6 +56,7 @@ Plane* Loader::createPlane(vector<string> line, ifstream& file) {
          plane->specular = finish.specular;
          plane->roughness = finish.roughness;
          plane->metallic = finish.metallic;
+         plane->reflection = finish.reflection;
          plane->ior = finish.ior;
       }
       line = getLine(&file);
@@ -86,6 +89,7 @@ Sphere* Loader::createSphere(vector<string> line, ifstream& file) {
          sphere->specular = finish.specular;
          sphere->roughness = finish.roughness;
          sphere->metallic = finish.metallic;
+         sphere->reflection = finish.reflection;
          sphere->ior = finish.ior;
       }
       if (!line[0].compare("translate")) {

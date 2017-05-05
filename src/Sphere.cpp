@@ -13,17 +13,17 @@ glm::vec3 Sphere::findNormal(const glm::vec3 intersection_point) {
 
 
 float Sphere::intersect(const Ray &ray) {
-	glm::vec3 pc = ray.position-center;
+	glm::vec3 pc = ray.position - center;
 
-	float A = dot(ray.direction, ray.direction);
-	float B = dot(ray.direction + ray.direction, pc);
-	float C = dot(pc, pc) - radius*radius;
+	const float A = dot(ray.direction, ray.direction);
+	const float B = dot(ray.direction + ray.direction, pc);
+	const float C = dot(pc, pc) - radius*radius;
 
-	float det = sqrt(B*B-4*A*C);
-	float t1 = (-B+det)/(2*A);
-	float t2 = (-B-det)/(2*A);
+	const float det = sqrt(B*B-4*A*C);
+	const float t1 = (-B+det)/(2*A);
+	const float t2 = (-B-det)/(2*A);
 	
-	return t1 < t2 ? t1 : t2;
+	return std::min(t1, t2);
 }
 
 void Sphere::print() {

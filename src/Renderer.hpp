@@ -19,7 +19,7 @@ public:
       BRDF_flag = 0;
    };
 
-   glm::vec3 calculateColor(Scene &, const glm::ivec2, const int, const int, int);
+   glm::vec3 calculateColor(Scene &, const glm::ivec2, const int, const int);
 	
    void render(Scene &, const int, const int);
 

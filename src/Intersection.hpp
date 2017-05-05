@@ -5,20 +5,23 @@
 #ifndef _INTERSECTION_H_
 #define _INTERSECTION_H_
 
-#include "Scene.hpp"
+#include <vector>
+#include <limits>
+
+#include "GeoObject.hpp"
 
 class Intersection {
 public:
 
-   Intersection(Scene*, Ray&);
+  Intersection(std::vector<GeoObject *>, Ray&);
    
    void print();
 
    // Return true if the ray intersects with an object in the scene 
-   bool hit() { return t != INFINITY; };
+   bool hit() { return t != std::numeric_limits<float>::max(); };
 
-   Ray ray;
    GeoObject *object;
+   Ray ray;
    float t;
    glm::vec3 point;
 };

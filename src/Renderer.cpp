@@ -4,9 +4,9 @@
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 #include "stb_image_write.h" 
 
-glm::vec3 Renderer::calculateColor(Scene &scene, const glm::ivec2 size, const int x, const int y, int BRDF_flag) {
+glm::vec3 Renderer::calculateColor(Scene &scene, const glm::ivec2 size, const int x, const int y) {
 	// Calculate color
-	glm::vec3 color = scene.findColor(size, x, y, BRDF_flag);
+	glm::vec3 color = scene.findColor(size, x, y, this->BRDF_flag);
 
 	// Scale RGB
 	color.r = round(glm::clamp(color.r, 0.f, 1.f) * 255.f);
@@ -27,7 +27,7 @@ void Renderer::render(Scene &scene, const int window_width, const int window_hei
 		for (int x = 0; x < size.x; x++) {
 
 			// Calculate color
-			glm::vec3 color = calculateColor(scene, size, x, y, BRDF_flag);
+			glm::vec3 color = calculateColor(scene, size, x, y);
 
 			// Set pixel color
 			unsigned char red   = (unsigned char) color.r;

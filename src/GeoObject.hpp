@@ -21,6 +21,7 @@ public:
       this->specular = 0;
       this->roughness = 0;
       this->metallic = 0;
+      this->reflection = 0;
       this->ior = 1;
    };
 
@@ -36,6 +37,7 @@ public:
    float specular;
    float roughness;
    float metallic;
+   float reflection;
    float ior;
    
 	virtual void print() = 0;
@@ -58,6 +60,8 @@ public:
             std::cout << roughness << std::endl;
          std::cout << "  - Metallic: ";
             std::cout << metallic << std::endl;
+         std::cout << "  - Reflection: ";
+            std::cout << reflection << std::endl;
          std::cout << "  - IOR: ";
             std::cout << ior << std::endl;
 

@@ -59,7 +59,7 @@ int main(int args, char **argv) {
 		int pixel_x = atoi(argv[5]);
 		int pixel_y = atoi(argv[6]);
 		Ray ray = scene.createCameraRay(window_width, window_height, pixel_x, pixel_y);
-		Intersection in(&scene, ray);
+		Intersection in(scene.objects, ray);
 		std::cout << "Pixel: [" << pixel_x << ", " << pixel_y << "] ";
 		ray.print();
 		// Firsthit
@@ -67,7 +67,7 @@ int main(int args, char **argv) {
 			in.print();
 			renderer.print();
 			const glm::ivec2 size = glm::ivec2(window_width, window_height);
-			glm::vec3 color = renderer.calculateColor(scene, size, pixel_x, pixel_y, renderer.BRDF_flag);
+			glm::vec3 color = renderer.calculateColor(scene, size, pixel_x, pixel_y);
 		   std::cout << "Color: (" << color.x << ", " << color.y  << ", " << color.z << ")" << std::endl;
 		}
  	}
