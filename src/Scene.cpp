@@ -2,11 +2,11 @@
 #include "Intersection.hpp"
 #include "BRDF.hpp"
 
-glm::vec3 Scene::findColor(const glm::ivec2 window_size, const int pixel_x, const int pixel_y, const int BRDF_flag) {
+glm::vec3 Scene::findColor(const glm::ivec2 window_size, const int pixel_x, const int pixel_y, const int BRDF_flag, int recurse_count) {
 	// Find intersection from camera to object
 	Ray camera_ray = createCameraRay(window_size.x, window_size.y, pixel_x, pixel_y);
 
-	return BRDF(objects, lights, camera_ray, BRDF_flag, 6);
+	return BRDF(objects, lights, camera_ray, BRDF_flag, recurse_count);
 }
 
 Ray Scene::createCameraRay(const int width, const int height, const int x, const int y) {

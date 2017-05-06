@@ -6,7 +6,7 @@
 
 glm::vec3 Renderer::calculateColor(Scene &scene, const glm::ivec2 size, const int x, const int y) {
 	// Calculate color
-	glm::vec3 color = scene.findColor(size, x, y, this->BRDF_flag);
+	glm::vec3 color = scene.findColor(size, x, y, this->BRDF_flag, RECURSE_COUNT);
 
 	// Scale RGB
 	color.r = round(glm::clamp(color.r, 0.f, 1.f) * 255.f);

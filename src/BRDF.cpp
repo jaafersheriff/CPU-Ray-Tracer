@@ -3,7 +3,7 @@
 glm::vec3 BRDF(std::vector<GeoObject *> objects, std::vector<Light *> lights, Ray &incident_ray, const int BRDF_flag, int recurse_count) {
 
    // Base csae
-   if (!recurse_count) {
+   if (recurse_count < 0) {
       return glm::vec3(0, 0, 0);
    }
 

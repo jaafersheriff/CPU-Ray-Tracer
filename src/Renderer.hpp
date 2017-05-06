@@ -8,6 +8,9 @@
 
 #include "Scene.hpp"
 
+// Number of times to recurse when reflecting/refracting 
+#define RECURSE_COUNT 6
+
 class Renderer {
 public:
 
