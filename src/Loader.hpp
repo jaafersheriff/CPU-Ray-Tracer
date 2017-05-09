@@ -2,7 +2,7 @@
 #define _LOADER_H_
 
 #include <fstream>   // read file input
-#include <sstream>   // sstream 
+#include <sstream>   // sstream
 #include <stdlib.h>  // strtof
 #include <vector> 	// vector
 #include <string>    // find
@@ -10,17 +10,6 @@
 #include "Scene.hpp"
 
 class Loader {
-
-struct Finish {
-   float ambient = 0;
-   float diffuse = 0;
-   float specular = 0;
-   float roughness = 0;
-   float metallic = 0;
-   float reflection = 0;
-   float ior = 0;
-};
-
 public:
 	Loader(){};
 
@@ -35,7 +24,7 @@ private:
    std::vector<float> findFloatsInWord(std::string word);
 
    // Returns a Finish struct containing all GeoObject finish properties
-   Finish createFinish(std::vector<std::string>);
+   void createFinish(GeoObject::Finish*, std::vector<std::string>);
 
    // Break up the current line in a file into a vector<string>
    // Separating by white space

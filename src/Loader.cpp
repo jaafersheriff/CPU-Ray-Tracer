@@ -3,32 +3,36 @@
 using namespace glm;
 using namespace std;
 
-Loader::Finish Loader::createFinish(vector<string> line) {
-   Finish f;
+void Loader::createFinish(GeoObject::Finish *f, vector<string> line) {
    for (unsigned int i = 1; i < line.size(); i++) {
       if (line[i].find("ambient") != string::npos) {
-         f.ambient = findFloatsInWord(line[i+1])[0];
+         f->ambient = findFloatsInWord(line[i+1])[0];
       }
       if (line[i].find("diffuse") != string::npos) {
-         f.diffuse = findFloatsInWord(line[i+1])[0];
+         f->diffuse = findFloatsInWord(line[i+1])[0];
       }
       if (line[i].find("specular") != string::npos) {
-         f.specular = findFloatsInWord(line[i+1])[0];
+         f->specular = findFloatsInWord(line[i+1])[0];
       }
       if (line[i].find("roughness") != string::npos) {
-         f.roughness = findFloatsInWord(line[i+1])[0];
+         f->roughness = findFloatsInWord(line[i+1])[0];
       }
       if (line[i].find("metallic") != string::npos) {
-         f.metallic = findFloatsInWord(line[i+1])[0];
+         f->metallic = findFloatsInWord(line[i+1])[0];
       }
       if (line[i].find("reflection") != string::npos) {
-         f.reflection = findFloatsInWord(line[i+1])[0];
+         f->reflection = findFloatsInWord(line[i+1])[0];
+      }
+      if (line[i].find("refraction") != string::npos) {
+         f->refraction = findFloatsInWord(line[i+1])[0];
+      }
+      if (line[i].find("filter") != string::npos) {
+         f->filter = findFloatsInWord(line[i+1])[0];
       }
       if (line[i].find("ior") != string::npos) {
-         f.ior = findFloatsInWord(line[i+1])[0];
+         f->ior = findFloatsInWord(line[i+1])[0];
       }
    }
-   return f;
 }
 
 Plane* Loader::createPlane(vector<string> line, ifstream& file) {
@@ -50,14 +54,7 @@ Plane* Loader::createPlane(vector<string> line, ifstream& file) {
          plane->color = vec3(floats[0], floats[1], floats[2]);
       }
       if (!line[0].compare("finish")) {
-         Finish finish = createFinish(line);
-         plane->ambient = finish.ambient;
-         plane->diffuse = finish.diffuse;
-         plane->specular = finish.specular;
-         plane->roughness = finish.roughness;
-         plane->metallic = finish.metallic;
-         plane->reflection = finish.reflection;
-         plane->ior = finish.ior;
+         createFinish(&plane->finish, line);
       }
       line = getLine(&file);
    }
@@ -80,17 +77,10 @@ Sphere* Loader::createSphere(vector<string> line, ifstream& file) {
    while(line[0].compare("}")) {
       if (!line[0].compare("pigment")) {
          floats = findFloatsInLine(line);
-         sphere->color = vec3(floats[0], floats[1], floats[2]);               
+         sphere->color = vec3(floats[0], floats[1], floats[2]);
       }
       if (!line[0].compare("finish")) {
-         Finish finish = createFinish(line);
-         sphere->ambient = finish.ambient;
-         sphere->diffuse = finish.diffuse;
-         sphere->specular = finish.specular;
-         sphere->roughness = finish.roughness;
-         sphere->metallic = finish.metallic;
-         sphere->reflection = finish.reflection;
-         sphere->ior = finish.ior;
+         createFinish(&sphere->finish, line);
       }
       if (!line[0].compare("translate")) {
          floats = findFloatsInLine(line);
@@ -111,7 +101,7 @@ Light* Loader::createLight(vector<string> line, ifstream& file) {
    // Position
    floats = findFloatsInLine(line);
    light->position = vec3(floats[0], floats[1], floats[2]);
-   // Color 
+   // Color
    light->color = vec3(floats[3], floats[4], floats[5]);
 
    return light;
@@ -132,7 +122,7 @@ Camera* Loader::createCamera(vector<string> line, ifstream& file) {
       if (!line[0].compare("up")) {
          floats = findFloatsInLine(line);
          camera->up = vec3(floats[0], floats[1], floats[2]);
-      } 
+      }
       if (!line[0].compare("right")) {
          floats = findFloatsInLine(line);
          camera->right = vec3(floats[0], floats[1], floats[2]);
@@ -155,7 +145,7 @@ void Loader::parse(const char *file_name, Scene &scene) {
 	}
    string word;
 
-   // Walk through file line by line 
+   // Walk through file line by line
    while(inFile) {
       // Store line as vector<string> separating by whitespace
       vector<string> line = getLine(&inFile);
@@ -201,7 +191,7 @@ vector<string> Loader::getLine(ifstream *file) {
 	while(sstream >> word) {
 		words.push_back(word);
 	}
-	
+
 	return words;
 }
 
@@ -226,7 +216,7 @@ vector<float> Loader::findFloatsInWord(string word) {
       int n = 0;
 
       // If number is found
-      while ((c >= '0' && c <= '9') || c == '.' || c == '-') {         
+      while ((c >= '0' && c <= '9') || c == '.' || c == '-') {
          // Continue looping through string collecting digits
          num[n++] = c;
          c = word[w++];

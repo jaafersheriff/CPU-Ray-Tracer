@@ -10,6 +10,7 @@ public:
    Ray(glm::vec3 position, glm::vec3 direction);
 
 	void print();
+	// TODO rename to remove _
    glm::vec3 intersection_point(float);
 
 	glm::vec3 position;

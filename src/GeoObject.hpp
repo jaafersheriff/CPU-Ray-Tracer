@@ -9,20 +9,24 @@
 
 class GeoObject {
 public:
+   struct Finish {
+      float ambient = 0;
+      float diffuse = 0;
+      float specular = 0;
+      float roughness = 0;
+      float metallic = 0;
+      float refraction = 0;
+      float reflection = 0;
+      float filter = 0;
+      float ior = 1;
+   };
+
 	GeoObject() {
       this->translate = glm::vec3(0, 0, 0);
       this->scale = glm::vec3(0, 0, 0);
       this->rotate = glm::vec3(0, 0, 0);
 
       this->color = glm::vec3(0, 0, 0);
-
-      this->ambient = 0;
-      this->diffuse = 0;
-      this->specular = 0;
-      this->roughness = 0;
-      this->metallic = 0;
-      this->reflection = 0;
-      this->ior = 1;
    };
 
 	std::string type;
@@ -32,14 +36,9 @@ public:
    glm::vec3 rotate;
 
    glm::vec3 color;
-   float ambient;
-   float diffuse;
-   float specular;
-   float roughness;
-   float metallic;
-   float reflection;
-   float ior;
-   
+
+   Finish finish;
+
 	virtual void print() = 0;
 	virtual float intersect(const Ray &) = 0;
    virtual glm::vec3 findNormal(const glm::vec3 intersection_point) = 0;
@@ -51,19 +50,23 @@ public:
 
       std::cout << "- Material: " << std::endl;
          std::cout << "  - Ambient: ";
-            std::cout << ambient << std::endl;
+            std::cout << finish.ambient << std::endl;
          std::cout << "  - Diffuse: ";
-            std::cout << diffuse << std::endl;
+            std::cout << finish.diffuse << std::endl;
          std::cout << "  - Specular: ";
-            std::cout << specular << std::endl;
+            std::cout << finish.specular << std::endl;
          std::cout << "  - Roughness: ";
-            std::cout << roughness << std::endl;
+            std::cout << finish.roughness << std::endl;
          std::cout << "  - Metallic: ";
-            std::cout << metallic << std::endl;
+            std::cout << finish.metallic << std::endl;
          std::cout << "  - Reflection: ";
-            std::cout << reflection << std::endl;
+            std::cout << finish.reflection << std::endl;
+         std::cout << "  - Refraction: ";
+            std::cout << finish.refraction << std::endl;
+         std::cout << "  - Filter: ";
+            std::cout << finish.filter << std::endl;
          std::cout << "  - IOR: ";
-            std::cout << ior << std::endl;
+            std::cout << finish.ior << std::endl;
 
       std::cout << "- Transform:" << std::endl;
          std::cout << "  - Translate: {";
