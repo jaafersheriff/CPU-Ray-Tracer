@@ -2,7 +2,7 @@
 
 Plane::Plane() : GeoObject() {
 	this->type = "Plane";
-	
+
 	this->normal = glm::vec3(0, 0, 0);
 	this->distance = 0;
 }
@@ -13,7 +13,12 @@ glm::vec3 Plane::findNormal(const glm::vec3 intersection_point) {
 
 
 float Plane::intersect(const Ray &ray) {
-	return (distance - dot(ray.position, normal))/(dot(ray.direction, normal));
+	float den = dot(ray.direction, normal);
+	if (!den) {
+		return -1;
+	}
+	float num = distance-dot(ray.position, normal);
+	return num/den;
 }
 
 void Plane::print() {

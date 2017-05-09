@@ -13,17 +13,15 @@
 class Intersection {
 public:
 
-  Intersection(std::vector<GeoObject *>, Ray&);
-   
-   void print();
+   Intersection(std::vector<GeoObject *>, Ray&);
 
-   // Return true if the ray intersects with an object in the scene 
-   bool hit() { return t != std::numeric_limits<float>::max(); };
+   void print();
 
    GeoObject *object;
    Ray ray;
    float t;
    glm::vec3 point;
+   bool hit;
 };
 
 #endif

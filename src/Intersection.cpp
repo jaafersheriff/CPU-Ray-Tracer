@@ -5,6 +5,7 @@ const static float EPSILON = 0.0001f;
 Intersection::Intersection(std::vector<GeoObject *> objects, Ray& ray) {
    this->ray = ray;
    this->t = std::numeric_limits<float>::max();
+   this->hit = false;
 
    // Loop through all objects in scene
    for (unsigned int i = 0; i < objects.size(); i++) {
@@ -16,16 +17,20 @@ Intersection::Intersection(std::vector<GeoObject *> objects, Ray& ray) {
          this->object = objects[i];
       }
    }
-   // Set final intersection point and return
-   this->point = ray.intersection_point(this->t);
+
+   // If an object was hit
+   if (this->t != std::numeric_limits<float>::max()) {
+      this->hit = true;
+      this->point = ray.calculatePoint(this->t);
+   }
 }
 
 void Intersection::print() {
-   if (!hit()) {
+   if (!hit) {
       std::cout << "No Hit" << std::endl;
       return;
    }
-   
+
    std::cout << "T = " << t << std::endl;
-   std::cout << "Object Type: " << object->type << std::endl; 
+   std::cout << "Object Type: " << object->type << std::endl;
 }

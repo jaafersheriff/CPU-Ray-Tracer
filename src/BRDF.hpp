@@ -33,6 +33,7 @@ public:
 
 	glm::vec3 CookTorrance(Light *, Intersection &, glm::vec3);
 
+   float fresnel(float n, float d);
 };
 
 #endif

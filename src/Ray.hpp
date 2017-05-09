@@ -9,9 +9,9 @@ public:
 	Ray();
    Ray(glm::vec3 position, glm::vec3 direction);
 
+   void set(const glm::vec3, const glm::vec3);
 	void print();
-	// TODO rename to remove _
-   glm::vec3 intersection_point(float);
+   glm::vec3 calculatePoint(float);
 
 	glm::vec3 position;
 	glm::vec3 direction;

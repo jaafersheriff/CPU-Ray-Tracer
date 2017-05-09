@@ -2,7 +2,7 @@
 
 Sphere::Sphere() : GeoObject() {
 	this->type = "Sphere";
-		
+
 	this->center = glm::vec3(0, 0, 0);
 	this->radius = 0;
 }
@@ -18,11 +18,15 @@ float Sphere::intersect(const Ray &ray) {
 	const float A = dot(ray.direction, ray.direction);
 	const float B = dot(ray.direction + ray.direction, pc);
 	const float C = dot(pc, pc) - radius*radius;
-
 	const float det = sqrt(B*B-4*A*C);
-	const float t1 = (-B+det)/(2*A);
-	const float t2 = (-B-det)/(2*A);
-	
+
+	if (!det || !A) {
+		return -1;
+	}
+
+	float t1 = std::max(0.f, (-B+det)/(2*A));
+	float t2 = std::max(0.f, (-B-det)/(2*A));
+
 	return std::min(t1, t2);
 }
 

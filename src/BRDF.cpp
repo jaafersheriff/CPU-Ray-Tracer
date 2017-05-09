@@ -9,7 +9,7 @@ glm::vec3 BRDF::raytrace(std::vector<GeoObject *> objects, std::vector<Light *> 
 
    // If no intersection from camera to object, return black
    Intersection incident_int(objects, incident_ray);
-   if (!incident_int.hit()) {
+   if (!incident_int.hit) {
       return glm::vec3(0, 0, 0);
    }
 
@@ -27,7 +27,7 @@ glm::vec3 BRDF::raytrace(std::vector<GeoObject *> objects, std::vector<Light *> 
       Intersection light_int(objects, light_ray);
 
       // If no objects are blocking incoming light, BRDF
-      if (!light_int.hit() || distance(incident_int.point, light->position) < distance(incident_int.point, light_int.point)) {
+      if (!light_int.hit || distance(incident_int.point, light->position) < distance(incident_int.point, light_int.point)) {
          // Local color
          local_color += render_flag ? CookTorrance(light, incident_int, norm) : BlinnPhong(light, incident_int, norm);
       }
@@ -52,10 +52,8 @@ glm::vec3 BRDF::raytrace(std::vector<GeoObject *> objects, std::vector<Light *> 
 
 
    // Fresnel
-   // TODO: functional programming
    float NdotV = dot(norm, -incident_int.ray.direction);
-   float F_z = pow(finish->ior-1, 2)/pow(finish->ior+1, 2);
-   float fresnel_reflectance = F_z + (1 - F_z) * pow(1-NdotV, 5);
+   float fresnel_reflectance = fresnel(finish->ior, NdotV);
 
    float local_contribution = (1-finish->filter) * (1-finish->reflection);
    float reflectance_contribution = (1-finish->filter) * finish->reflection + finish->filter * fresnel_reflectance;
@@ -75,9 +73,7 @@ void BRDF::createReflectionRay(Ray *ray, const Intersection &intersection, const
 
    glm::vec3 reflection_dir = incident_ray.direction - 2 * dot(incident_ray.direction, norm) * norm;
 
-   // TODO: setter
-   ray->position = glm::vec3(incident_point);
-   ray->direction = glm::vec3(reflection_dir);
+   ray->set(incident_point, reflection_dir);
 
    if (verbose_flag) {
       std::cout << "REFLECTION RAY: ";
@@ -91,9 +87,9 @@ void BRDF::createRefractionRay(Ray *ray, const float n1, const float n2, const R
    float rat = n1/n2;
    float root = 1-rat*rat*(1-dDotN*dDotN);
 
-   // TODO - user setter
-   ray->position = p;
-   ray->direction = glm::vec3(rat*(in_ray.direction-dDotN*n)-n*(float)sqrt(root));
+   glm::vec3 refraction_dir = rat*(in_ray.direction-dDotN*n)-n*(float)sqrt(root);
+
+   ray->set(p, refraction_dir);
 
    if (verbose_flag) {
       std::cout << "REFRACTION RAY: ";
@@ -155,13 +151,17 @@ glm::vec3 BRDF::CookTorrance(Light *light, Intersection &object_in, glm::vec3 no
    G = std::min(G, 2.f*HdotN*NdotL/VdotH);
 
    // F
-   float F_z = pow(finish->ior-1.f, 2.f)/pow(finish->ior+1.f, 2.f);
-   float F = F_z + (1.f-F_z) * pow(1.f-VdotH, 5.f);
+   float F = fresnel(finish->ior, VdotH);
 
    glm::vec3 specular = object_in.object->color * finish->metallic;
    specular *= (D*G*F) / (4.f*NdotL*NdotV);
 
 
    return light->color * NdotL * (diffuse + specular);
+}
+
+float BRDF::fresnel(float n, float d) {
+   float F_z = pow(n-1.f, 2.f)/pow(n+1.f, 2.f);
+   return F_z + (1.f-F_z) * pow(1.f-d, 5.f);
 }
 
