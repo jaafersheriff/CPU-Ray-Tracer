@@ -2,11 +2,13 @@
 #include <algorithm>
 
 #define STB_IMAGE_WRITE_IMPLEMENTATION
-#include "stb_image_write.h" 
+#include "stb_image_write.h"
 
 glm::vec3 Renderer::calculateColor(Scene &scene, const glm::ivec2 size, const int x, const int y) {
+
 	// Calculate color
-	glm::vec3 color = scene.findColor(size, x, y, this->BRDF_flag, RECURSE_COUNT);
+	Ray camera_ray = scene.createCameraRay(size.x, size.y, x, y);
+	glm::vec3 color = brdf.raytrace(scene.objects, scene.lights, camera_ray, RECURSE_COUNT);
 
 	// Scale RGB
 	color.r = round(glm::clamp(color.r, 0.f, 1.f) * 255.f);
@@ -22,7 +24,7 @@ void Renderer::render(Scene &scene, const int window_width, const int window_hei
 	const glm::ivec2 size = glm::ivec2(window_width, window_height);
 
 	unsigned char *data = new unsigned char[size.x * size.y * numChannels];
-	
+
 	for (int y = 0; y < size.y; y++) {
 		for (int x = 0; x < size.x; x++) {
 
@@ -39,7 +41,7 @@ void Renderer::render(Scene &scene, const int window_width, const int window_hei
 			data[pixel + 2] = blue;
 		}
 	}
-	int success = stbi_write_png(fileName.c_str(), size.x, size.y, numChannels, data, size.x * numChannels); 
+	int success = stbi_write_png(fileName.c_str(), size.x, size.y, numChannels, data, size.x * numChannels);
 	if (!success) {
 		std::cout << "FAILED WRITING IMAGE" << std::endl;
 	}
@@ -48,7 +50,7 @@ void Renderer::render(Scene &scene, const int window_width, const int window_hei
 
 void Renderer::print() {
 	std::cout << "BRDF: ";
-	if (BRDF_flag)
+	if (brdf.render_flag)
 		std::cout << "Cook-Torranec";
 	else
 		std::cout << "Blinn-Phong";

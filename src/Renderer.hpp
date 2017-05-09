@@ -3,27 +3,29 @@
 #ifndef _RENDERER_H_
 #define _RENDERER_H_
 
-#include <iostream> 
+#include <iostream>
 #include <glm/glm.hpp>
 
 #include "Scene.hpp"
+#include "BRDF.hpp"
 
-// Number of times to recurse when reflecting/refracting 
+// Number of times to recurse when reflecting/refracting
 #define RECURSE_COUNT 6
 
 class Renderer {
 public:
+   BRDF brdf;
 
-   // 0 - Blinn-Phong
-   // 1 - Cook-Torrance
-   int BRDF_flag;
+   void setBRDFVerbose(int flag) {
+      brdf.verbose_flag = flag;
+   }
 
-	Renderer() {
-      BRDF_flag = 0;
-   };
+   void setBRDFFlag(int flag) {
+      brdf.render_flag = flag;
+   }
 
    glm::vec3 calculateColor(Scene &, const glm::ivec2, const int, const int);
-	
+
    void render(Scene &, const int, const int);
 
    void print();
