@@ -8,7 +8,7 @@ glm::vec3 Renderer::calculateColor(Scene &scene, const glm::ivec2 size, const in
 
 	// Calculate color
 	Ray camera_ray = scene.createCameraRay(size.x, size.y, x, y);
-	glm::vec3 color = brdf.raytrace(scene.objects, scene.lights, camera_ray, RECURSE_COUNT);
+	glm::vec3 color = brdf.raytrace(scene, camera_ray, RECURSE_COUNT);
 
 	// Scale RGB
 	color.r = round(glm::clamp(color.r, 0.f, 1.f) * 255.f);

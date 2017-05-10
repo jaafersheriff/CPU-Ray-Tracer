@@ -2,7 +2,7 @@
 
 const static float EPSILON = 0.0001f;
 
-glm::vec3 BRDF::raytrace(std::vector<GeoObject *> objects, std::vector<Light *> lights, Ray &incident_ray, int recurse_count) {
+glm::vec3 BRDF::raytrace(Scene &scene, Ray &incident_ray, int recurse_count) {
 
    // Base case
    if (recurse_count < 0) {
@@ -10,7 +10,7 @@ glm::vec3 BRDF::raytrace(std::vector<GeoObject *> objects, std::vector<Light *> 
    }
 
    // If no intersection from camera to object, return black
-   Intersection incident_int(objects, incident_ray);
+   Intersection incident_int(scene.objects, incident_ray);
    if (!incident_int.hit) {
       return glm::vec3(0, 0, 0);
    }
@@ -22,11 +22,11 @@ glm::vec3 BRDF::raytrace(std::vector<GeoObject *> objects, std::vector<Light *> 
 
    // Calculate ray from object to each light
    glm::vec3 norm = incident_int.object->findNormal(incident_int.point);
-   for (unsigned int i = 0; i < lights.size(); i++) {
-      Light *light = lights[i];
+   for (unsigned int i = 0; i < scene.lights.size(); i++) {
+      Light *light = scene.lights[i];
       glm::vec3 light_dir = glm::normalize(light->position - incident_int.point);
       Ray light_ray(incident_int.point, light_dir);
-      Intersection light_int(objects, light_ray);
+      Intersection light_int(scene.objects, light_ray);
 
       // If no objects are blocking incoming light, BRDF
       if (!light_int.hit || distance(incident_int.point, light->position) < distance(incident_int.point, light_int.point)) {
@@ -38,20 +38,14 @@ glm::vec3 BRDF::raytrace(std::vector<GeoObject *> objects, std::vector<Light *> 
    // Reflection color
    Ray reflection_ray;
    createReflectionRay(&reflection_ray, incident_int, norm);
-   glm::vec3 reflection_color = raytrace(objects, lights, reflection_ray, recurse_count-1);
+   glm::vec3 reflection_color = raytrace(scene, reflection_ray, recurse_count-1);
 
    // Refraction color
-   glm::vec3 refraction_color = glm::vec3(0, 0, 0);
-   // Refraction inside of object
-   Ray inner_refraction_ray;
-   createRefractionRay(&inner_refraction_ray, 1, finish->ior, incident_ray, incident_int.point, norm);
-   //refraction_color += raytrace(objects, lights, inner_refraction_ray, recurse_count-1);
-   // Refraction outside of object
-   float t = incident_int.object->intersect(inner_refraction_ray);
-   glm::vec3 p = inner_refraction_ray.calculatePoint(t);
-   Ray outer_refraction_ray;
-   createRefractionRay(&outer_refraction_ray, finish->ior, 1, inner_refraction_ray, p, -norm);
-   refraction_color += raytrace(objects, lights, outer_refraction_ray, recurse_count-1);
+   Ray refraction_ray;
+   // TODO: flip norm depending on dot(ray.d, norm) -- catches refraction ray calculations
+   // TODO: use ^ to decide n1 and n2
+   createRefractionRay(&refraction_ray, finish->ior, 1, incident_ray, incident_int.point, norm);
+   glm::vec3 refraction_color = raytrace(scene, refraction_ray, recurse_count-1);
 
    // Fresnel
    float NdotV = dot(norm, -incident_int.ray.direction);
@@ -62,8 +56,8 @@ glm::vec3 BRDF::raytrace(std::vector<GeoObject *> objects, std::vector<Light *> 
    float transmission_contribution = finish->filter * (1-fresnel_reflectance);
 
     return local_contribution*local_color +
-           reflectance_contribution * reflection_color;
-//           transmission_contribution * refraction_color;
+           reflectance_contribution * reflection_color +
+           transmission_contribution * refraction_color;
 }
 
 void BRDF::createReflectionRay(Ray *ray, const Intersection &intersection, const glm::vec3 norm) {
@@ -73,12 +67,6 @@ void BRDF::createReflectionRay(Ray *ray, const Intersection &intersection, const
    glm::vec3 reflection_dir = incident_ray.direction - 2 * dot(incident_ray.direction, norm) * norm;
 
    ray->set(incident_point + reflection_dir * EPSILON, reflection_dir);
-
-   if (verbose_flag) {
-      std::cout << "REFLECTION RAY: ";
-      ray->print();
-      std::cout << std::endl;
-   }
 }
 
 void BRDF::createRefractionRay(Ray *ray, const float n1, const float n2, const Ray &in_ray, const glm::vec3 p, const glm::vec3 n) {
@@ -89,12 +77,6 @@ void BRDF::createRefractionRay(Ray *ray, const float n1, const float n2, const R
    glm::vec3 refraction_dir = rat*(in_ray.direction-dDotN*n)-n*(float)sqrt(root);
 
    ray->set(p + refraction_dir * EPSILON, refraction_dir);
-
-   if (verbose_flag) {
-      std::cout << "REFRACTION RAY: ";
-      ray->print();
-      std::cout << std::endl;
-   }
 }
 
 glm::vec3 BRDF::BlinnPhong(Light *light, Intersection &object_in, glm::vec3 norm) {

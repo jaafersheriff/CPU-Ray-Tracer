@@ -3,8 +3,8 @@
 
 #include <glm/glm.hpp>
 
-#include "Light.hpp"
 #include "Intersection.hpp"
+#include "Scene.hpp"
 
 #define PI 3.14159265359f
 
@@ -27,7 +27,7 @@ public:
 
 	void createRefractionRay(Ray *ray, const float n1, const float n2, const Ray &in_ray, const glm::vec3 p, const glm::vec3 n);
 
-	glm::vec3 raytrace(std::vector<GeoObject *>, std::vector<Light *>, Ray &, int);
+	glm::vec3 raytrace(Scene &, Ray &, int);
 
 	glm::vec3 BlinnPhong(Light *, Intersection &, glm::vec3);
 
