@@ -28,7 +28,9 @@ public:
 
    void render(Scene &, const int, const int);
 
+   BRDF::printNode *parent = nullptr;
    void print();
+   void printRays(BRDF::printNode*, int level);
 };
 
 #endif

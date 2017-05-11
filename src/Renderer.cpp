@@ -5,10 +5,13 @@
 #include "stb_image_write.h"
 
 glm::vec3 Renderer::calculateColor(Scene &scene, const glm::ivec2 size, const int x, const int y) {
-
+	if (brdf.verbose_flag) {
+		parent = new BRDF::printNode;
+		parent->type = "Primary";
+	}
 	// Calculate color
 	Ray camera_ray = scene.createCameraRay(size.x, size.y, x, y);
-	glm::vec3 color = brdf.raytrace(scene, camera_ray, RECURSE_COUNT);
+	glm::vec3 color = brdf.raytrace(scene, camera_ray, RECURSE_COUNT, parent);
 
 	// Scale RGB
 	color.r = round(glm::clamp(color.r, 0.f, 1.f) * 255.f);
@@ -55,4 +58,32 @@ void Renderer::print() {
 	else
 		std::cout << "Blinn-Phong";
 	std::cout << std::endl;
+}
+
+void Renderer::printRays(BRDF::printNode* p, int level) {
+	if (p == nullptr) {
+		return;
+	}
+
+	if (level > 0) {
+		printf("|\\\n");
+	}
+
+	for (int i = 0; i < level; i++) { printf("| "); }
+	printf("o - %s\n", p->type.c_str());
+
+	for (int i = 0; i <= level; i++) { printf("| "); }
+	printf("  "); p->in.ray.print();
+
+	if (p->in.hit) {
+		for (int i = 0; i <= level; i++) { printf("| "); }
+		printf("  Hit object ID (%d - %s) at T = %.2f, Intersection = {%.4f, %.4f, %.4f}\n",
+			p->in.id, p->in.object->type.c_str(), p->in.t, p->in.point.x, p->in.point.y, p->in.point.z);
+
+		for (int i = 0; i <= level; i++) { printf("| "); }
+		printf("  Normal {%.4f, %.4f, %.4f}\n", p->norm.x, p->norm.y, p->norm.z);
+	}
+
+	printRays(p->refr, level+1);
+	printRays(p->refl, level+1);
 }

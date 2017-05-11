@@ -23,6 +23,7 @@ Scene scene;
 int arg_flags[4] = {0};
 
 int main(int args, char **argv) {
+
 	// Catch empty line args
 	if (args == 1) {
 		return 1;
@@ -72,6 +73,9 @@ int main(int args, char **argv) {
 			const glm::ivec2 size = glm::ivec2(window_width, window_height);
 			glm::vec3 color = renderer.calculateColor(scene, size, pixel_x, pixel_y);
 		   std::cout << "Color: (" << color.x << ", " << color.y  << ", " << color.z << ")" << std::endl;
+		   if (renderer.brdf.verbose_flag) {
+		   	renderer.printRays(renderer.parent, 0);
+		   }
 		}
  	}
 

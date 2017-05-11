@@ -12,7 +12,7 @@
 
 class Intersection {
 public:
-
+	Intersection() {};
    Intersection(std::vector<GeoObject *>, Ray&);
 
    void print();
@@ -22,6 +22,7 @@ public:
    float t;
    glm::vec3 point;
    bool hit;
+   int id;
 };
 
 #endif

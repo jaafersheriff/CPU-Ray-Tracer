@@ -10,6 +10,14 @@
 
 class BRDF {
 public:
+   struct printNode {
+      std::string type;
+      Intersection in;
+      glm::vec3 norm;
+      printNode *refr = nullptr;
+      printNode *refl = nullptr;
+   };
+
    // 0 - No ray printing
    // 1 - Ray printing
    int verbose_flag;
@@ -27,13 +35,14 @@ public:
 
 	void createRefractionRay(Ray *ray, const float ior, const Ray &in_ray, const glm::vec3 p, glm::vec3 n);
 
-	glm::vec3 raytrace(Scene &, Ray &, int);
+	glm::vec3 raytrace(Scene &, Ray &, int, printNode*);
 
 	glm::vec3 BlinnPhong(Light *, Intersection &, glm::vec3);
 
 	glm::vec3 CookTorrance(Light *, Intersection &, glm::vec3);
 
    float fresnel(float n, glm::vec3, glm::vec3);
+
 };
 
 #endif

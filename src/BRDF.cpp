@@ -2,7 +2,7 @@
 
 const static float EPSILON = 0.0001f;
 
-glm::vec3 BRDF::raytrace(Scene &scene, Ray &incident_ray, int recurse_count) {
+glm::vec3 BRDF::raytrace(Scene &scene, Ray &incident_ray, int recurse_count, printNode* parent) {
 
    // Base case
    if (recurse_count < 0) {
@@ -16,12 +16,17 @@ glm::vec3 BRDF::raytrace(Scene &scene, Ray &incident_ray, int recurse_count) {
    }
 
    GeoObject::Finish* finish = &incident_int.object->finish;
+   glm::vec3 norm = incident_int.object->findNormal(incident_int.point);
+
+   if (parent != nullptr) {
+      parent->in = incident_int;
+      parent->norm = norm;
+   }
 
    // Ambient
    glm::vec3 local_color = finish->color * finish->ambient;
 
    // Calculate ray from object to each light
-   glm::vec3 norm = incident_int.object->findNormal(incident_int.point);
    for (unsigned int i = 0; i < scene.lights.size(); i++) {
       Light *light = scene.lights[i];
       glm::vec3 light_dir = glm::normalize(light->position - incident_int.point);
@@ -41,19 +46,37 @@ glm::vec3 BRDF::raytrace(Scene &scene, Ray &incident_ray, int recurse_count) {
    // Reflection color
    glm::vec3 reflection_color = glm::vec3(0, 0, 0);
    if (finish->reflection) {
+      printNode* child = nullptr;
+      if (parent != nullptr) {
+         child = new printNode;
+         child->type = "Reflection";
+         parent->refl = child;
+      }
+
       float reflectance_contribution = (1.f - finish->filter) * (finish->reflection) + (finish->filter) * (fresnel_reflectance);
+
       Ray reflection_ray;
       createReflectionRay(&reflection_ray, incident_int, norm);
-      reflection_color = raytrace(scene, reflection_ray, recurse_count-1) * reflectance_contribution;
+
+      reflection_color = raytrace(scene, reflection_ray, recurse_count-1, child) * reflectance_contribution;
    }
 
    // Refraction color
    glm::vec3 refraction_color = glm::vec3(0, 0, 0);
    if (finish->refraction) {
+      printNode* child = nullptr;
+      if (parent != nullptr) {
+         child = new printNode;
+         child->type = "Refraction";
+         parent->refr = child;
+      }
+
       float transmission_contribution = (finish->filter) * (1 - fresnel_reflectance);
+
       Ray refraction_ray;
       createRefractionRay(&refraction_ray, finish->ior, incident_ray, incident_int.point, norm);
-      refraction_color = raytrace(scene, refraction_ray, recurse_count-1) * transmission_contribution;
+
+      refraction_color = raytrace(scene, refraction_ray, recurse_count-1, child) * transmission_contribution;
    }
 
    float local_contribution = (1.f - finish->filter) * (1.f - finish->reflection);
@@ -72,12 +95,12 @@ void BRDF::createReflectionRay(Ray *ray, const Intersection &intersection, const
 }
 
 void BRDF::createRefractionRay(Ray *ray, const float ior, const Ray &in_ray, const glm::vec3 p, glm::vec3 n) {
-   float n1 = ior;
-   float n2 = 1;
+   float n1 = 1;
+   float n2 = ior;
    // If we're 'exiting' an object
-   if (dot(n, in_ray.direction) < 0) {
-      n1 = 1;
-      n2 = ior;
+   if (dot(n, in_ray.direction) > 0) {
+      n1 = ior;
+      n2 = 1;
       n = -n;
    }
 
