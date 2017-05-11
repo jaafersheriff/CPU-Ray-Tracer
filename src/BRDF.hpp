@@ -34,17 +34,25 @@ public:
       verbose_flag = 0;
    };
 
-	void createReflectionRay(Ray *ray, const Intersection &intersection, const glm::vec3 norm);
+   glm::vec3 raytrace(Scene &, Ray &, int, printNode*);
 
-	void createRefractionRay(Ray *ray, const float ior, const Ray &in_ray, const glm::vec3 p, glm::vec3 n);
+   float fresnel(float, glm::vec3, glm::vec3);
 
-	glm::vec3 raytrace(Scene &, Ray &, int, printNode*);
 
-	glm::vec3 BlinnPhong(Light *, Intersection &, glm::vec3, const float, printNode*);
+   glm::vec3 calculateLocalColor(Scene &, Intersection &, glm::vec3, printNode*);
 
+   glm::vec3 calculateReflectionColor(Scene &, Intersection &, glm::vec3, float, int, printNode*);
+	Ray createReflectionRay(const Intersection &, const glm::vec3);
+
+   glm::vec3 calculateRefractionColor(Scene &, Intersection &, glm::vec3, float, int, printNode*);
+   Ray createRefractionRay(const float, const Ray &, const glm::vec3, glm::vec3);
+
+
+	glm::vec3 BlinnPhong(Light *, Intersection &, glm::vec3, printNode*);
 	glm::vec3 CookTorrance(Light *, Intersection &, glm::vec3);
 
-   float fresnel(float n, glm::vec3, glm::vec3);
+   void createParentNode(printNode*, Intersection, glm::vec3);
+   printNode* createChildNode(printNode*, int);
 
 };
 
