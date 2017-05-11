@@ -10,6 +10,8 @@
 class GeoObject {
 public:
    struct Finish {
+      glm::vec3 color = glm::vec3(0, 0, 0);
+
       float ambient = 0;
       float diffuse = 0;
       float specular = 0;
@@ -18,15 +20,13 @@ public:
       float refraction = 0;
       float reflection = 0;
       float filter = 0;
-      float ior = 1;
+      float ior = 0;
    };
 
 	GeoObject() {
       this->translate = glm::vec3(0, 0, 0);
       this->scale = glm::vec3(0, 0, 0);
       this->rotate = glm::vec3(0, 0, 0);
-
-      this->color = glm::vec3(0, 0, 0);
    };
 
 	std::string type;
@@ -34,8 +34,6 @@ public:
    glm::vec3 translate;
    glm::vec3 scale;
    glm::vec3 rotate;
-
-   glm::vec3 color;
 
    Finish finish;
 
@@ -45,7 +43,7 @@ public:
 
    void GeoPrint() {
       std::cout << "- Color: {";
-         std::cout << color.x << " " << color.y << " " << color.z;
+         std::cout << finish.color.x << " " << finish.color.y << " " << finish.color.z;
          std::cout << "}" << std::endl;
 
       std::cout << "- Material: " << std::endl;
