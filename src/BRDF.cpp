@@ -1,5 +1,7 @@
 #include "BRDF.hpp"
 
+#include <algorithm>
+
 const static float EPSILON = 0.0001f;
 
 glm::vec3 BRDF::raytrace(Scene &scene, Ray &incident_ray, int recurse_count, printNode* parent) {
@@ -14,7 +16,6 @@ glm::vec3 BRDF::raytrace(Scene &scene, Ray &incident_ray, int recurse_count, pri
    if (!incident_int.hit) {
       return glm::vec3(0, 0, 0);
    }
-
    // Easing variable names
    GeoObject::Finish* finish = &incident_int.object->finish;
    glm::vec3 norm = incident_int.object->findNormal(incident_int.point);
@@ -48,9 +49,11 @@ glm::vec3 BRDF::raytrace(Scene &scene, Ray &incident_ray, int recurse_count, pri
    // Reflection color
    glm::vec3 reflection_color = glm::vec3(0, 0, 0);
    if (finish->reflection) {
+      printNode* child = nullptr;
       if (parent != nullptr) {
-         parent->refl = new printNode;
-         parent->refl->type = "Reflection";
+         child = new printNode;
+         child->type = "Reflection";
+         parent->refl = child;
       }
 
       float reflectance_contribution = (1.f - finish->filter) * (finish->reflection) + (finish->filter) * (fresnel_reflectance);
@@ -58,15 +61,17 @@ glm::vec3 BRDF::raytrace(Scene &scene, Ray &incident_ray, int recurse_count, pri
       Ray reflection_ray;
       createReflectionRay(&reflection_ray, incident_int, norm);
 
-      reflection_color = raytrace(scene, reflection_ray, recurse_count-1, parent->refl) * reflectance_contribution;
+      reflection_color = raytrace(scene, reflection_ray, recurse_count-1, child) * reflectance_contribution;
    }
 
    // Refraction color
    glm::vec3 refraction_color = glm::vec3(0, 0, 0);
    if (finish->refraction) {
+      printNode* child = nullptr;
       if (parent != nullptr) {
-         parent->refr = new printNode;
-         parent->refr->type = "Refraction";
+         child = new printNode;
+         child->type = "Refraction";
+         parent->refr = child;
       }
 
       float transmission_contribution = (finish->filter) * (1 - fresnel_reflectance);
@@ -74,7 +79,7 @@ glm::vec3 BRDF::raytrace(Scene &scene, Ray &incident_ray, int recurse_count, pri
       Ray refraction_ray;
       createRefractionRay(&refraction_ray, finish->ior, incident_ray, incident_int.point, norm);
 
-      refraction_color = raytrace(scene, refraction_ray, recurse_count-1, parent->refr) * transmission_contribution;
+      refraction_color = raytrace(scene, refraction_ray, recurse_count-1, child) * transmission_contribution;
    }
 
    float local_contribution = (1.f - finish->filter) * (1.f - finish->reflection);
