@@ -1,12 +1,9 @@
 #include "Loader.hpp"
 
-using namespace glm;
-using namespace std;
-
-void Loader::createColor(GeoObject::Finish *f, vector<string> line) {
-   vector<float> floats;
+void Loader::createColor(GeoObject::Finish *f, std::vector<std::string> line) {
+   std::vector<float> floats;
    for (unsigned int i = 1; i < line.size(); i++) {
-      if (line[i].find("rgb") != string::npos) {
+      if (line[i].find("rgb") != std::string::npos) {
          floats = findFloatsInLine(line);
          f->color.r= floats[0];
          f->color.g = floats[1];
@@ -18,45 +15,80 @@ void Loader::createColor(GeoObject::Finish *f, vector<string> line) {
    }
 }
 
-
-void Loader::createFinish(GeoObject::Finish *f, vector<string> line) {
+void Loader::createFinish(GeoObject::Finish *f, std::vector<std::string> line) {
    for (unsigned int i = 1; i < line.size(); i++) {
-      if (line[i].find("ambient") != string::npos) {
+      if (line[i].find("ambient") != std::string::npos) {
          f->ambient = findFloatsInWord(line[i+1])[0];
       }
-      if (line[i].find("diffuse") != string::npos) {
+      if (line[i].find("diffuse") != std::string::npos) {
          f->diffuse = findFloatsInWord(line[i+1])[0];
       }
-      if (line[i].find("specular") != string::npos) {
+      if (line[i].find("specular") != std::string::npos) {
          f->specular = findFloatsInWord(line[i+1])[0];
       }
-      if (line[i].find("roughness") != string::npos) {
+      if (line[i].find("roughness") != std::string::npos) {
          f->roughness = findFloatsInWord(line[i+1])[0];
       }
-      if (line[i].find("metallic") != string::npos) {
+      if (line[i].find("metallic") != std::string::npos) {
          f->metallic = findFloatsInWord(line[i+1])[0];
       }
-      if (line[i].find("reflection") != string::npos) {
+      if (line[i].find("reflection") != std::string::npos) {
          f->reflection = findFloatsInWord(line[i+1])[0];
       }
-      if (line[i].find("refraction") != string::npos) {
+      if (line[i].find("refraction") != std::string::npos) {
          f->refraction = findFloatsInWord(line[i+1])[0];
       }
-      if (line[i].find("ior") != string::npos) {
+      if (line[i].find("ior") != std::string::npos) {
          f->ior = findFloatsInWord(line[i+1])[0];
       }
    }
 }
 
-Plane* Loader::createPlane(vector<string> line, ifstream& file) {
+Triangle* Loader::createTriangle(std::vector<std::string> line, std::ifstream& file) {
+   // Create empty triangle object
+   Triangle *triangle = new Triangle;
+
+   std::vector<float> floats;
+
+   // v1
+   line = getLine(&file);
+   floats = findFloatsInLine(line);
+   triangle->v1 = glm::vec3(floats[0], floats[1], floats[2]);
+   // v2
+   line = getLine(&file);
+   floats = findFloatsInLine(line);
+   triangle->v2 = glm::vec3(floats[0], floats[1], floats[2]);
+   // v3
+   line = getLine(&file);
+   floats = findFloatsInLine(line);
+   triangle->v3 = glm::vec3(floats[0], floats[1], floats[2]);
+
+   // Continue parsing/storing file components until we reach '}' line
+   // TODO: functional programming
+   while(line[0].compare("}")) {
+      if (!line[0].compare("pigment")) {
+         createColor(&triangle->finish, line);
+      }
+      if (!line[0].compare("finish") ) {
+         createFinish(&triangle->finish, line);
+      }
+      if (line[line.size() - 1].find("}}") != std::string::npos) {
+         break;
+      }
+      line = getLine(&file);
+   }
+   return triangle;
+}
+
+Plane* Loader::createPlane(std::vector<std::string> line, std::ifstream& file) {
    // Create empty Plane object pointer
    Plane *plane = new Plane;
 
-   vector<float> floats;
+   std::vector<float> floats;
 
    // Normal
    floats = findFloatsInLine(line);
-   plane->normal = normalize(vec3(floats[0], floats[1], floats[2]));
+   plane->normal = normalize(glm::vec3(floats[0], floats[1], floats[2]));
    // Distance
    plane->distance = floats[3];
 
@@ -68,7 +100,7 @@ Plane* Loader::createPlane(vector<string> line, ifstream& file) {
       if (!line[0].compare("finish") ) {
          createFinish(&plane->finish, line);
       }
-      if (line[line.size() - 1].find("}}") != string::npos) {
+      if (line[line.size() - 1].find("}}") != std::string::npos) {
          break;
       }
       line = getLine(&file);
@@ -76,15 +108,15 @@ Plane* Loader::createPlane(vector<string> line, ifstream& file) {
    return plane;
 }
 
-Sphere* Loader::createSphere(vector<string> line, ifstream& file) {
+Sphere* Loader::createSphere(std::vector<std::string> line, std::ifstream& file) {
    // Create empty Sphere object pointer
    Sphere *sphere = new Sphere;
 
-   vector<float> floats;
+   std::vector<float> floats;
 
    // Center
    floats = findFloatsInLine(line);
-   sphere->center = vec3(floats[0], floats[1], floats[2]);
+   sphere->center = glm::vec3(floats[0], floats[1], floats[2]);
    // Radius
    sphere->radius = floats[3];
 
@@ -98,9 +130,9 @@ Sphere* Loader::createSphere(vector<string> line, ifstream& file) {
       }
       if (!line[0].compare("translate")) {
          floats = findFloatsInLine(line);
-         sphere->translate = vec3(floats[0], floats[1], floats[2]);
+         sphere->translate = glm::vec3(floats[0], floats[1], floats[2]);
       }
-      if (line[line.size() - 1].find("}}") != string::npos) {
+      if (line[line.size() - 1].find("}}") != std::string::npos) {
          break;
       }
 
@@ -110,44 +142,44 @@ Sphere* Loader::createSphere(vector<string> line, ifstream& file) {
    return sphere;
 }
 
-Light* Loader::createLight(vector<string> line, ifstream& file) {
+Light* Loader::createLight(std::vector<std::string> line, std::ifstream& file) {
    // Create empty Light object pointer
    Light *light = new Light;
 
-   vector<float> floats;
+   std::vector<float> floats;
 
    // Position
    floats = findFloatsInLine(line);
-   light->position = vec3(floats[0], floats[1], floats[2]);
+   light->position = glm::vec3(floats[0], floats[1], floats[2]);
    // Color
-   light->color = vec3(floats[3], floats[4], floats[5]);
+   light->color = glm::vec3(floats[3], floats[4], floats[5]);
 
    return light;
 }
 
-Camera* Loader::createCamera(vector<string> line, ifstream& file) {
+Camera* Loader::createCamera(std::vector<std::string> line, std::ifstream& file) {
    // Create empty Camera object pointer
    Camera *camera = new Camera();
 
-   vector<float> floats;
+   std::vector<float> floats;
 
    // Continue parsing/storing file components until we reach '}' line
    while(line[0].compare("}")) {
       if (!line[0].compare("location")) {
          floats = findFloatsInLine(line);
-         camera->location = vec3(floats[0], floats[1], floats[2]);
+         camera->location = glm::vec3(floats[0], floats[1], floats[2]);
       }
       if (!line[0].compare("up")) {
          floats = findFloatsInLine(line);
-         camera->up = vec3(floats[0], floats[1], floats[2]);
+         camera->up = glm::vec3(floats[0], floats[1], floats[2]);
       }
       if (!line[0].compare("right")) {
          floats = findFloatsInLine(line);
-         camera->right = vec3(floats[0], floats[1], floats[2]);
+         camera->right = glm::vec3(floats[0], floats[1], floats[2]);
       }
       if (!line[0].compare("look_at")) {
          floats = findFloatsInLine(line);
-         camera->lookAt = vec3(floats[0], floats[1], floats[2]);
+         camera->lookAt = glm::vec3(floats[0], floats[1], floats[2]);
       }
       line = getLine(&file);
    }
@@ -157,16 +189,16 @@ Camera* Loader::createCamera(vector<string> line, ifstream& file) {
 
 void Loader::parse(const char *file_name, Scene &scene) {
    // Create file pointer
-   ifstream inFile(file_name, ios::in | ios::binary);
+   std::ifstream inFile(file_name, std::ios::in | std::ios::binary);
 	if (!inFile) {
-		cout << "Error opening file: " << file_name << endl;
+		std::cout << "Error opening file: " << file_name << std::endl;
 	}
-   string word;
+   std::string word;
 
    // Walk through file line by line
    while(inFile) {
-      // Store line as vector<string> separating by whitespace
-      vector<string> line = getLine(&inFile);
+      // Store line as std::vector<std::string> separating by whitespace
+      std::vector<std::string> line = getLine(&inFile);
 
       // Skip empty lines
       if (line.size() <= 0) {
@@ -185,26 +217,20 @@ void Loader::parse(const char *file_name, Scene &scene) {
       else if (!line[0].compare("plane")) {
          scene.objects.push_back(createPlane(line, inFile));
       }
-		else if (!line[0].compare("box")) {
-			// TODO
-		}
-		else if (!line[0].compare("cone")) {
-			// TODO
-		}
 		else if (!line[0].compare("triangle")) {
-			// TODO
+			scene.objects.push_back(createTriangle(line, inFile));
 		}
    }
    inFile.close();
 }
 
-vector<string> Loader::getLine(ifstream *file) {
+std::vector<std::string> Loader::getLine(std::ifstream *file) {
 	char line[256];
 	file->getline(line, 256);
-	stringstream sstream(line);
+	std::stringstream sstream(line);
 
-	vector<string> words;
-	string word;
+	std::vector<std::string> words;
+	std::string word;
 
 	while(sstream >> word) {
 		words.push_back(word);
@@ -213,20 +239,20 @@ vector<string> Loader::getLine(ifstream *file) {
 	return words;
 }
 
-vector<float> Loader::findFloatsInLine(vector<string> line) {
-   vector<float> ret;
+std::vector<float> Loader::findFloatsInLine(std::vector<std::string> line) {
+   std::vector<float> ret;
 
-   for(string word : line) {
-      vector<float> wordFloats = findFloatsInWord(word);
+   for(std::string word : line) {
+      std::vector<float> wordFloats = findFloatsInWord(word);
       ret.insert(ret.end(), wordFloats.begin(), wordFloats.end());
    }
    return ret;
 }
 
-vector<float> Loader::findFloatsInWord(string word) {
-   vector<float> ret;
+std::vector<float> Loader::findFloatsInWord(std::string word) {
+   std::vector<float> ret;
 
-   // Loop through every char in string
+   // Loop through every char in std::string
    unsigned int w = 0;
    while(w < word.size()) {
       char c = word[w++];
@@ -235,7 +261,7 @@ vector<float> Loader::findFloatsInWord(string word) {
 
       // If number is found
       while ((c >= '0' && c <= '9') || c == '.' || c == '-') {
-         // Continue looping through string collecting digits
+         // Continue looping through std::string collecting digits
          num[n++] = c;
          c = word[w++];
       }

@@ -12,6 +12,7 @@
 #include "GeoObject.hpp"
 #include "Sphere.hpp"
 #include "Plane.hpp"
+#include "Triangle.hpp"
 
 class Scene {
 public:

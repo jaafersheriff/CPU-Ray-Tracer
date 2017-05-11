@@ -42,7 +42,10 @@ private:
    Sphere* createSphere(std::vector<std::string>, std::ifstream &file);
 
    // Create a Plane object given a file pointing to a plane line
-   Plane*  createPlane(std::vector<std::string>, std::ifstream &file);
+   Plane* createPlane(std::vector<std::string>, std::ifstream &file);
+
+   // Create a Triangle object
+   Triangle* createTriangle(std::vector<std::string>, std::ifstream &file);
 };
 
 #endif
