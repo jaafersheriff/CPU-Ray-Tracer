@@ -70,7 +70,7 @@ void Renderer::printRays(BRDF::printNode* p, int level) {
 	}
 
 	for (int i = 0; i < level; i++) { printf("| "); }
-	printf("o - %s\n", p->type.c_str());
+	printf("o - Iteration type: %s\n", p->type.c_str());
 
 	for (int i = 0; i <= level; i++) { printf("| "); }
 	printf("  "); p->in.ray.print();
