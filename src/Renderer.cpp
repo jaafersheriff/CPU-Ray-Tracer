@@ -60,6 +60,7 @@ void Renderer::print() {
 	std::cout << std::endl;
 }
 
+// TODO: printf to cout
 void Renderer::printRays(BRDF::printNode* p, int level) {
 	if (p == nullptr) {
 		return;
@@ -77,11 +78,21 @@ void Renderer::printRays(BRDF::printNode* p, int level) {
 
 	if (p->in.hit) {
 		for (int i = 0; i <= level; i++) { printf("| "); }
-		printf("  Hit object ID (%d - %s) at T = %.2f, Intersection = {%.4f, %.4f, %.4f}\n",
+		printf("  Hit object ID (%d - %s) at T = %.3f, Intersection = {%.4f, %.4f, %.4f}\n",
 			p->in.id, p->in.object->type.c_str(), p->in.t, p->in.point.x, p->in.point.y, p->in.point.z);
 
 		for (int i = 0; i <= level; i++) { printf("| "); }
 		printf("  Normal {%.4f, %.4f, %.4f}\n", p->norm.x, p->norm.y, p->norm.z);
+
+		for (int i = 0; i <= level; i++) { printf("| "); }
+		printf("  Transformed "); p->in.ray.print();
+
+		for (int i = 0; i <= level; i++) { printf("| "); }
+		printf("  Ambient: %.2f, %.2f, %.2f\n", p->ambient.x, p->ambient.y, p->ambient.z);
+		for (int i = 0; i <= level; i++) { printf("| "); }
+		printf("  Diffuse: %.4f, %.4f, %.4Sf\n", p->diffuse.x, p->diffuse.y, p->diffuse.z);
+		for (int i = 0; i <= level; i++) { printf("| "); }
+		printf("  Specular: %.2f, %.2f, %.2f\n", p->specular.x, p->specular.y, p->specular.z);
 	}
 
 	printRays(p->refr, level+1);

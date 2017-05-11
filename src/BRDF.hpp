@@ -14,6 +14,9 @@ public:
       std::string type;
       Intersection in;
       glm::vec3 norm;
+      glm::vec3 ambient;
+      glm::vec3 diffuse;
+      glm::vec3 specular;
       printNode *refr = nullptr;
       printNode *refl = nullptr;
    };
@@ -37,7 +40,7 @@ public:
 
 	glm::vec3 raytrace(Scene &, Ray &, int, printNode*);
 
-	glm::vec3 BlinnPhong(Light *, Intersection &, glm::vec3);
+	glm::vec3 BlinnPhong(Light *, Intersection &, glm::vec3, const float, printNode*);
 
 	glm::vec3 CookTorrance(Light *, Intersection &, glm::vec3);
 

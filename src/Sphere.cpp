@@ -1,7 +1,5 @@
 #include "Sphere.hpp"
 
-#include <algorithm>
-
 Sphere::Sphere() : GeoObject() {
 	this->type = "Sphere";
 
@@ -20,16 +18,26 @@ float Sphere::intersect(const Ray &ray) {
 	const float A = dot(ray.direction, ray.direction);
 	const float B = dot(ray.direction + ray.direction, pc);
 	const float C = dot(pc, pc) - radius*radius;
-	const float det = sqrt(B*B-4*A*C);
+	float det = B*B-4*A*C;
 
-	if (!det || !A) {
+	if (det < 0 || !A) {
 		return -1;
 	}
 
+	det = sqrt(det);
 	float t1 = (-B+det)/(2*A);
 	float t2 = (-B-det)/(2*A);
 
-	return (t1 > 0 && t2 > 0) ? std::min(t1, t2) : (t1 > 0) ? t1 : t2;
+	if (t1 > 0 && t2 > 0) {
+		return std::min(t1, t2);
+	}
+	if (t1 > 0 && t2 < 0) {
+		return t1;
+	}
+	if (t1 < 0 && t2 > 0) {
+		return t2;
+	}
+	return -1;
 }
 
 void Sphere::print() {
