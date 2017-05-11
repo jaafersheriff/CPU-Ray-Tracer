@@ -15,9 +15,11 @@ glm::vec3 BRDF::raytrace(Scene &scene, Ray &incident_ray, int recurse_count, pri
       return glm::vec3(0, 0, 0);
    }
 
+   // Easing variable names
    GeoObject::Finish* finish = &incident_int.object->finish;
    glm::vec3 norm = incident_int.object->findNormal(incident_int.point);
 
+   // Verbose printing
    if (parent != nullptr) {
       parent->in = incident_int;
       parent->norm = norm;

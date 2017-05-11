@@ -68,6 +68,9 @@ Plane* Loader::createPlane(vector<string> line, ifstream& file) {
       if (!line[0].compare("finish") ) {
          createFinish(&plane->finish, line);
       }
+      if (line[line.size() - 1].find("}}") != string::npos) {
+         break;
+      }
       line = getLine(&file);
    }
    return plane;
@@ -97,6 +100,10 @@ Sphere* Loader::createSphere(vector<string> line, ifstream& file) {
          floats = findFloatsInLine(line);
          sphere->translate = vec3(floats[0], floats[1], floats[2]);
       }
+      if (line[line.size() - 1].find("}}") != string::npos) {
+         break;
+      }
+
       line = getLine(&file);
    }
 
