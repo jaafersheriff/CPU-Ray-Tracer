@@ -18,7 +18,7 @@ glm::vec3 BRDF::raytrace(Scene &scene, Ray &incident_ray, int recurse_count) {
    GeoObject::Finish* finish = &incident_int.object->finish;
 
    // Ambient
-   glm::vec3 local_color = incident_int.object->color * finish->ambient;
+   glm::vec3 local_color = finish->color * finish->ambient;
 
    // Calculate ray from object to each light
    glm::vec3 norm = incident_int.object->findNormal(incident_int.point);
@@ -35,29 +35,31 @@ glm::vec3 BRDF::raytrace(Scene &scene, Ray &incident_ray, int recurse_count) {
       }
    }
 
+   // Fresnel
+   float fresnel_reflectance = fresnel(finish->ior, norm, -incident_ray.direction);
+
    // Reflection color
-   Ray reflection_ray;
-   createReflectionRay(&reflection_ray, incident_int, norm);
-   glm::vec3 reflection_color = raytrace(scene, reflection_ray, recurse_count-1);
+   glm::vec3 reflection_color = glm::vec3(0, 0, 0);
+   if (finish->reflection) {
+      float reflectance_contribution = (1.f - finish->filter) * (finish->reflection) + (finish->filter) * (fresnel_reflectance);
+      Ray reflection_ray;
+      createReflectionRay(&reflection_ray, incident_int, norm);
+      reflection_color = raytrace(scene, reflection_ray, recurse_count-1) * reflectance_contribution;
+   }
 
    // Refraction color
-   Ray refraction_ray;
-   // TODO: flip norm depending on dot(ray.d, norm) -- catches refraction ray calculations
-   // TODO: use ^ to decide n1 and n2
-   createRefractionRay(&refraction_ray, finish->ior, 1, incident_ray, incident_int.point, norm);
-   glm::vec3 refraction_color = raytrace(scene, refraction_ray, recurse_count-1);
+   glm::vec3 refraction_color = glm::vec3(0, 0, 0);
+   if (finish->refraction) {
+      float transmission_contribution = (finish->filter) * (1 - fresnel_reflectance);
+      Ray refraction_ray;
+      createRefractionRay(&refraction_ray, finish->ior, incident_ray, incident_int.point, norm);
+      refraction_color = raytrace(scene, refraction_ray, recurse_count-1) * transmission_contribution;
+   }
 
-   // Fresnel
-   float NdotV = dot(norm, -incident_int.ray.direction);
-   float fresnel_reflectance = fresnel(finish->ior, NdotV);
+   float local_contribution = (1.f - finish->filter) * (1.f - finish->reflection);
+   local_color = local_color * local_contribution;
 
-   float local_contribution = (1-finish->filter) * (1-finish->reflection);
-   float reflectance_contribution = (1-finish->filter) * finish->reflection + finish->filter * fresnel_reflectance;
-   float transmission_contribution = finish->filter * (1-fresnel_reflectance);
-
-    return local_contribution*local_color +
-           reflectance_contribution * reflection_color +
-           transmission_contribution * refraction_color;
+   return local_color + reflection_color + refraction_color;
 }
 
 void BRDF::createReflectionRay(Ray *ray, const Intersection &intersection, const glm::vec3 norm) {
@@ -66,10 +68,19 @@ void BRDF::createReflectionRay(Ray *ray, const Intersection &intersection, const
 
    glm::vec3 reflection_dir = incident_ray.direction - 2 * dot(incident_ray.direction, norm) * norm;
 
-   ray->set(incident_point + reflection_dir * EPSILON, reflection_dir);
+   ray->set(incident_point + norm * EPSILON, reflection_dir);
 }
 
-void BRDF::createRefractionRay(Ray *ray, const float n1, const float n2, const Ray &in_ray, const glm::vec3 p, const glm::vec3 n) {
+void BRDF::createRefractionRay(Ray *ray, const float ior, const Ray &in_ray, const glm::vec3 p, glm::vec3 n) {
+   float n1 = ior;
+   float n2 = 1;
+   // If we're 'exiting' an object
+   if (dot(n, in_ray.direction) < 0) {
+      n1 = 1;
+      n2 = ior;
+      n = -n;
+   }
+
    float dDotN = dot(in_ray.direction, n);
    float rat = n1/n2;
    float root = 1-rat*rat*(1-dDotN*dDotN);
@@ -89,14 +100,14 @@ glm::vec3 BRDF::BlinnPhong(Light *light, Intersection &object_in, glm::vec3 norm
    // Diffuse
    glm::vec3 diffuse = glm::vec3(0, 0, 0);
    if (NdotL && finish->diffuse) {
-      diffuse = finish->diffuse * object_in.object->color * NdotL * light->color;
+      diffuse = finish->diffuse * finish->color * NdotL * light->color;
    }
 
    // Specular
    glm::vec3 specular = glm::vec3(0, 0, 0);;
    if (HdotN && finish->specular) {
       float r_squared = finish->roughness*finish->roughness;
-      specular = finish->specular * object_in.object->color  * (float) pow(HdotN, 2/r_squared - 2) * light->color;
+      specular = finish->specular * finish->color  * (float) pow(HdotN, 2/r_squared - 2) * light->color;
    }
 
    return diffuse + specular;
@@ -116,7 +127,7 @@ glm::vec3 BRDF::CookTorrance(Light *light, Intersection &object_in, glm::vec3 no
    }
 
    // Diffuse
-   glm::vec3 diffuse = object_in.object->color * (1 - finish->metallic);
+   glm::vec3 diffuse = finish->color * (1 - finish->metallic);
 
    // Specular
    // D - Blinn
@@ -132,17 +143,17 @@ glm::vec3 BRDF::CookTorrance(Light *light, Intersection &object_in, glm::vec3 no
    G = std::min(G, 2.f*HdotN*NdotL/VdotH);
 
    // F
-   float F = fresnel(finish->ior, VdotH);
+   float F = fresnel(finish->ior, half, -object_in.ray.direction);
 
-   glm::vec3 specular = object_in.object->color * finish->metallic;
+   glm::vec3 specular = finish->color * finish->metallic;
    specular *= (D*G*F) / (4.f*NdotL*NdotV);
 
 
    return light->color * NdotL * (diffuse + specular);
 }
 
-float BRDF::fresnel(float n, float d) {
-   float F_z = pow(n-1.f, 2.f)/pow(n+1.f, 2.f);
-   return F_z + (1.f-F_z) * pow(1.f-d, 5.f);
+float BRDF::fresnel(float n, glm::vec3 a, glm::vec3 b) {
+   float F_z = pow(n-1.f, 2)/pow(n+1.f, 2);
+   return F_z + (1.f-F_z) * pow(1.f-dot(a, b), 5.f);
 }
 

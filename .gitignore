@@ -2,6 +2,8 @@ build/
 tests/
 res/
 
+outt
+
 .scannerwork/
 sonar-project.properties
 

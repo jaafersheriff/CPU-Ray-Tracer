@@ -25,7 +25,7 @@ public:
 
 	void createReflectionRay(Ray *ray, const Intersection &intersection, const glm::vec3 norm);
 
-	void createRefractionRay(Ray *ray, const float n1, const float n2, const Ray &in_ray, const glm::vec3 p, const glm::vec3 n);
+	void createRefractionRay(Ray *ray, const float ior, const Ray &in_ray, const glm::vec3 p, glm::vec3 n);
 
 	glm::vec3 raytrace(Scene &, Ray &, int);
 
@@ -33,7 +33,7 @@ public:
 
 	glm::vec3 CookTorrance(Light *, Intersection &, glm::vec3);
 
-   float fresnel(float n, float d);
+   float fresnel(float n, glm::vec3, glm::vec3);
 };
 
 #endif
