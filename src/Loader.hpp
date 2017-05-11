@@ -23,6 +23,8 @@ private:
    // Find all floats inside a word
    std::vector<float> findFloatsInWord(std::string word);
 
+   void createColor(GeoObject::Finish*, std::vector<std::string>);
+
    // Returns a Finish struct containing all GeoObject finish properties
    void createFinish(GeoObject::Finish*, std::vector<std::string>);
 

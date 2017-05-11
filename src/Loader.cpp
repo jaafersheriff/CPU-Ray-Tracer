@@ -3,6 +3,22 @@
 using namespace glm;
 using namespace std;
 
+void Loader::createColor(GeoObject::Finish *f, vector<string> line) {
+   vector<float> floats;
+   for (unsigned int i = 1; i < line.size(); i++) {
+      if (line[i].find("rgb") != string::npos) {
+         floats = findFloatsInLine(line);
+         f->color.r= floats[0];
+         f->color.g = floats[1];
+         f->color.b = floats[2];
+         if (floats.size() > 3) {
+            f->filter = floats[3];
+         }
+      }
+   }
+}
+
+
 void Loader::createFinish(GeoObject::Finish *f, vector<string> line) {
    for (unsigned int i = 1; i < line.size(); i++) {
       if (line[i].find("ambient") != string::npos) {
@@ -26,9 +42,6 @@ void Loader::createFinish(GeoObject::Finish *f, vector<string> line) {
       if (line[i].find("refraction") != string::npos) {
          f->refraction = findFloatsInWord(line[i+1])[0];
       }
-      if (line[i].find("filter") != string::npos) {
-         f->filter = findFloatsInWord(line[i+1])[0];
-      }
       if (line[i].find("ior") != string::npos) {
          f->ior = findFloatsInWord(line[i+1])[0];
       }
@@ -50,10 +63,9 @@ Plane* Loader::createPlane(vector<string> line, ifstream& file) {
    // Continue parsing/storing file components until we reach '}' line
    while(line[0].compare("}")) {
       if (!line[0].compare("pigment")) {
-         floats = findFloatsInLine(line);
-         plane->color = vec3(floats[0], floats[1], floats[2]);
+         createColor(&plane->finish, line);
       }
-      if (!line[0].compare("finish")) {
+      if (!line[0].compare("finish") ) {
          createFinish(&plane->finish, line);
       }
       line = getLine(&file);
@@ -76,8 +88,7 @@ Sphere* Loader::createSphere(vector<string> line, ifstream& file) {
    // Continue parsing/storing file components until we reach '}' line
    while(line[0].compare("}")) {
       if (!line[0].compare("pigment")) {
-         floats = findFloatsInLine(line);
-         sphere->color = vec3(floats[0], floats[1], floats[2]);
+         createColor(&sphere->finish, line);
       }
       if (!line[0].compare("finish")) {
          createFinish(&sphere->finish, line);
