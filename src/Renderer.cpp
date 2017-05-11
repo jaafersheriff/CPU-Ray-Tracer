@@ -60,39 +60,39 @@ void Renderer::print() {
 	std::cout << std::endl;
 }
 
-// TODO: printf to cout
 void Renderer::printRays(BRDF::printNode* p, int level) {
 	if (p == nullptr) {
 		return;
 	}
 
 	if (level > 0) {
-		printf("|\\\n");
+		for (int i = 1; i < level; i++) { std::cout << "| "; }
+		std::cout << "|\\" << std::endl;;
 	}
 
-	for (int i = 0; i < level; i++) { printf("| "); }
-	printf("o - Iteration type: %s\n", p->type.c_str());
+	for (int i = 0; i < level; i++) { std::cout << "| "; }
+	std::cout << "o - Iteration type: " << p->type << std::endl;
 
-	for (int i = 0; i <= level; i++) { printf("| "); }
-	printf("  "); p->in.ray.print();
+	for (int i = 0; i <= level; i++) { std::cout << "| "; }
+	std::cout << "  "; p->in.ray.print();
 
 	if (p->in.hit) {
-		for (int i = 0; i <= level; i++) { printf("| "); }
-		printf("  Hit object ID (%d - %s) at T = %.3f, Intersection = {%.4f, %.4f, %.4f}\n",
-			p->in.id, p->in.object->type.c_str(), p->in.t, p->in.point.x, p->in.point.y, p->in.point.z);
+		for (int i = 0; i <= level; i++) { std::cout << "| "; }
+		std::cout << "  Hit object ID (" << p->in.id << " - " << p->in.object->type << ") at T = " << p->in.t;
+		std::cout << ", Intersection = {" << p->in.point.x << " " << p->in.point.y << " " << p->in.point.z << "}" << std::endl;
 
-		for (int i = 0; i <= level; i++) { printf("| "); }
-		printf("  Normal {%.4f, %.4f, %.4f}\n", p->norm.x, p->norm.y, p->norm.z);
+		for (int i = 0; i <= level; i++) { std::cout << "| "; }
+		std::cout << "  Normal {" << p->norm.x << " " << p->norm.y << " " << p->norm.z << "}" << std::endl;
 
-		for (int i = 0; i <= level; i++) { printf("| "); }
-		printf("  Transformed "); p->in.ray.print();
+		for (int i = 0; i <= level; i++) { std::cout << "| "; }
+		std::cout << "  Transformed "; p->in.ray.print();
 
-		for (int i = 0; i <= level; i++) { printf("| "); }
-		printf("  Ambient: %.2f, %.2f, %.2f\n", p->ambient.x, p->ambient.y, p->ambient.z);
-		for (int i = 0; i <= level; i++) { printf("| "); }
-		printf("  Diffuse: %.4f, %.4f, %.4Sf\n", p->diffuse.x, p->diffuse.y, p->diffuse.z);
-		for (int i = 0; i <= level; i++) { printf("| "); }
-		printf("  Specular: %.2f, %.2f, %.2f\n", p->specular.x, p->specular.y, p->specular.z);
+		for (int i = 0; i <= level; i++) { std::cout << "| "; }
+		std::cout << "  Ambient: " << p->ambient.x << ", " << p->ambient.y << ", " << p->ambient.z << std::endl;
+		for (int i = 0; i <= level; i++) { std::cout << "| "; }
+		std::cout << "  Diffuse: " << p->diffuse.x << ", " << p->diffuse.y << ", " << p->diffuse.z << std::endl;
+		for (int i = 0; i <= level; i++) { std::cout << "| "; }
+		std::cout << "  Specular: " << p->specular.x << ", " << p->specular.y << ", " << p->specular.z << std::endl;
 	}
 
 	printRays(p->refr, level+1);
