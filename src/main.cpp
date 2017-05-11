@@ -74,7 +74,7 @@ int main(int args, char **argv) {
 			glm::vec3 color = renderer.calculateColor(scene, size, pixel_x, pixel_y);
 		   std::cout << "Color: (" << color.x << ", " << color.y  << ", " << color.z << ")" << std::endl;
 		   if (renderer.brdf.verbose_flag) {
-		   	renderer.printRays(renderer.parent, 0);
+		   	renderer.printRays(renderer.root, 0);
 		   }
 		}
  	}

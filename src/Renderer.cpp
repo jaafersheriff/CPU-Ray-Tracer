@@ -6,14 +6,14 @@
 
 glm::vec3 Renderer::calculateColor(Scene &scene, const glm::ivec2 size, const int x, const int y) {
 	if (brdf.verbose_flag) {
-		parent = new BRDF::printNode;
-		parent->type = "Primary";
+		root = new BRDF::printNode;
+		root->type = "Primary";
 	}
 	// Calculate color
 	Ray camera_ray = scene.createCameraRay(size.x, size.y, x, y);
-	glm::vec3 color = brdf.raytrace(scene, camera_ray, RECURSE_COUNT, parent);
+	glm::vec3 color = brdf.raytrace(scene, camera_ray, RECURSE_COUNT, root);
 
-	// Scale RGB
+	// Scale RGB from [0, 1] to [0, 255]
 	color.r = round(glm::clamp(color.r, 0.f, 1.f) * 255.f);
 	color.g = round(glm::clamp(color.g, 0.f, 1.f) * 255.f);
 	color.b = round(glm::clamp(color.b, 0.f, 1.f) * 255.f);
@@ -44,8 +44,7 @@ void Renderer::render(Scene &scene, const int window_width, const int window_hei
 			data[pixel + 2] = blue;
 		}
 	}
-	int success = stbi_write_png(fileName.c_str(), size.x, size.y, numChannels, data, size.x * numChannels);
-	if (!success) {
+	if (!stbi_write_png(fileName.c_str(), size.x, size.y, numChannels, data, size.x * numChannels)) {
 		std::cout << "FAILED WRITING IMAGE" << std::endl;
 	}
 	delete[] data;
@@ -54,7 +53,7 @@ void Renderer::render(Scene &scene, const int window_width, const int window_hei
 void Renderer::print() {
 	std::cout << "BRDF: ";
 	if (brdf.render_flag)
-		std::cout << "Cook-Torranec";
+		std::cout << "Cook-Torrance";
 	else
 		std::cout << "Blinn-Phong";
 	std::cout << std::endl;
@@ -78,7 +77,7 @@ void Renderer::printRays(BRDF::printNode* p, int level) {
 
 	if (p->in.hit) {
 		for (int i = 0; i <= level; i++) { std::cout << "| "; }
-		std::cout << "  Hit object ID (" << p->in.id << " - " << p->in.object->type << ") at T = " << p->in.t;
+		std::cout << "  Hit Object ID (" << p->in.id << " - " << p->in.object->type << ") at T = " << p->in.t;
 		std::cout << ", Intersection = {" << p->in.point.x << " " << p->in.point.y << " " << p->in.point.z << "}" << std::endl;
 
 		for (int i = 0; i <= level; i++) { std::cout << "| "; }
