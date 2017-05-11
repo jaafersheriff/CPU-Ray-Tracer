@@ -1,5 +1,7 @@
 #include "Sphere.hpp"
 
+#include <algorithm>
+
 Sphere::Sphere() : GeoObject() {
 	this->type = "Sphere";
 
@@ -24,10 +26,10 @@ float Sphere::intersect(const Ray &ray) {
 		return -1;
 	}
 
-	float t1 = std::max(0.f, (-B+det)/(2*A));
-	float t2 = std::max(0.f, (-B-det)/(2*A));
+	float t1 = (-B+det)/(2*A);
+	float t2 = (-B-det)/(2*A);
 
-	return std::min(t1, t2);
+	return (t1 > 0 && t2 > 0) ? std::min(t1, t2) : (t1 > 0) ? t1 : t2;
 }
 
 void Sphere::print() {
