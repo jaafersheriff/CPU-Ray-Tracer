@@ -12,15 +12,15 @@ public:
    struct Finish {
       glm::vec3 color = glm::vec3(0, 0, 0);
 
-      float ambient = 0;
-      float diffuse = 0;
-      float specular = 0;
-      float roughness = 0;
-      float metallic = 0;
+      float ambient    = 0;
+      float diffuse    = 0;
+      float specular   = 0;
+      float roughness  = 0;
+      float metallic   = 0;
       float refraction = 0;
       float reflection = 0;
-      float filter = 0;
-      float ior = 0;
+      float filter     = 0;
+      float ior        = 0;
    };
 
 	GeoObject() {
@@ -41,7 +41,7 @@ public:
 
 	virtual void print() = 0;
 	virtual float intersect(const Ray &) = 0;
-   virtual glm::vec3 findNormal(const glm::vec3 intersection_point) = 0;
+   virtual glm::vec3 findNormal(const glm::vec3) = 0;
 
    void GeoPrint() {
       std::cout << "- Color: {";
