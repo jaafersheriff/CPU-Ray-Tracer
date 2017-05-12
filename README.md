@@ -7,7 +7,7 @@ I suspect the cause is due to where the color contributions are added. I followe
 
 The binary tree printing functionality is almost 100% there which is great. That was definitely a helpful tool for debugging.
 
-As for triangles, I'm able to render them properly with no acne. However, I think there may be an error with the normal calculations. Right now I just do a cross product of 2 vertices, but I think the proper calculation is a bit more complicated than that.
+As for triangles, I'm able to render them properly with no acne.  
 
 My custom .pov file with my output provided (it's interesting to note that my erroneous refraction color causes the sphere to be all black, but the proper reflection color shows the warped planes on the sphere)
 

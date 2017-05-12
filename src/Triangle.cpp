@@ -51,7 +51,10 @@ float Triangle::intersect(const Ray &ray) {
 }
 
 glm::vec3 Triangle::findNormal(const glm::vec3 intersection_point) {
-	return glm::cross(v3, v1);
+	glm::vec3 V = v2 - v1;
+	glm::vec3 W = v3 - v1;
+
+	return normalize(glm::vec3(V.y*W.z-V.z*W.y, V.z*W.x-V.x*W.z, V.x*W.y-V.y*W.x));
 }
 
 void Triangle::print() {
