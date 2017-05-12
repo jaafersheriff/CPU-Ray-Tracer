@@ -1,4 +1,3 @@
-build/
 tests/
 res/
 
@@ -9,6 +8,6 @@ sonar-project.properties
 
 raytrace.*
 
-*.png
+output.png
 *.py
 *.sh
