@@ -42,10 +42,10 @@ public:
 
    glm::vec3 calculateLocalColor(Scene &, Intersection &, glm::vec3, printNode*);
 
-   glm::vec3 calculateReflectionColor(Scene &, Intersection &, glm::vec3, float, int, printNode*);
+   glm::vec3 calculateReflectionColor(Scene &, Intersection &, glm::vec3, int, printNode*);
 	Ray createReflectionRay(const Intersection &, const glm::vec3);
 
-   glm::vec3 calculateRefractionColor(Scene &, Intersection &, glm::vec3, float, int, printNode*);
+   glm::vec3 calculateRefractionColor(Scene &, Intersection &, glm::vec3, int, printNode*);
    Ray createRefractionRay(const float, const Ray &, const glm::vec3, glm::vec3);
 
 
