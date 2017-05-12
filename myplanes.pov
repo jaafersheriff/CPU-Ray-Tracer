@@ -21,12 +21,6 @@ plane {<0, 1, 0>, -6
   finish {ambient 0.4 diffuse 0.8, reflection 0.5}
 }
 
-//top
-plane {<0, 1, 0>, -6
-  pigment {color rgb <0.0, 0.8, 0.0>}
-  finish {ambient 0.4 diffuse 0.8, reflection 0.5}
-}
-
 //back
 plane {<0, 0, 1>, -6
   pigment {color rgb <0.0, 0.0, 0.8>}
@@ -35,12 +29,12 @@ plane {<0, 0, 1>, -6
 
 //left
 plane {<1, 0, 0>, -5
-  pigment {color rgbf <0.0, 0.8, 0.8, 0.4>}
-  finish {ambient 0.4 diffuse 0.8, refraction 0.6, ior 1.33}
+  pigment {color rgbf <0.0, 0.8, 0.8>}
+  finish {ambient 0.4 diffuse 0.8, reflection 0.5}
 }
 
 //left sphere
 sphere { <-2, 3, 0>, 2.0
-  pigment { color rgbf <1.0, 1.0, 1.0>}
-  finish {ambient 0.2 diffuse 0.4, reflection 0.5}
+  pigment { color rgbf <1.0, 1.0, 1.0, 0.9>}
+  finish {ambient 0.2 diffuse 0.4, ior 5}
 }
