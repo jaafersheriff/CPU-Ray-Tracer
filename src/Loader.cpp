@@ -47,7 +47,6 @@ void Loader::createFinish(GeoObject::Finish *f, std::vector<std::string> line) {
 Triangle* Loader::createTriangle(std::vector<std::string> line, std::ifstream& file) {
    // Create empty triangle object
    Triangle *triangle = new Triangle;
-
    std::vector<float> floats;
 
    // v1
@@ -212,13 +211,19 @@ void Loader::parse(const char *file_name, Scene &scene) {
 			scene.lights.push_back(createLight(line, inFile));
       }
       else if (!line[0].compare("sphere")){
-			scene.objects.push_back(createSphere(line, inFile));
+         Sphere *sphere = createSphere(line, inFile);
+         sphere->id = scene.objects.size()+1;
+			scene.objects.push_back(sphere);
       }
       else if (!line[0].compare("plane")) {
-         scene.objects.push_back(createPlane(line, inFile));
+         Plane *plane = createPlane(line, inFile);
+         plane->id = scene.objects.size()+1;
+         scene.objects.push_back(plane);
       }
 		else if (!line[0].compare("triangle")) {
-			scene.objects.push_back(createTriangle(line, inFile));
+         Triangle *triangle = createTriangle(line, inFile);
+         triangle->id = scene.objects.size()+1;
+			scene.objects.push_back(triangle);
 		}
    }
    inFile.close();

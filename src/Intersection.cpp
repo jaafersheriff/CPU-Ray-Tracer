@@ -15,7 +15,6 @@ Intersection::Intersection(std::vector<GeoObject *> objects, Ray& ray) {
       if (curr_t > EPSILON && curr_t < this->t) {
          this->t = curr_t;
          this->object = objects[i];
-         this->id = i+1;
       }
    }
 

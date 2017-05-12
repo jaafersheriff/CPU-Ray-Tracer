@@ -22,7 +22,6 @@ public:
    float t;
    glm::vec3 point;
    bool hit;
-   int id;
 };
 
 #endif

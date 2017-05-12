@@ -51,6 +51,9 @@ glm::vec3 BRDF::calculateLocalColor(Scene &scene, Intersection &intersection, gl
       Light *light = scene.lights[i];
       glm::vec3 light_dir = glm::normalize(light->position - intersection.point);
       Ray light_ray(intersection.point, light_dir);
+      if (parent != nullptr) {
+         parent->shadow_ray = light_ray;
+      }
 
       // If no objects are blocking incoming light, BRDF
       Intersection light_int(scene.objects, light_ray);
@@ -101,6 +104,15 @@ glm::vec3 BRDF::calculateRefractionColor(Scene &scene, Intersection &intersectio
 
    Ray refraction_ray = createRefractionRay(finish->ior, intersection.ray, intersection.point, norm);
    glm::vec3 refraction_color = raytrace(scene, refraction_ray, recurse-1, child) * transmission_contribution;
+
+   // Beers law
+   Intersection i = Intersection(scene.objects, refraction_ray);
+   if (i.hit) {
+      float dist = glm::distance(i.point, refraction_ray.position);
+      glm::vec3 absorb = (1.f - i.object->finish.color) * (0.15f) * -dist;
+      glm::vec3 atten = glm::vec3(exp(absorb.r), exp(absorb.g), exp(absorb.b));
+      refraction_color *= atten;
+   }
 
    return refraction_color;
 }

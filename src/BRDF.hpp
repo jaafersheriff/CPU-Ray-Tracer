@@ -13,6 +13,7 @@ public:
    struct printNode {
       std::string type;
       Intersection in;
+      Ray shadow_ray;
       glm::vec3 norm;
       glm::vec3 ambient;
       glm::vec3 diffuse;

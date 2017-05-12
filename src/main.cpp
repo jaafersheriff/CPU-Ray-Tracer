@@ -63,6 +63,7 @@ int main(int args, char **argv) {
 		Intersection in(scene.objects, ray);
 		std::cout << "Pixel: [" << pixel_x << ", " << pixel_y << "] ";
 		if (arg_flags[2] || arg_flags[3]) {
+			std::cout << "Ray: ";
 			ray.print();
 		}
 		if (arg_flags[3] || renderer.brdf.verbose_flag) {

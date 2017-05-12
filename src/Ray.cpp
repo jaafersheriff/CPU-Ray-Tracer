@@ -20,7 +20,7 @@ void Ray::set(const glm::vec3 p, const glm::vec3 d) {
 }
 
 void Ray::print() {
-   std::cout << "Ray: {" << position.x << " " << position.y << " " << position.z;
+   std::cout << "{" << position.x << " " << position.y << " " << position.z;
    std::cout << "} -> {" << direction.x << " " << direction.y << " " << direction.z;
    std::cout << "}" << std::endl;
 }

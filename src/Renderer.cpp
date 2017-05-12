@@ -65,34 +65,40 @@ void Renderer::printRays(BRDF::printNode* p, int level) {
 	}
 
 	if (level > 0) {
-		for (int i = 1; i < level; i++) { std::cout << "| "; }
-		std::cout << "|\\" << std::endl;;
+		for (int i = 1; i < level; i++) { std::cout << "  "; }
+		std::cout << " \\" << std::endl;;
 	}
 
-	for (int i = 0; i < level; i++) { std::cout << "| "; }
+	for (int i = 0; i < level; i++) { std::cout << "  "; }
 	std::cout << "o - Iteration type: " << p->type << std::endl;
 
-	for (int i = 0; i <= level; i++) { std::cout << "| "; }
-	std::cout << "  "; p->in.ray.print();
+	for (int i = 0; i < level; i++) { std::cout << "  "; }
+	std::cout << "|   Ray: "; p->in.ray.print();
 
 	if (p->in.hit) {
-		for (int i = 0; i <= level; i++) { std::cout << "| "; }
-		std::cout << "  Hit Object ID (" << p->in.id << " - " << p->in.object->type << ") at T = " << p->in.t;
+		for (int i = 0; i < level; i++) { std::cout << "  "; }
+		std::cout << "|   Hit Object ID (" << p->in.object->id << " - " << p->in.object->type << ") at T = " << p->in.t;
 		std::cout << ", Intersection = {" << p->in.point.x << " " << p->in.point.y << " " << p->in.point.z << "}" << std::endl;
 
-		for (int i = 0; i <= level; i++) { std::cout << "| "; }
-		std::cout << "  Normal {" << p->norm.x << " " << p->norm.y << " " << p->norm.z << "}" << std::endl;
+		for (int i = 0; i < level; i++) { std::cout << "  "; }
+		std::cout << "|   Normal {" << p->norm.x << " " << p->norm.y << " " << p->norm.z << "}" << std::endl;
 
-		for (int i = 0; i <= level; i++) { std::cout << "| "; }
-		std::cout << "  Transformed "; p->in.ray.print();
+		for (int i = 0; i < level; i++) { std::cout << "  "; }
+		std::cout << "|   Transformed Ray: "; p->in.ray.print();
 
-		for (int i = 0; i <= level; i++) { std::cout << "| "; }
-		std::cout << "  Ambient: " << p->ambient.x << ", " << p->ambient.y << ", " << p->ambient.z << std::endl;
-		for (int i = 0; i <= level; i++) { std::cout << "| "; }
-		std::cout << "  Diffuse: " << p->diffuse.x << ", " << p->diffuse.y << ", " << p->diffuse.z << std::endl;
-		for (int i = 0; i <= level; i++) { std::cout << "| "; }
-		std::cout << "  Specular: " << p->specular.x << ", " << p->specular.y << ", " << p->specular.z << std::endl;
+		for (int i = 0; i < level; i++) { std::cout << "  "; }
+		std::cout << "|   ShadowRay [0] "; p->shadow_ray.print();
+
+		for (int i = 0; i < level; i++) { std::cout << "  "; }
+		std::cout << "|   Ambient: " << p->ambient.x << ", " << p->ambient.y << ", " << p->ambient.z << std::endl;
+		for (int i = 0; i < level; i++) { std::cout << "  "; }
+		std::cout << "|   Diffuse: " << p->diffuse.x << ", " << p->diffuse.y << ", " << p->diffuse.z << std::endl;
+		for (int i = 0; i < level; i++) { std::cout << "  "; }
+		std::cout << "|   Specular: " << p->specular.x << ", " << p->specular.y << ", " << p->specular.z << std::endl;
+
 	}
+	for (int i = 0; i < level; i++) { std::cout << "  "; }
+	std::cout << "|" << std::endl;
 
 	printRays(p->refr, level+1);
 	printRays(p->refl, level+1);
