@@ -36,11 +36,11 @@ plane {<1, 0, 0>, -5
 //left sphere
 sphere { <-2, 3, 0>, 2.0
   pigment { color rgbf <1.0, 1.0, 1.0, 0.9>}
-  finish {ambient 0.2 diffuse 0.4, ior 5}
+  finish {ambient 0.2 diffuse 0.4, reflection 0.8, ior 5}
 }
 
 //right sphere
 sphere { <2, 0, 0>, 2.3
   pigment { color rgbf <1.0, 1.0, 1.0, 0.9>}
-  finish {ambient 0.2 diffuse 0.4, ior 5}
+  finish {ambient 0.2 diffuse 0.4, reflection 0.8, ior 5}
 }

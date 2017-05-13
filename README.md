@@ -1,4 +1,4 @@
-# CSC*473*Raytracer
+# CSC-473-Raytracer
 
 ### Program 3
 
@@ -7,7 +7,7 @@ Triangles:
 
 Reflections:
 * Fully functional
-* Output tends to be too bright 
+* Output tends to be too bright
 
 Refractions:
 * Fully functional
