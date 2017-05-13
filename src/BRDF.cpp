@@ -39,10 +39,9 @@ glm::vec3 BRDF::raytrace(Scene &scene, Ray &incident_ray, int recurse_count, pri
    float reflectance_contribution = (1.f - finish->filter) * (finish->reflection) + (finish->filter) * (fresnel_reflectance);
    float transmission_contribution = (finish->filter) * (1 - fresnel_reflectance);
 
-
    return local_color * local_contribution +
-            reflection_color * reflectance_contribution +
-            refraction_color * transmission_contribution;
+          reflection_color * reflectance_contribution +
+          refraction_color * transmission_contribution;
 
 }
 
@@ -94,21 +93,18 @@ Ray BRDF::createReflectionRay(const Intersection &intersection, const glm::vec3 
 }
 
 glm::vec3 BRDF::calculateRefractionColor(Scene &scene, Intersection &intersection, glm::vec3 norm, int recurse, printNode* parent) {
-   if (!intersection.object->finish.refraction) {
-      return glm::vec3(0, 0, 0);
-   }
 
    Ray refraction_ray = createRefractionRay(intersection.object->finish.ior, intersection.ray, intersection.point, norm);
    glm::vec3 refraction_color = raytrace(scene, refraction_ray, recurse-1, createChildNode(parent, 1));
 
    // Beers law
-   // Intersection i = Intersection(scene.objects, refraction_ray);
-   // if (i.hit) {
-   //    float dist = glm::distance(i.point, refraction_ray.position);
-   //    glm::vec3 absorb = (1.f - i.object->finish.color) * (0.15f) * -dist;
-   //    glm::vec3 atten = glm::vec3(exp(absorb.r), exp(absorb.g), exp(absorb.b));
-   //    refraction_color *= atten;
-   // }
+   Intersection i = Intersection(scene.objects, refraction_ray);
+   if (i.hit) {
+      float dist = glm::distance(i.point, refraction_ray.position);
+      glm::vec3 absorb = (1.f - i.object->finish.color) * (0.15f) * -dist;
+      glm::vec3 atten = glm::vec3(exp(absorb.r), exp(absorb.g), exp(absorb.b));
+      refraction_color *= atten;
+   }
 
    return refraction_color;
 }

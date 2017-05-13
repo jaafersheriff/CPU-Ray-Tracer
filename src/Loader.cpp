@@ -35,9 +35,6 @@ void Loader::createFinish(GeoObject::Finish *f, std::vector<std::string> line) {
       if (line[i].find("reflection") != std::string::npos) {
          f->reflection = findFloatsInWord(line[i+1])[0];
       }
-      if (line[i].find("refraction") != std::string::npos) {
-         f->refraction = findFloatsInWord(line[i+1])[0];
-      }
       if (line[i].find("ior") != std::string::npos) {
          f->ior = findFloatsInWord(line[i+1])[0];
       }

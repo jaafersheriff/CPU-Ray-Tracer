@@ -17,7 +17,6 @@ public:
       float specular   = 0;
       float roughness  = 0;
       float metallic   = 0;
-      float refraction = 0;
       float reflection = 0;
       float filter     = 0;
       float ior        = 0;
@@ -61,8 +60,6 @@ public:
             std::cout << finish.metallic << std::endl;
          std::cout << "  - Reflection: ";
             std::cout << finish.reflection << std::endl;
-         std::cout << "  - Refraction: ";
-            std::cout << finish.refraction << std::endl;
          std::cout << "  - Filter: ";
             std::cout << finish.filter << std::endl;
          std::cout << "  - IOR: ";
