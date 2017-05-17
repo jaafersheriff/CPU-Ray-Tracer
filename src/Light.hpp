@@ -1,3 +1,7 @@
+// Light class
+// Solely holds light data
+
+#pragma once
 #ifndef _LIGHT_H_
 #define _LIGHT_H_
 

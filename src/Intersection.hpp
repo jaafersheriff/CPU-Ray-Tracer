@@ -2,11 +2,11 @@
 // Includes a ray, an intersected object,
 // the T value for the ray, and the intersection point
 // in world coords
+#pragma once
 #ifndef _INTERSECTION_H_
 #define _INTERSECTION_H_
 
-#include <vector>
-#include <limits>
+#include <vector> // vector
 
 #include "GeoObject.hpp"
 
@@ -17,10 +17,17 @@ public:
 
    void print();
 
-   GeoObject *object;
+	// Object intersected 
+	// Set to nullptr if no object is intersected
+   GeoObject *object = nullptr;
+	
+	// Ray of intersection, t value of intersection, world coords of intersection
    Ray ray;
-   float t;
+	float t;
    glm::vec3 point;
+	// TODO : store object normal
+
+	// True if object is intersected, false otherwise
    bool hit;
 };
 

@@ -2,6 +2,7 @@
 
 const static float EPSILON = 0.0001f;
 
+
 glm::vec3 BRDF::raytrace(Scene &scene, Ray &incident_ray, int recurse_count, printNode* parent) {
 
    // Base case
@@ -22,19 +23,13 @@ glm::vec3 BRDF::raytrace(Scene &scene, Ray &incident_ray, int recurse_count, pri
    // Verbose printing
    createParentNode(parent, incident_int, norm);
 
-   // Calculate all colors
+   // Colors
    glm::vec3 local_color = calculateLocalColor(scene, incident_int, norm, parent);
    glm::vec3 reflection_color = calculateReflectionColor(scene, incident_int, norm, recurse_count, parent);
    glm::vec3 refraction_color = calculateRefractionColor(scene, incident_int, norm, recurse_count, parent);
 
-   // Calculate contributions
-   float fresnel_reflectance;
-   if (dot(incident_ray.direction, norm) > 0) {
-      fresnel_reflectance = fresnel(finish->ior, -norm, -incident_ray.direction);
-   }
-   else {
-      fresnel_reflectance = fresnel(finish->ior, norm, -incident_ray.direction);
-   }
+	// Contributions 
+   float fresnel_reflectance = fresnel(finish->ior, norm, -incident_ray.direction);
    float local_contribution = (1.f - finish->filter) * (1.f - finish->reflection);
    float reflectance_contribution = (1.f - finish->filter) * (finish->reflection) + (finish->filter) * (fresnel_reflectance);
    float transmission_contribution = (finish->filter) * (1 - fresnel_reflectance);
@@ -42,7 +37,6 @@ glm::vec3 BRDF::raytrace(Scene &scene, Ray &incident_ray, int recurse_count, pri
    return local_color * local_contribution +
           reflection_color * reflectance_contribution +
           refraction_color * transmission_contribution;
-
 }
 
 
@@ -53,19 +47,22 @@ glm::vec3 BRDF::calculateLocalColor(Scene &scene, Intersection &intersection, gl
       parent->ambient = local_color;
    }
 
+	// Loop through lights
    for (unsigned int i = 0; i < scene.lights.size(); i++) {
       // Calculate ray from object to each light
       Light *light = scene.lights[i];
       glm::vec3 light_dir = glm::normalize(light->position - intersection.point);
       Ray light_ray(intersection.point, light_dir);
-      if (parent != nullptr) {
-         parent->shadow_ray = light_ray;
-      }
 
       // If no objects are blocking incoming light, BRDF
       Intersection light_int(scene.objects, light_ray);
       if (!light_int.hit || distance(intersection.point, light->position) < distance(intersection.point, light_int.point)) {
          local_color += render_flag ? CookTorrance(light, intersection, norm) : BlinnPhong(light, intersection, norm, parent);
+      }
+ 
+		// Verbose printing
+      if (parent != nullptr) {
+         parent->shadow_ray = light_ray;
       }
    }
 
@@ -93,6 +90,9 @@ Ray BRDF::createReflectionRay(const Intersection &intersection, const glm::vec3 
 }
 
 glm::vec3 BRDF::calculateRefractionColor(Scene &scene, Intersection &intersection, glm::vec3 norm, int recurse, printNode* parent) {
+   if (!intersection.object->finish.filter) {
+      return glm::vec3(0, 0, 0);
+   }
 
    Ray refraction_ray = createRefractionRay(intersection.object->finish.ior, intersection.ray, intersection.point, norm);
    glm::vec3 refraction_color = raytrace(scene, refraction_ray, recurse-1, createChildNode(parent, 1));

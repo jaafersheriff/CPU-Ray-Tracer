@@ -1,3 +1,6 @@
+// Ray class
+
+#pragma once
 #ifndef _RAY_H_
 #define _RAH_H_
 
@@ -7,14 +10,16 @@
 class Ray {
 public:
 	Ray();
-   Ray(glm::vec3 position, glm::vec3 direction);
-
-   void set(const glm::vec3, const glm::vec3);
-	void print();
-   glm::vec3 calculatePoint(float);
+   Ray(glm::vec3 &, glm::vec3 &);
+	void set(const glm::vec3, const glm::vec3);
 
 	glm::vec3 position;
 	glm::vec3 direction;
+   
+	// Calculates the point of intersection given a value t
+   glm::vec3 calculatePoint(float);
+	
+	void print();
 };
 
 #endif

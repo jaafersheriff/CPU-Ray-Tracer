@@ -3,14 +3,16 @@
 const static float EPSILON = 0.0001f;
 
 Intersection::Intersection(std::vector<GeoObject *> objects, Ray& ray) {
+	// Store incoming ray
    this->ray = ray;
-   this->t = std::numeric_limits<float>::max();
+	
+	// Init hit and t values
    this->hit = false;
+   this->t = std::numeric_limits<float>::max();
 
    // Loop through all objects in scene
    for (unsigned int i = 0; i < objects.size(); i++) {
-      // If intersection with current object is closer to camera than current intersection
-      // Replace intersection
+      // Store t value and object if there's a closer intersection
       float curr_t = objects[i]->intersect(ray);
       if (curr_t > EPSILON && curr_t < this->t) {
          this->t = curr_t;
@@ -18,7 +20,7 @@ Intersection::Intersection(std::vector<GeoObject *> objects, Ray& ray) {
       }
    }
 
-   // If an object was hit
+   // If there was a valid intersection, store point of intersection and object's normal
    if (this->t != std::numeric_limits<float>::max()) {
       this->hit = true;
       this->point = ray.calculatePoint(this->t);

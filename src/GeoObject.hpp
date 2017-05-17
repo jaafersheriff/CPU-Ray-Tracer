@@ -1,9 +1,12 @@
+// Abstract geometric object class
+// Includes finish struct containing all finish data
+// All objets have a finish, a transformation, a type, and an ID
+#pragma once
 #ifndef _GEOOBJECT_H_
 #define _GEOOBJECT_H_
 
+#include <glm/glm.hpp>
 #include <iostream>	// std::cout
-
-#include <glm/glm.hpp>	// vec3
 
 #include "Ray.hpp"
 
@@ -12,15 +15,18 @@ public:
    struct Finish {
       glm::vec3 color = glm::vec3(0, 0, 0);
 
-      float ambient    = 0;
-      float diffuse    = 0;
-      float specular   = 0;
-      float roughness  = 0;
-      float metallic   = 0;
+      float ambient = 0;
+      float diffuse = 0;
+      float specular = 0;
+      float roughness = 0;
+      float metallic = 0;
+      float refraction = 0;
       float reflection = 0;
-      float filter     = 0;
-      float ior        = 0;
+      float filter = 0;
+      float ior = 0;
    };
+
+	// TODO : Transformation struct
 
 	GeoObject() {
       this->translate = glm::vec3(0, 0, 0);
@@ -28,20 +34,23 @@ public:
       this->rotate = glm::vec3(0, 0, 0);
    };
 
+	// Abstract types
+   int id;
 	std::string type;
 
-   glm::vec3 translate;
+   Finish finish;
+   
+	glm::vec3 translate;
    glm::vec3 scale;
    glm::vec3 rotate;
 
-   Finish finish;
-
-   int id;
-
+	// Abstract functions
 	virtual void print() = 0;
 	virtual float intersect(const Ray &) = 0;
-   virtual glm::vec3 findNormal(const glm::vec3) = 0;
+   virtual glm::vec3 findNormal(const glm::vec3 intersection_point) = 0;
 
+	// Parent print functionality
+	// All objects need to print their finish and transformation
    void GeoPrint() {
       std::cout << "- Color: {";
          std::cout << finish.color.x << " " << finish.color.y << " " << finish.color.z;
@@ -60,6 +69,8 @@ public:
             std::cout << finish.metallic << std::endl;
          std::cout << "  - Reflection: ";
             std::cout << finish.reflection << std::endl;
+         std::cout << "  - Refraction: ";
+            std::cout << finish.refraction << std::endl;
          std::cout << "  - Filter: ";
             std::cout << finish.filter << std::endl;
          std::cout << "  - IOR: ";

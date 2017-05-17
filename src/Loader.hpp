@@ -1,3 +1,7 @@
+// Loader class
+// Parses .pov files and creates the various Camera, Light, and GeoObjects objects
+
+#pragma once
 #ifndef _LOADER_H_
 #define _LOADER_H_
 
@@ -23,9 +27,10 @@ private:
    // Find all floats inside a word
    std::vector<float> findFloatsInWord(std::string word);
 
+	// Adds color param to a finish object
    void createColor(GeoObject::Finish*, std::vector<std::string>);
 
-   // Returns a Finish struct containing all GeoObject finish properties
+   // Initializes Finish struct containing all GeoObject finish properties
    void createFinish(GeoObject::Finish*, std::vector<std::string>);
 
    // Break up the current line in a file into a vector<string>

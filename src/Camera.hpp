@@ -1,8 +1,11 @@
+// Camera class
+// Only functionality is storing data and print
+#pragma once
 #ifndef _CAMERA_H_
 #define _CAMERA_H_
 
 #include <glm/glm.hpp>	// vec3
-#include <iostream>	// print
+#include <iostream>	// std::cout
 
 class Camera {
 public:
@@ -14,4 +17,5 @@ public:
 	glm::vec3 right;
 	glm::vec3 lookAt;
 };
+
 #endif

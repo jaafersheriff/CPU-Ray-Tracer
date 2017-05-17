@@ -1,3 +1,6 @@
+// Plane class extends GeoObject
+
+#pragma once
 #ifndef _PLANE_H_
 #define _PLANE_H_
 
@@ -7,12 +10,14 @@ class Plane: public GeoObject {
 public:
 	Plane();
 
-	void print();
-	float intersect(const Ray &);
-   glm::vec3 findNormal(const glm::vec3 intersection_point);
-
 	glm::vec3 normal;
 	float distance;
+
+	float intersect(const Ray &);
+   glm::vec3 findNormal(const glm::vec3 intersection_point);
+	
+	void print();
+
 };
 
 #endif

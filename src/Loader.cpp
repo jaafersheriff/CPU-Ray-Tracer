@@ -5,7 +5,7 @@ void Loader::createColor(GeoObject::Finish *f, std::vector<std::string> line) {
    for (unsigned int i = 1; i < line.size(); i++) {
       if (line[i].find("rgb") != std::string::npos) {
          floats = findFloatsInLine(line);
-         f->color.r= floats[0];
+         f->color.r = floats[0];
          f->color.g = floats[1];
          f->color.b = floats[2];
          if (floats.size() > 3) {
@@ -34,6 +34,9 @@ void Loader::createFinish(GeoObject::Finish *f, std::vector<std::string> line) {
       }
       if (line[i].find("reflection") != std::string::npos) {
          f->reflection = findFloatsInWord(line[i+1])[0];
+      }
+      if (line[i].find("refraction") != std::string::npos) {
+         f->refraction = findFloatsInWord(line[i+1])[0];
       }
       if (line[i].find("ior") != std::string::npos) {
          f->ior = findFloatsInWord(line[i+1])[0];
