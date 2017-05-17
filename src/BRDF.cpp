@@ -85,8 +85,8 @@ Ray BRDF::createReflectionRay(const Intersection &intersection, const glm::vec3 
    const glm::vec3 incident_point = intersection.point;
 
    glm::vec3 reflection_dir = normalize(incident_ray.direction - 2 * dot(incident_ray.direction, norm) * norm);
-
-   return Ray(incident_point + reflection_dir * EPSILON, reflection_dir);
+	glm::vec3 p_z = incident_point + reflection_dir * EPSILON;
+   return Ray(p_z, reflection_dir);
 }
 
 glm::vec3 BRDF::calculateRefractionColor(Scene &scene, Intersection &intersection, glm::vec3 norm, int recurse, printNode* parent) {
@@ -118,14 +118,14 @@ Ray BRDF::createRefractionRay(const float ior, const Ray &in_ray, const glm::vec
       n2 = 1;
       norm = -norm;
    }
-
-   float dDotN = dot(in_ray.direction, norm);
+   
+	float dDotN = dot(in_ray.direction, norm);
    float rat = n1/n2;
    float root = 1-(rat*rat)*(1-dDotN*dDotN);
 
    glm::vec3 refraction_dir = normalize(rat*(in_ray.direction-dDotN*norm)-norm*(float)sqrt(root));
-
-   return Ray(pos + refraction_dir * EPSILON, refraction_dir);
+	glm::vec3 p_z = pos + refraction_dir * EPSILON;
+   return Ray(p_z, refraction_dir);
 }
 
 glm::vec3 BRDF::BlinnPhong(Light *light, Intersection &object_in, glm::vec3 norm, printNode* p) {
