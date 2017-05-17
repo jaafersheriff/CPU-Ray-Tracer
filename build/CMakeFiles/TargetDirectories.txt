@@ -1,3 +1,0 @@
-/cygdrive/c/Users/jaafe/Documents/Life/Year 3/Spring Quarter/CPE 473/P3/build/CMakeFiles/edit_cache.dir
-/cygdrive/c/Users/jaafe/Documents/Life/Year 3/Spring Quarter/CPE 473/P3/build/CMakeFiles/rebuild_cache.dir
-/cygdrive/c/Users/jaafe/Documents/Life/Year 3/Spring Quarter/CPE 473/P3/build/CMakeFiles/raytrace.dir
