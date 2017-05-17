@@ -32,6 +32,9 @@ endif()
 
 if(NOT GLM_INCLUDE_DIR)
   MESSAGE(FATAL_ERROR "Please point the environment variable GLM_INCLUDE_DIR to the include directory of your GLM installation.")
+else()
+	MESSAGE("GLM dir: " ${GLM_INCLUDE_DIR})
 endif()
 include_directories(${GLM_INCLUDE_DIR})
+
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O2")
