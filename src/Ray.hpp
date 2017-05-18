@@ -10,7 +10,7 @@
 class Ray {
 public:
 	Ray();
-   Ray(glm::vec3 &, glm::vec3 &);
+   Ray(glm::vec3, glm::vec3);
 	void set(const glm::vec3, const glm::vec3);
 
 	glm::vec3 position;

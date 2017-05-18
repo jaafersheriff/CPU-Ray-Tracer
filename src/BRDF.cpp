@@ -28,8 +28,13 @@ glm::vec3 BRDF::raytrace(Scene &scene, Ray &incident_ray, int recurse_count, pri
    glm::vec3 reflection_color = calculateReflectionColor(scene, incident_int, norm, recurse_count, parent);
    glm::vec3 refraction_color = calculateRefractionColor(scene, incident_int, norm, recurse_count, parent);
 
-	// Contributions 
+   // Fresnel
+   if (dot(incident_int.ray.direction, norm) > 0) {
+       norm = -norm;
+   }
    float fresnel_reflectance = fresnel(finish->ior, norm, -incident_ray.direction);
+
+   // Contributions 
    float local_contribution = (1.f - finish->filter) * (1.f - finish->reflection);
    float reflectance_contribution = (1.f - finish->filter) * (finish->reflection) + (finish->filter) * (fresnel_reflectance);
    float transmission_contribution = (finish->filter) * (1 - fresnel_reflectance);
@@ -85,7 +90,8 @@ Ray BRDF::createReflectionRay(const Intersection &intersection, const glm::vec3 
    const glm::vec3 incident_point = intersection.point;
 
    glm::vec3 reflection_dir = normalize(incident_ray.direction - 2 * dot(incident_ray.direction, norm) * norm);
-	glm::vec3 p_z = incident_point + reflection_dir * EPSILON;
+   glm::vec3 p_z = incident_point + reflection_dir * EPSILON;
+
    return Ray(p_z, reflection_dir);
 }
 
@@ -119,12 +125,12 @@ Ray BRDF::createRefractionRay(const float ior, const Ray &in_ray, const glm::vec
       norm = -norm;
    }
    
-	float dDotN = dot(in_ray.direction, norm);
+   float dDotN = dot(in_ray.direction, norm);
    float rat = n1/n2;
    float root = 1-(rat*rat)*(1-dDotN*dDotN);
 
    glm::vec3 refraction_dir = normalize(rat*(in_ray.direction-dDotN*norm)-norm*(float)sqrt(root));
-	glm::vec3 p_z = pos + refraction_dir * EPSILON;
+   glm::vec3 p_z = pos + refraction_dir * EPSILON;
    return Ray(p_z, refraction_dir);
 }
 

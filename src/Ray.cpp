@@ -5,7 +5,7 @@ Ray::Ray() {
 	this->direction = glm::vec3(0, 0, 0);
 }
 
-Ray::Ray(glm::vec3 &pos, glm::vec3 &dir) {
+Ray::Ray(glm::vec3 pos, glm::vec3 dir) {
    this->position = glm::vec3(pos);
    this->direction = glm::vec3(dir);
 }
