@@ -23,7 +23,10 @@ Intersection::Intersection(std::vector<GeoObject *> objects, Ray& ray) {
    // If there was a valid intersection, store point of intersection and object's normal
    if (this->t != std::numeric_limits<float>::max()) {
       this->hit = true;
+
+		// TODO: coordinate transforms
       this->point = ray.calculatePoint(this->t);
+		this->normal = object->findNormal(this->point);
    }
 }
 

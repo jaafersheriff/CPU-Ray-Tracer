@@ -21,6 +21,10 @@ public:
 	void parse(const char *file_name, Scene &scene);
 
 private:
+   // Parse through remaining object adding object properties
+   void addProperties(GeoObject *, std::vector<std::string>, std::ifstream&);
+
+
    // Find all floats inside a line
    std::vector<float> findFloatsInLine(std::vector<std::string>);
 

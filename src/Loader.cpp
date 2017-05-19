@@ -1,4 +1,5 @@
 #include "Loader.hpp"
+#include "glm/gtc/matrix_transform.hpp"	// Matrix transformations
 
 void Loader::createColor(GeoObject::Finish *f, std::vector<std::string> line) {
    std::vector<float> floats;
@@ -44,6 +45,49 @@ void Loader::createFinish(GeoObject::Finish *f, std::vector<std::string> line) {
    }
 }
 
+void Loader::addProperties(GeoObject *object, std::vector<std::string> line, std::ifstream& file) {
+	std::vector<float> floats;
+
+   // Continue parsing/storing file components until we reach '}' line
+   while(line[0].compare("}")) {
+      // Finish
+      if (!line[0].compare("pigment")) {
+         createColor(&object->finish, line);
+      }
+      if (!line[0].compare("finish")) {
+         createFinish(&object->finish, line);
+      }
+      // Transformations
+      if (!line[0].compare("scale")) {
+			floats = findFloatsInLine(line);
+			glm::vec3 scale = glm::vec3(floats[0], floats[1], floats[2]);
+			object->inv_M = glm::scale(object->inv_M, scale);
+      }
+      if (!line[0].compare("rotate")) {
+			floats = findFloatsInLine(line);
+			// x
+			object->inv_M = glm::rotate(object->inv_M, floats[0], glm::vec3(1, 0, 0));
+			// y
+			object->inv_M = glm::rotate(object->inv_M, floats[1], glm::vec3(0, 1, 0));
+			// z		
+			object->inv_M = glm::rotate(object->inv_M, floats[2], glm::vec3(0, 0, 1));
+      }
+      if (!line[0].compare("translate")) {
+			floats = findFloatsInLine(line);
+			glm::vec3 translate = glm::vec3(floats[0], floats[1], floats[2]);
+			object->inv_M = glm::translate(object->inv_M, translate);
+		}
+      // Stupid catch for faulty .pov files
+      if (line[line.size() - 1].find("}}") != std::string::npos) {
+         break;
+      }
+      line = getLine(&file);
+   }
+
+	// Invert model matrix before returning
+	object->inv_M = glm::inverse(object->inv_M);
+}
+
 Triangle* Loader::createTriangle(std::vector<std::string> line, std::ifstream& file) {
    // Create empty triangle object
    Triangle *triangle = new Triangle;
@@ -62,21 +106,10 @@ Triangle* Loader::createTriangle(std::vector<std::string> line, std::ifstream& f
    floats = findFloatsInLine(line);
    triangle->v3 = glm::vec3(floats[0], floats[1], floats[2]);
 
-   // Continue parsing/storing file components until we reach '}' line
-   // TODO: functional programming
-   while(line[0].compare("}")) {
-      if (!line[0].compare("pigment")) {
-         createColor(&triangle->finish, line);
-      }
-      if (!line[0].compare("finish") ) {
-         createFinish(&triangle->finish, line);
-      }
-      if (line[line.size() - 1].find("}}") != std::string::npos) {
-         break;
-      }
-      line = getLine(&file);
-   }
-   return triangle;
+   // Object properties
+   addProperties(triangle, line, file);
+
+  return triangle;
 }
 
 Plane* Loader::createPlane(std::vector<std::string> line, std::ifstream& file) {
@@ -91,20 +124,10 @@ Plane* Loader::createPlane(std::vector<std::string> line, std::ifstream& file) {
    // Distance
    plane->distance = floats[3];
 
-   // Continue parsing/storing file components until we reach '}' line
-   while(line[0].compare("}")) {
-      if (!line[0].compare("pigment")) {
-         createColor(&plane->finish, line);
-      }
-      if (!line[0].compare("finish") ) {
-         createFinish(&plane->finish, line);
-      }
-      if (line[line.size() - 1].find("}}") != std::string::npos) {
-         break;
-      }
-      line = getLine(&file);
-   }
-   return plane;
+   // Object properties
+   addProperties(plane, line, file);
+
+  return plane;
 }
 
 Sphere* Loader::createSphere(std::vector<std::string> line, std::ifstream& file) {
@@ -119,24 +142,8 @@ Sphere* Loader::createSphere(std::vector<std::string> line, std::ifstream& file)
    // Radius
    sphere->radius = floats[3];
 
-   // Continue parsing/storing file components until we reach '}' line
-   while(line[0].compare("}")) {
-      if (!line[0].compare("pigment")) {
-         createColor(&sphere->finish, line);
-      }
-      if (!line[0].compare("finish")) {
-         createFinish(&sphere->finish, line);
-      }
-      if (!line[0].compare("translate")) {
-         floats = findFloatsInLine(line);
-         sphere->translate = glm::vec3(floats[0], floats[1], floats[2]);
-      }
-      if (line[line.size() - 1].find("}}") != std::string::npos) {
-         break;
-      }
-
-      line = getLine(&file);
-   }
+   // Object properties
+   addProperties(sphere, line, file);
 
    return sphere;
 }
@@ -164,11 +171,14 @@ Camera* Loader::createCamera(std::vector<std::string> line, std::ifstream& file)
 
    // Continue parsing/storing file components until we reach '}' line
    while(line[0].compare("}")) {
-      if (!line[0].compare("location")) {
-         floats = findFloatsInLine(line);
-         camera->location = glm::vec3(floats[0], floats[1], floats[2]);
-      }
-      if (!line[0].compare("up")) {
+		// Stupid catch for .pov formatting
+		for (unsigned int i = 0; i < line.size(); i++) {
+ 		   if (line[i].find("location") != std::string::npos) {
+   	      floats = findFloatsInLine(line);
+   	      camera->location = glm::vec3(floats[0], floats[1], floats[2]);
+			}
+		}
+     if (!line[0].compare("up")) {
          floats = findFloatsInLine(line);
          camera->up = glm::vec3(floats[0], floats[1], floats[2]);
       }

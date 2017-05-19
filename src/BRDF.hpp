@@ -18,7 +18,6 @@ public:
       std::string type;
       Intersection in;
       Ray shadow_ray;
-      glm::vec3 norm;
       glm::vec3 ambient;
       glm::vec3 diffuse;
       glm::vec3 specular;
@@ -44,20 +43,20 @@ public:
 
 
 	// Color calculation functions
-   glm::vec3 calculateLocalColor(Scene &, Intersection &, glm::vec3, printNode*);
-   glm::vec3 calculateReflectionColor(Scene &, Intersection &, glm::vec3, int, printNode*);
-   glm::vec3 calculateRefractionColor(Scene &, Intersection &, glm::vec3, int, printNode*);
+   glm::vec3 calculateLocalColor(Scene &, Intersection &, printNode*);
+   glm::vec3 calculateReflectionColor(Scene &, Intersection &, int, printNode*);
+   glm::vec3 calculateRefractionColor(Scene &, Intersection &, int, printNode*);
 
 	// Ray calculation functions
-	Ray createReflectionRay(const Intersection &, const glm::vec3);
-   Ray createRefractionRay(const float, const Ray &, const glm::vec3, glm::vec3);
+	Ray createReflectionRay(const Intersection &);
+   Ray createRefractionRay(const Intersection &);
 
 	// Shading calculations
-	glm::vec3 BlinnPhong(Light *, Intersection &, glm::vec3, printNode*);
-	glm::vec3 CookTorrance(Light *, Intersection &, glm::vec3);
+	glm::vec3 BlinnPhong(Light *, Intersection &, printNode*);
+	glm::vec3 CookTorrance(Light *, Intersection &);
 
 	// Verbose printing
-   void createParentNode(printNode*, Intersection, glm::vec3);
+   void createParentNode(printNode*, Intersection);
    printNode* createChildNode(printNode*, int);
 
 	// Helpers

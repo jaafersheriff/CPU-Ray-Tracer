@@ -81,9 +81,6 @@ void Renderer::printRays(BRDF::printNode* p, int level) {
 		std::cout << ", Intersection = {" << p->in.point.x << " " << p->in.point.y << " " << p->in.point.z << "}" << std::endl;
 
 		for (int i = 0; i < level; i++) { std::cout << "  "; }
-		std::cout << "|   Normal {" << p->norm.x << " " << p->norm.y << " " << p->norm.z << "}" << std::endl;
-
-		for (int i = 0; i < level; i++) { std::cout << "  "; }
 		std::cout << "|   Transformed Ray: "; p->in.ray.print();
 
 		for (int i = 0; i < level; i++) { std::cout << "  "; }

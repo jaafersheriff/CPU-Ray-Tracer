@@ -6,12 +6,14 @@
 #define _GEOOBJECT_H_
 
 #include <glm/glm.hpp>
+#include <glm/gtx/string_cast.hpp>	// print matrices
 #include <iostream>	// std::cout
 
 #include "Ray.hpp"
 
 class GeoObject {
 public:
+   // Finish struct contains all material data
    struct Finish {
       glm::vec3 color = glm::vec3(0, 0, 0);
 
@@ -26,31 +28,30 @@ public:
       float ior = 0;
    };
 
-	// TODO : Transformation struct
 
-	GeoObject() {
-      this->translate = glm::vec3(0, 0, 0);
-      this->scale = glm::vec3(0, 0, 0);
-      this->rotate = glm::vec3(0, 0, 0);
+
+   GeoObject() {
+      inv_M = glm::mat4(1.0f);
    };
 
-	// Abstract types
+   // Abstract types
    int id;
-	std::string type;
+   std::string type;
 
+   // Material properties
    Finish finish;
-   
-	glm::vec3 translate;
-   glm::vec3 scale;
-   glm::vec3 rotate;
 
-	// Abstract functions
-	virtual void print() = 0;
-	virtual float intersect(const Ray &) = 0;
+   // Model matrix is stored as its inverse because we never
+   // use it in its normal state
+   glm::mat4 inv_M;
+
+   // Abstract functions
+   virtual void print() = 0;
+   virtual float intersect(const Ray &) = 0;
    virtual glm::vec3 findNormal(const glm::vec3 intersection_point) = 0;
 
-	// Parent print functionality
-	// All objects need to print their finish and transformation
+   // Parent print functionality
+   // All objects need to print their finish and transformation
    void GeoPrint() {
       std::cout << "- Color: {";
          std::cout << finish.color.x << " " << finish.color.y << " " << finish.color.z;
@@ -76,18 +77,9 @@ public:
          std::cout << "  - IOR: ";
             std::cout << finish.ior << std::endl;
 
-      std::cout << "- Transform:" << std::endl;
-         std::cout << "  - Translate: {";
-            std::cout << translate.x << " " << translate.y << " " << translate.z;
-            std::cout << "}" << std::endl;
-         std::cout << "  - Scale: {";
-            std::cout << scale.x << " " << scale.y << " " << scale.z;
-            std::cout << "}" << std::endl;
-      std::cout << "  - Rotate: {";
-            std::cout << rotate.x << " " << rotate.y << " " << rotate.z;
-            std::cout << "}" << std::endl;
-
-   }
+		std::cout << " - Model Transform: " << std::endl;
+			std::cout << "  " << glm::to_string(inv_M) << std::endl;
+  }
 };
 
 #endif

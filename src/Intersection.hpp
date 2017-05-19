@@ -17,15 +17,15 @@ public:
 
    void print();
 
-	// Object intersected 
+	// Object intersected and normal at point of intersection
 	// Set to nullptr if no object is intersected
    GeoObject *object = nullptr;
-	
+	glm::vec3 normal;
+
 	// Ray of intersection, t value of intersection, world coords of intersection
    Ray ray;
 	float t;
    glm::vec3 point;
-	// TODO : store object normal
 
 	// True if object is intersected, false otherwise
    bool hit;
