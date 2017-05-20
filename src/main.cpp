@@ -35,7 +35,15 @@ int main(int args, char **argv) {
 	arg_flags[2] = !strcmp(argv[1], "pixelray");
 	arg_flags[3] = !strcmp(argv[1], "firsthit") || !strcmp(argv[1], "pixelcolor");
 	renderer.setBRDFVerbose(!strcmp(argv[1], "pixeltrace"));
-	renderer.setBRDFFlag(!strcmp(argv[args-1], "-altbrdf"));
+	// Optional flags
+	for (int i = 0; i < args; i++) {
+		if (argv[i][0] == '-') {
+			renderer.setBRDFFlag(std::string(argv[i]).find("altbrdf") != std::string::npos);
+			if (char *num = strchr(argv[i], '=') + 1) {
+				renderer.setSSCount(atoi(num));
+			}
+		}
+	}
 
 	std::cout << std::setprecision(4);
 
@@ -59,7 +67,7 @@ int main(int args, char **argv) {
 		int window_height = atoi(argv[4]);
 		int pixel_x = atoi(argv[5]);
 		int pixel_y = atoi(argv[6]);
-		Ray ray = scene.createCameraRay(window_width, window_height, pixel_x, pixel_y);
+		Ray ray = scene.createCameraRay(window_width, window_height, pixel_x, pixel_y, 1, 1, 1);
 		Intersection in(scene.objects, ray);
 		std::cout << "Pixel: [" << pixel_x << ", " << pixel_y << "] ";
 		if (arg_flags[2] || arg_flags[3]) {

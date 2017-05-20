@@ -2,15 +2,15 @@
 #include "Intersection.hpp"
 #include "BRDF.hpp"
 
-Ray Scene::createCameraRay(const int width, const int height, const int x, const int y) {
+Ray Scene::createCameraRay(const int width, const int height, const int x, const int y, const int m, const int n, const int s) {
 	Ray ray;
 
 	// p0
 	ray.position = camera->location;
 
 	// direction
-	float u = (x + 0.5)/width - 0.5;
-	float v = (y + 0.5)/height - 0.5;
+	float u = (x + (m + 0.5) / s)/width - 0.5;
+	float v = (y + (n + 0.5) / s)/height - 0.5;
 	glm::vec3 w = glm::normalize(glm::vec3(camera->lookAt - camera->location));
 	ray.direction = glm::normalize(glm::vec3(u*camera->right + v*camera->up + w));
 

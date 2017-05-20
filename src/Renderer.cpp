@@ -9,9 +9,16 @@ glm::vec3 Renderer::calculateColor(Scene &scene, const glm::ivec2 size, const in
 		root = new BRDF::printNode;
 		root->type = "Primary";
 	}
+
 	// Calculate color
-	Ray camera_ray = scene.createCameraRay(size.x, size.y, x, y);
-	glm::vec3 color = brdf.raytrace(scene, camera_ray, RECURSE_COUNT, root);
+	glm::vec3 color = glm::vec3(0, 0, 0);
+	for (int m = 0; m < SSCount; m++) {
+		for (int n = 0; n < SSCount; n++) {
+			Ray camera_ray = scene.createCameraRay(size.x, size.y, x, y, m, n, SSCount);
+			color += brdf.raytrace(scene, camera_ray, RECURSE_COUNT, root);
+		}
+	}
+	color /= (SSCount*SSCount);
 
 	// Scale RGB from [0, 1] to [0, 255]
 	color.r = round(glm::clamp(color.r, 0.f, 1.f) * 255.f);

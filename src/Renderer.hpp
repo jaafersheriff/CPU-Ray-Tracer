@@ -19,6 +19,10 @@ public:
 	// BRDF object for recursive raytracing
    BRDF brdf;
 
+	// Super-sample count
+	int SSCount = 1;
+	void setSSCount(const int in) { this->SSCount = in; }
+
 	// printNode object for verbose printing
    BRDF::printNode *root = nullptr;
 

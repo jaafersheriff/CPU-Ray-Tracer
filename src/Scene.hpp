@@ -26,7 +26,7 @@ public:
 	std::vector<GeoObject *> objects;
 
    // Creates a ray from the camera's position to a pixel
-   Ray createCameraRay(const int window_width, const int window_height, const int pixel_x, const int pixel_y);
+   Ray createCameraRay(const int width, const int height, const int x, const int y, const int m, const int n, const int s);
 
 	// Calculates the color in the world at an Intersection
 	glm::vec3 findColor(const glm::ivec2, const int, const int, const int, int);
