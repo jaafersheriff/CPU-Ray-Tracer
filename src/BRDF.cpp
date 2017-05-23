@@ -26,14 +26,12 @@ glm::vec3 BRDF::raytrace(Scene &scene, Ray &incident_ray, int recurse_count, pri
    glm::vec3 reflection_color = calculateReflectionColor(scene, incident_int, recurse_count, parent);
    glm::vec3 refraction_color = calculateRefractionColor(scene, incident_int, recurse_count, parent);
 
-   // Fresnel
-	float fresnel_reflectance = 0.f;
+	// Contributions 
+   float fresnel_reflectance = 0.f;
 	if (fresnel_flag) {
 		fresnel_reflectance = calculateFresnelReflectance(finish->ior, incident_int);
 	}
-
-   // Contributions 
-   float local_contribution = (1.f - finish->filter) * (1.f - finish->reflection);
+ 	float local_contribution = (1.f - finish->filter) * (1.f - finish->reflection);
    float reflectance_contribution = (1.f - finish->filter) * (finish->reflection) + (finish->filter) * (fresnel_reflectance);
    float transmission_contribution = (finish->filter) * (1 - fresnel_reflectance);
 

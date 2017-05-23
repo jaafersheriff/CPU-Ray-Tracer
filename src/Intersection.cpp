@@ -14,8 +14,8 @@ Intersection::Intersection(std::vector<GeoObject *> objects, Ray& ray) {
    for (unsigned int i = 0; i < objects.size(); i++) {
 		// Transform ray into object's object space
 
-		glm::vec3 p = glm::vec3(glm::vec4(ray.position, 1.0f) * objects[i]->inv_M);
-		glm::vec3 d = glm::vec3(glm::vec4(ray.direction, 0.0f) * objects[i]->inv_M);
+		glm::vec3 p = glm::vec3(objects[i]->inv_M * glm::vec4(ray.position, 1.0f));
+		glm::vec3 d = glm::vec3(objects[i]->inv_M * glm::vec4(ray.direction, 0.0f));
 		Ray objectRay(p, d);
 
       // Store t value and object if there's a closer intersection
@@ -23,6 +23,7 @@ Intersection::Intersection(std::vector<GeoObject *> objects, Ray& ray) {
       if (curr_t > EPSILON && curr_t < this->t) {
          this->t = curr_t;
          this->object = objects[i];
+			this->objectRay = objectRay;
       }
    }
 
@@ -30,8 +31,11 @@ Intersection::Intersection(std::vector<GeoObject *> objects, Ray& ray) {
    if (this->t != std::numeric_limits<float>::max()) {
       this->hit = true;
       this->point = this->ray.calculatePoint(this->t);
+		
 		// Coordinate transform normal
-		this->normal = glm::vec3(glm::vec4(this->object->findNormal(this->point), 0.0f) * glm::transpose(this->object->inv_M));
+		glm::vec3 obj_normal = this->object->findNormal(this->objectRay.calculatePoint(this->t));
+		glm::vec3 world_normal = glm::vec3(glm::transpose(this->object->inv_M) * glm::vec4(obj_normal, 0.0f)); 
+		this->normal = glm::normalize(world_normal);
    }
 }
 

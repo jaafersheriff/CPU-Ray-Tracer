@@ -22,8 +22,10 @@ public:
    GeoObject *object = nullptr;
 	glm::vec3 normal;
 
-	// Ray of intersection, t value of intersection, world coords of intersection
+	// Ray of intersection and transformed ray of intersection
    Ray ray;
+	Ray objectRay;
+	// t value of intersection, world coords of intersection
 	float t;
    glm::vec3 point;
 
