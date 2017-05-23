@@ -61,21 +61,19 @@ void Loader::addProperties(GeoObject *object, std::vector<std::string> line, std
       if (!line[0].compare("scale")) {
 			floats = findFloatsInLine(line);
 			glm::vec3 scale = glm::vec3(floats[0], floats[1], floats[2]);
-			object->inv_M = glm::scale(object->inv_M, scale);
+			object->inv_M = glm::scale(glm::mat4(1.0f), scale) * object->inv_M;
       }
       if (!line[0].compare("rotate")) {
-			floats = findFloatsInLine(line);
-			// x
-			object->inv_M = glm::rotate(object->inv_M, floats[0], glm::vec3(1, 0, 0));
-			// y
-			object->inv_M = glm::rotate(object->inv_M, floats[1], glm::vec3(0, 1, 0));
-			// z		
-			object->inv_M = glm::rotate(object->inv_M, floats[2], glm::vec3(0, 0, 1));
-      }
+  			floats = findFloatsInLine(line);
+			glm::vec3 rot = glm::vec3(glm::radians(floats[0]), glm::radians(floats[1]), glm::radians(floats[2]));
+			object->inv_M = glm::rotate(glm::mat4(1.0f), rot.z, glm::vec3(0, 0, 1)) * object->inv_M;
+			object->inv_M = glm::rotate(glm::mat4(1.0f), rot.y, glm::vec3(0, 1, 0)) * object->inv_M;
+			object->inv_M = glm::rotate(glm::mat4(1.0f), rot.x, glm::vec3(1, 0, 0)) * object->inv_M;
+	   }
       if (!line[0].compare("translate")) {
 			floats = findFloatsInLine(line);
 			glm::vec3 translate = glm::vec3(floats[0], floats[1], floats[2]);
-			object->inv_M = glm::translate(object->inv_M, translate);
+			object->inv_M = glm::translate(glm::mat4(1.0f), translate) * object->inv_M;
 		}
       // Stupid catch for faulty .pov files
       if (line[line.size() - 1].find("}}") != std::string::npos) {

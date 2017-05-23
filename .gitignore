@@ -1,6 +1,7 @@
 build/
 tests/
 res/
+.vscode/
 
 outt
 
