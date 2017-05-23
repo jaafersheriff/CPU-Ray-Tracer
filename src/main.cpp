@@ -38,12 +38,23 @@ int main(int args, char **argv) {
 	// Optional flags
 	for (int i = 0; i < args; i++) {
 		if (argv[i][0] == '-') {
-			renderer.setBRDFFlag(std::string(argv[i]).find("altbrdf") != std::string::npos);
-			if (char *num = strchr(argv[i], '=') + 1) {
-				renderer.setSSCount(atoi(num));
+			// Cook-Torrance
+			if (std::string(argv[i]).find("altbrdf") != std::string::npos) {
+				renderer.setBRDFFlag(1);
+			}
+			// SuperSampling
+			if (std::string(argv[i]).find("ss") != std::string::npos) {
+					if (char *num = (strchr(argv[i], '=') + 1)) {
+					renderer.setSSCount(atoi(num));
+				}
+			}
+			// Fresnel
+			if (std::string(argv[i]).find("fresnel") != std::string::npos) {
+				
 			}
 		}
 	}
+
 
 	std::cout << std::setprecision(4);
 
