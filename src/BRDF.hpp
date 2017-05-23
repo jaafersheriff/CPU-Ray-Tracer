@@ -45,7 +45,7 @@ public:
 
 	// Master recursive function for tracing rays
    glm::vec3 raytrace(Scene &, Ray &, int, printNode*);
-
+	glm::vec3 calculateColor(Scene &, Intersection &, int, printNode*);
 
 	// Color calculation functions
 	float calculateFresnelReflectance(float, Intersection &);
