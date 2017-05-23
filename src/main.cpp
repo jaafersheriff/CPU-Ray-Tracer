@@ -34,13 +34,13 @@ int main(int args, char **argv) {
 	arg_flags[1] = !strcmp(argv[1], "sceneinfo");
 	arg_flags[2] = !strcmp(argv[1], "pixelray");
 	arg_flags[3] = !strcmp(argv[1], "firsthit") || !strcmp(argv[1], "pixelcolor");
-	renderer.setBRDFVerbose(!strcmp(argv[1], "pixeltrace"));
+	renderer.setVerbose(!strcmp(argv[1], "pixeltrace"));
 	// Optional flags
 	for (int i = 0; i < args; i++) {
 		if (argv[i][0] == '-') {
 			// Cook-Torrance
 			if (std::string(argv[i]).find("altbrdf") != std::string::npos) {
-				renderer.setBRDFFlag(1);
+				renderer.setRenderFlag(1);
 			}
 			// SuperSampling
 			if (std::string(argv[i]).find("ss") != std::string::npos) {
@@ -50,7 +50,7 @@ int main(int args, char **argv) {
 			}
 			// Fresnel
 			if (std::string(argv[i]).find("fresnel") != std::string::npos) {
-				
+				renderer.setFresnelFlag(1);
 			}
 		}
 	}

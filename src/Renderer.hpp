@@ -32,8 +32,9 @@ public:
    void print(); 
    void printRays(BRDF::printNode*, int level);
    
-	void setBRDFVerbose(int flag) { brdf.verbose_flag = flag; }
-   void setBRDFFlag(int flag) { brdf.render_flag = flag; }
+	void setVerbose(int flag) { brdf.verbose_flag = flag; }
+   void setRenderFlag(int flag) { brdf.render_flag = flag; }
+	void setFresnelFlag(int flag) { brdf.fresnel_flag = flag; }
 };
 
 #endif

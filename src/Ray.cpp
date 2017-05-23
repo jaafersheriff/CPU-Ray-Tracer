@@ -6,8 +6,8 @@ Ray::Ray() {
 }
 
 Ray::Ray(glm::vec3 pos, glm::vec3 dir) {
-   this->position = glm::vec3(pos);
-   this->direction = glm::vec3(dir);
+   this->position = pos;
+   this->direction = dir;
 }
 
 void Ray::set(const glm::vec3 p, const glm::vec3 d) {

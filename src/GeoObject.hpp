@@ -8,6 +8,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtx/string_cast.hpp>	// print matrices
 #include <iostream>	// std::cout
+#include <iomanip>
 
 #include "Ray.hpp"
 
@@ -78,7 +79,10 @@ public:
             std::cout << finish.ior << std::endl;
 
 		std::cout << " - Model Transform: " << std::endl;
-			std::cout << "  " << glm::to_string(inv_M) << std::endl;
+			std::cout << "  " << std::setw(4) << inv_M[0][0] << " " << std::setw(4) << inv_M[1][0] << " " << std::setw(4) << inv_M[2][0] << " " << std::setw(4) << inv_M[3][0] << std::endl;
+			std::cout << "  " << std::setw(4) << inv_M[0][1] << " " << std::setw(4) << inv_M[1][1] << " " << std::setw(4) << inv_M[2][1] << " " << std::setw(4) << inv_M[3][1] << std::endl;
+			std::cout << "  " << std::setw(4) << inv_M[0][2] << " " << std::setw(4) << inv_M[1][2] << " " << std::setw(4) << inv_M[2][2] << " " << std::setw(4) << inv_M[3][2] << std::endl;
+			std::cout << "  " << std::setw(4) << inv_M[0][3] << " " << std::setw(4) << inv_M[1][3] << " " << std::setw(4) << inv_M[2][3] << " " << std::setw(4) << inv_M[3][3] << std::endl;
   }
 };
 
