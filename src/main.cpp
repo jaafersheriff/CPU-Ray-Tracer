@@ -34,7 +34,12 @@ int main(int args, char **argv) {
 	arg_flags[1] = !strcmp(argv[1], "sceneinfo");
 	arg_flags[2] = !strcmp(argv[1], "pixelray");
 	arg_flags[3] = !strcmp(argv[1], "firsthit") || !strcmp(argv[1], "pixelcolor");
-	renderer.setVerbose(!strcmp(argv[1], "pixeltrace"));
+	if (!strcmp(argv[1], "pixeltrace")) {
+		renderer.setVerbose(1);
+	}
+	if (!strcmp(argv[1], "printrays")) {
+		renderer.setVerbose(2);
+	}
 	// Optional flags
 	for (int i = 0; i < args; i++) {
 		if (argv[i][0] == '-') {
@@ -54,7 +59,6 @@ int main(int args, char **argv) {
 			}
 		}
 	}
-
 
 	std::cout << std::setprecision(4);
 
@@ -93,9 +97,13 @@ int main(int args, char **argv) {
 			const glm::ivec2 size = glm::ivec2(window_width, window_height);
 			glm::vec3 color = renderer.calculateColor(scene, size, pixel_x, pixel_y);
 		   std::cout << "Color: (" << color.x << ", " << color.y  << ", " << color.z << ")" << std::endl;
-		   if (renderer.brdf.verbose_flag) {
-		   	renderer.printRays(renderer.root, 0);
+		   if (renderer.brdf.verbose_flag == 1) {
+		   	renderer.pixeltrace(renderer.root, 0);
 		   }
+			if (renderer.brdf.verbose_flag == 2) {
+				std::cout << "----" << std::endl;
+				renderer.printrays(renderer.root, 0);
+			}
 		}
  	}
 

@@ -30,8 +30,9 @@ public:
    glm::vec3 calculateColor(Scene &, const glm::ivec2, const int, const int);
 
    void print(); 
-   void printRays(BRDF::printNode*, int level);
-   
+   void pixeltrace(BRDF::printNode*, int );
+	void printrays(BRDF::printNode*, int);
+
 	void setVerbose(int flag) { brdf.verbose_flag = flag; }
    void setRenderFlag(int flag) { brdf.render_flag = flag; }
 	void setFresnelFlag(int flag) { brdf.fresnel_flag = flag; }

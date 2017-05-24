@@ -28,9 +28,13 @@ glm::vec3 BRDF::calculateColor(Scene &scene, Intersection &intersection, int rec
    float reflectance_contribution = (1.f - finish->filter) * (finish->reflection) + (finish->filter) * (fresnel_reflectance);
    float transmission_contribution = (finish->filter) * (1 - fresnel_reflectance);
 
-   return local_color * local_contribution +
-          reflection_color * reflectance_contribution +
-          refraction_color * transmission_contribution;
+   glm::vec3 out_color =  local_color * local_contribution +
+								  reflection_color * reflectance_contribution +
+								  refraction_color * transmission_contribution;
+	
+	updateParentNode(parent, local_contribution, reflectance_contribution, transmission_contribution, out_color);
+
+	return out_color;
 }
 
 glm::vec3 BRDF::raytrace(Scene &scene, Ray &incident_ray, int recurse_count, printNode* parent) {
@@ -84,6 +88,8 @@ glm::vec3 BRDF::calculateReflectionColor(Scene &scene, Intersection &intersectio
    // Reflection color is scaled by object's material
    reflection_color *= intersection.object->finish.color;
 
+	updateParentNode(parent, reflection_ray, reflection_color, 0);
+
    return reflection_color;
 }
 
@@ -117,6 +123,8 @@ glm::vec3 BRDF::calculateRefractionColor(Scene &scene, Intersection &intersectio
 	glm::vec3 atten = glm::vec3( exp(absorb.r), exp(absorb.g), exp(absorb.b) );
 	refraction_color *= atten;
 
+	updateParentNode(parent, refraction_ray, refraction_color, 1);
+ 
    return refraction_color;
 }
 
@@ -207,6 +215,20 @@ glm::vec3 BRDF::CookTorrance(Light *light, Intersection &object_in) {
    return light->color * NdotL * (diffuse + specular);
 }
 
+float BRDF::calculateFresnelReflectance(float ior, Intersection &intersection) {
+	if (dot(intersection.ray.direction, intersection.normal) > 0) {
+		return fresnel(ior, -intersection.normal, -intersection.ray.direction);
+	}
+	else {
+		return fresnel(ior, intersection.normal, -intersection.ray.direction);
+	}
+}
+
+float BRDF::fresnel(float n, glm::vec3 a, glm::vec3 b) {
+   float F_z = pow(n-1.f, 2)/pow(n+1.f, 2);
+   return F_z + (1.f-F_z) * pow(1.f-dot(a, b), 5.f);
+}
+
 void BRDF::createParentNode(printNode* parent, Intersection in) {
    if (parent != nullptr) {
       parent->in = in;
@@ -214,6 +236,29 @@ void BRDF::createParentNode(printNode* parent, Intersection in) {
       parent->diffuse = glm::vec3(0, 0, 0);
       parent->specular = glm::vec3(0, 0, 0);
    }
+}
+
+void BRDF::updateParentNode(printNode* parent, float local, float refl, float refr, glm::vec3 col) {
+	if (parent == nullptr) {
+		return;
+	}
+
+	parent->local_con = local;
+	parent->refl_con = refl;
+	parent->refr_con = refr;
+	parent->final_color = col;
+}
+
+void BRDF::updateParentNode(printNode* parent, Ray &ray, glm::vec3 color, int type) {
+	if (parent == nullptr) {
+			return;
+	}
+	if (type == 1) {
+		parent->refraction_d = ray.direction;
+	}
+	else {
+		parent->reflection_d = ray.direction;
+	}
 }
 
 BRDF::printNode* BRDF::createChildNode(printNode* parent, int type) {
@@ -235,16 +280,4 @@ BRDF::printNode* BRDF::createChildNode(printNode* parent, int type) {
    return child;
 }
 
-float BRDF::calculateFresnelReflectance(float ior, Intersection &intersection) {
-	if (dot(intersection.ray.direction, intersection.normal) > 0) {
-		return fresnel(ior, -intersection.normal, -intersection.ray.direction);
-	}
-	else {
-		return fresnel(ior, intersection.normal, -intersection.ray.direction);
-	}
-}
 
-float BRDF::fresnel(float n, glm::vec3 a, glm::vec3 b) {
-   float F_z = pow(n-1.f, 2)/pow(n+1.f, 2);
-   return F_z + (1.f-F_z) * pow(1.f-dot(a, b), 5.f);
-}

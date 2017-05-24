@@ -16,11 +16,17 @@ public:
 	// Used for verbose printing
    struct printNode {
       std::string type;
-      Intersection in;
+      Intersection in;	// Object, ray, transformed ray, t, point, normal
       Ray shadow_ray;
+		glm::vec3 final_color;
       glm::vec3 ambient;
       glm::vec3 diffuse;
       glm::vec3 specular;
+		glm::vec3 refraction_d;
+		glm::vec3 reflection_d;
+		float local_con;
+		float refr_con;
+		float refl_con;
       printNode *refr = nullptr;
       printNode *refl = nullptr;
    };
@@ -65,6 +71,8 @@ public:
 	// Verbose printing
    void createParentNode(printNode*, Intersection);
    printNode* createChildNode(printNode*, int);
+	void updateParentNode(printNode*, float, float, float, glm::vec3);
+	void updateParentNode(printNode*, Ray &, glm::vec3, int);
 };
 
 #endif

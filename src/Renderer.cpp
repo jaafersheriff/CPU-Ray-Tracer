@@ -66,8 +66,8 @@ void Renderer::print() {
 	std::cout << std::endl;
 }
 
-void Renderer::printRays(BRDF::printNode* p, int level) {
-	if (p == nullptr) {
+void Renderer::pixeltrace(BRDF::printNode* root, int level) {
+	if (root == nullptr) {
 		return;
 	}
 
@@ -77,33 +77,55 @@ void Renderer::printRays(BRDF::printNode* p, int level) {
 	}
 
 	for (int i = 0; i < level; i++) { std::cout << "  "; }
-	std::cout << "o - Iteration type: " << p->type << std::endl;
+	std::cout << "o - Iteration type: " << root->type << std::endl;
 
 	for (int i = 0; i < level; i++) { std::cout << "  "; }
-	std::cout << "|   Ray: "; p->in.ray.print();
+	std::cout << "|   Ray: "; root->in.ray.print();
 
-	if (p->in.hit) {
+	if (root->in.hit) {
 		for (int i = 0; i < level; i++) { std::cout << "  "; }
-		std::cout << "|   Hit Object ID (" << p->in.object->id << " - " << p->in.object->type << ") at T = " << p->in.t;
-		std::cout << ", Intersection = {" << p->in.point.x << " " << p->in.point.y << " " << p->in.point.z << "}" << std::endl;
-
-		for (int i = 0; i < level; i++) { std::cout << "  "; }
-		std::cout << "|   Transformed Ray: "; p->in.ray.print();
+		std::cout << "|   Hit Object ID (" << root->in.object->id << " - " << root->in.object->type << ") at T = " << root->in.t;
+		std::cout << ", Intersection = {" << root->in.point.x << " " << root->in.point.y << " " << root->in.point.z << "}" << std::endl;
 
 		for (int i = 0; i < level; i++) { std::cout << "  "; }
-		std::cout << "|   ShadowRay [0] "; p->shadow_ray.print();
+		std::cout << "|   Transformed Ray: "; root->in.ray.print();
 
 		for (int i = 0; i < level; i++) { std::cout << "  "; }
-		std::cout << "|   Ambient: " << p->ambient.x << ", " << p->ambient.y << ", " << p->ambient.z << std::endl;
+		std::cout << "|   ShadowRay [0] "; root->shadow_ray.print();
+
 		for (int i = 0; i < level; i++) { std::cout << "  "; }
-		std::cout << "|   Diffuse: " << p->diffuse.x << ", " << p->diffuse.y << ", " << p->diffuse.z << std::endl;
+		std::cout << "|   Ambient: " << root->ambient.x << ", " << root->ambient.y << ", " << root->ambient.z << std::endl;
 		for (int i = 0; i < level; i++) { std::cout << "  "; }
-		std::cout << "|   Specular: " << p->specular.x << ", " << p->specular.y << ", " << p->specular.z << std::endl;
+		std::cout << "|   Diffuse: " << root->diffuse.x << ", " << root->diffuse.y << ", " << root->diffuse.z << std::endl;
+		for (int i = 0; i < level; i++) { std::cout << "  "; }
+		std::cout << "|   Srootecular: " << root->specular.x << ", " << root->specular.y << ", " << root->specular.z << std::endl;
 
 	}
 	for (int i = 0; i < level; i++) { std::cout << "  "; }
 	std::cout << "|" << std::endl;
 
-	printRays(p->refr, level+1);
-	printRays(p->refl, level+1);
+	pixeltrace(root->refr, level+1);
+	pixeltrace(root->refl, level+1);
+}
+
+void Renderer::printrays(BRDF::printNode* root, int level) {
+	if (root == nullptr) {
+		return;
+	}
+
+	std::cout << "  Iteration type: " << root->type << std::endl;
+	std::cout << "             Ray: ";
+		root->in.ray.print();
+	std::cout << " Transformed Ray: ";
+		root->in.objectRay.print();
+	std::cout << "      Hit Object: (ID #" << root->in.object->id << " - " << root->in.object->type << ")" << std::endl;
+	std::cout << "    Intersection: {" << root->in.point.x << " " << root->in.point.y << " " << root->in.point.z << "}";
+		std::cout << " at T = " << root->in.t << std::endl;
+	std::cout << "          Normal: {" << root->in.normal.x << " " << root->in.normal.y << " " << root->in.normal.z << "}" << std::endl;
+	std::cout << "         Ambient: {" << root->final_color.x << " " << root->final_color.y << " " << root->final_color.z << "}" << std::endl;
+	std::cout << "         Diffuse: {" << root->diffuse.x << " " << root->diffuse.y << " " << root->diffuse.z << "}" << std::endl;
+	std::cout << "        Specular: {" << root->specular.x << " " << root->specular.y << " " << root->specular.z << "}" << std::endl;
+	std::cout << "      Reflection: {" << root->reflection_d.x << " " << root->reflection_d.y << " " << root->reflection_d.z << "}" << std::endl;
+	std::cout << "      Refraction: {" << root->refraction_d.x << " " << root->refraction_d.y << " " << root->refraction_d.z << "}" << std::endl;;
+	std::cout << "   Contributions: " << root->local_con << " Local, " << root-> refl_con << " Reflection, " << root->refr_con << " Transmission" << std::endl;
 }
