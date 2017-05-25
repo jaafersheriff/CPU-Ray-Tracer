@@ -98,7 +98,7 @@ void Renderer::pixeltrace(BRDF::printNode* root, int level) {
       for (int i = 0; i < level; i++) { std::cout << "  "; }
       std::cout << "|   Diffuse: " << root->diffuse.x << ", " << root->diffuse.y << ", " << root->diffuse.z << std::endl;
       for (int i = 0; i < level; i++) { std::cout << "  "; }
-      std::cout << "|   Srootecular: " << root->specular.x << ", " << root->specular.y << ", " << root->specular.z << std::endl;
+      std::cout << "|   Specular: " << root->specular.x << ", " << root->specular.y << ", " << root->specular.z << std::endl;
 
    }
    for (int i = 0; i < level; i++) { std::cout << "  "; }

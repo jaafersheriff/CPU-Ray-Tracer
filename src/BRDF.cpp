@@ -15,7 +15,7 @@ glm::vec3 BRDF::calculateColor(Scene &scene, Intersection &intersection, int rec
 	createParentNode(parent, intersection);
 
 	// Colors
-	glm::vec3 local_color 		= calculateLocalColor(scene, intersectiPon, parent);
+	glm::vec3 local_color 		= calculateLocalColor(scene, intersection, parent);
 	glm::vec3 reflection_color = calculateReflectionColor(scene, intersection, recurse_count, parent);
 	glm::vec3 refraction_color = calculateRefractionColor(scene, intersection, recurse_count, parent);
 
