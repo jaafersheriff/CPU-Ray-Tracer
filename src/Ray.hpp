@@ -9,17 +9,17 @@
 
 class Ray {
 public:
-	Ray();
+   Ray();
    Ray(glm::vec3, glm::vec3);
-	void set(const glm::vec3, const glm::vec3);
+   void set(const glm::vec3, const glm::vec3);
 
-	glm::vec3 position;
-	glm::vec3 direction;
-   
-	// Calculates the point of intersection given a value t
+   glm::vec3 position;
+   glm::vec3 direction;
+
+   // Calculates the point of intersection given a value t
    glm::vec3 calculatePoint(float);
-	
-	void print();
+
+   void print();
 };
 
 #endif

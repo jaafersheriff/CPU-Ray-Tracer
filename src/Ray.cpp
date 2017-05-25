@@ -6,8 +6,8 @@ Ray::Ray() {
 }
 
 Ray::Ray(glm::vec3 pos, glm::vec3 dir) {
-   this->position = pos;
-   this->direction = dir;
+	this->position = pos;
+	this->direction = dir;
 }
 
 void Ray::set(const glm::vec3 p, const glm::vec3 d) {
@@ -20,7 +20,7 @@ glm::vec3 Ray::calculatePoint(float t) {
 }
 
 void Ray::print() {
-   std::cout << "{" << position.x << " " << position.y << " " << position.z;
-   std::cout << "} -> {" << direction.x << " " << direction.y << " " << direction.z;
-   std::cout << "}" << std::endl;
+	std::cout << "{" << position.x << " " << position.y << " " << position.z;
+	std::cout << "} -> {" << direction.x << " " << direction.y << " " << direction.z;
+	std::cout << "}" << std::endl;
 }

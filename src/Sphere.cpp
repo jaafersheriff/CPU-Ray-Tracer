@@ -31,10 +31,10 @@ float Sphere::intersect(const Ray &ray) {
 	if (t1 > 0 && t2 > 0) {
 		return std::min(t1, t2);
 	}
-	if (t1 > 0 && t2 < 0) {
+	if (t1 > 0) {
 		return t1;
 	}
-	if (t1 < 0 && t2 > 0) {
+	if (t2 > 0) {
 		return t2;
 	}
 	return -1;

@@ -49,7 +49,7 @@ int main(int args, char **argv) {
 			}
 			// SuperSampling
 			if (std::string(argv[i]).find("ss") != std::string::npos) {
-					if (char *num = (strchr(argv[i], '=') + 1)) {
+				if (char *num = (strchr(argv[i], '=') + 1)) {
 					renderer.setSSCount(atoi(num));
 				}
 			}
@@ -65,7 +65,7 @@ int main(int args, char **argv) {
 	// Parse file + create scene
 	loader.parse(argv[2], scene);
 
- 	// Render
+	// Render
 	if (arg_flags[0]) {
 		int window_width = atoi(argv[3]);
 		int window_height = atoi(argv[4]);
@@ -85,27 +85,27 @@ int main(int args, char **argv) {
 		Ray ray = scene.createCameraRay(window_width, window_height, pixel_x, pixel_y, 1, 1, 1);
 		Intersection in(scene.objects, ray);
 		std::cout << "Pixel: [" << pixel_x << ", " << pixel_y << "] ";
-		if (arg_flags[2] || arg_flags[3]) {
-			std::cout << "Ray: ";
-			ray.print();
-		}
-		if (arg_flags[3] || renderer.brdf.verbose_flag) {
-			if (arg_flags[3]) {
-				in.print();
-				renderer.print();
-			}
-			const glm::ivec2 size = glm::ivec2(window_width, window_height);
-			glm::vec3 color = renderer.calculateColor(scene, size, pixel_x, pixel_y);
-		   std::cout << "Color: (" << color.x << ", " << color.y  << ", " << color.z << ")" << std::endl;
-		   if (renderer.brdf.verbose_flag == 1) {
-		   	renderer.pixeltrace(renderer.root, 0);
-		   }
-			if (renderer.brdf.verbose_flag == 2) {
-				std::cout << "----" << std::endl;
-				renderer.printrays(renderer.root, 0);
-			}
-		}
- 	}
-
-	return 0;
+	if (arg_flags[2] || arg_flags[3]) {
+		std::cout << "Ray: ";
+		ray.print();
 	}
+	if (arg_flags[3] || renderer.brdf.verbose_flag) {
+		if (arg_flags[3]) {
+			in.print();
+			renderer.print();
+		}
+		const glm::ivec2 size = glm::ivec2(window_width, window_height);
+		glm::vec3 color = renderer.calculateColor(scene, size, pixel_x, pixel_y);
+		std::cout << "Color: (" << color.x << ", " << color.y  << ", " << color.z << ")" << std::endl;
+		if (renderer.brdf.verbose_flag == 1) {
+			renderer.pixeltrace(renderer.root, 0);
+		}
+		if (renderer.brdf.verbose_flag == 2) {
+			std::cout << "----" << std::endl;
+			renderer.printrays(renderer.root, 0);
+		}
+	}
+}
+
+return 0;
+}

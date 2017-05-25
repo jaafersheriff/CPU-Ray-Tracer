@@ -8,16 +8,16 @@
 
 class Triangle: public GeoObject {
 public:
-	Triangle();
-	
-	glm::vec3 v1;
-	glm::vec3 v2;
-	glm::vec3 v3;
+   Triangle();
 
-	float intersect(const Ray &);
-	glm::vec3 findNormal(const glm::vec3);
-	
-	void print();
+   glm::vec3 v1;
+   glm::vec3 v2;
+   glm::vec3 v3;
+
+   float intersect(const Ray &);
+   glm::vec3 findNormal(const glm::vec3);
+
+   void print();
 };
 
 #endif

@@ -15,10 +15,10 @@
 
 class Loader {
 public:
-	Loader(){};
+   Loader(){};
 
    // Walk through an input file creating a Scene object
-	void parse(const char *file_name, Scene &scene);
+   void parse(const char *file_name, Scene &scene);
 
 private:
    // Parse through remaining object adding object properties
@@ -30,7 +30,7 @@ private:
    // Find all floats inside a word
    std::vector<float> findFloatsInWord(std::string word);
 
-	// Adds color param to a finish object
+   // Adds color param to a finish object
    void createColor(GeoObject::Finish*, std::vector<std::string>);
 
    // Initializes Finish struct containing all GeoObject finish properties
@@ -38,7 +38,7 @@ private:
 
    // Break up the current line in a file into a vector<string>
    // Separating by white space
-	std::vector<std::string> getLine(std::ifstream *file);
+   std::vector<std::string> getLine(std::ifstream *file);
 
    // Create a Camera object given a file pointing to a camera line
    Camera* createCamera(std::vector<std::string>, std::ifstream &file);

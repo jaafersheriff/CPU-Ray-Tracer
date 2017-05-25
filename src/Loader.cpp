@@ -46,7 +46,7 @@ void Loader::createFinish(GeoObject::Finish *f, std::vector<std::string> line) {
 }
 
 void Loader::addProperties(GeoObject *object, std::vector<std::string> line, std::ifstream& file) {
-	std::vector<float> floats;
+   std::vector<float> floats;
 
    // Continue parsing/storing file components until we reach '}' line
    while(line[0].compare("}")) {
@@ -59,22 +59,22 @@ void Loader::addProperties(GeoObject *object, std::vector<std::string> line, std
       }
       // Transformations
       if (!line[0].compare("scale")) {
-			floats = findFloatsInLine(line);
-			glm::vec3 scale = glm::vec3(floats[0], floats[1], floats[2]);
-			object->inv_M = glm::scale(glm::mat4(1.0f), scale) * object->inv_M;
+         floats = findFloatsInLine(line);
+         glm::vec3 scale = glm::vec3(floats[0], floats[1], floats[2]);
+         object->inv_M = glm::scale(glm::mat4(1.0f), scale) * object->inv_M;
       }
       if (!line[0].compare("rotate")) {
-  			floats = findFloatsInLine(line);
-			glm::vec3 rot = glm::vec3(glm::radians(floats[0]), glm::radians(floats[1]), glm::radians(floats[2]));
-			object->inv_M = glm::rotate(glm::mat4(1.0f), rot.z, glm::vec3(0, 0, 1)) * object->inv_M;
-			object->inv_M = glm::rotate(glm::mat4(1.0f), rot.y, glm::vec3(0, 1, 0)) * object->inv_M;
-			object->inv_M = glm::rotate(glm::mat4(1.0f), rot.x, glm::vec3(1, 0, 0)) * object->inv_M;
-	   }
+         floats = findFloatsInLine(line);
+         glm::vec3 rot = glm::vec3(glm::radians(floats[0]), glm::radians(floats[1]), glm::radians(floats[2]));
+         object->inv_M = glm::rotate(glm::mat4(1.0f), rot.z, glm::vec3(0, 0, 1)) * object->inv_M;
+         object->inv_M = glm::rotate(glm::mat4(1.0f), rot.y, glm::vec3(0, 1, 0)) * object->inv_M;
+         object->inv_M = glm::rotate(glm::mat4(1.0f), rot.x, glm::vec3(1, 0, 0)) * object->inv_M;
+      }
       if (!line[0].compare("translate")) {
-			floats = findFloatsInLine(line);
-			glm::vec3 translate = glm::vec3(floats[0], floats[1], floats[2]);
-			object->inv_M = glm::translate(glm::mat4(1.0f), translate) * object->inv_M;
-		}
+         floats = findFloatsInLine(line);
+         glm::vec3 translate = glm::vec3(floats[0], floats[1], floats[2]);
+         object->inv_M = glm::translate(glm::mat4(1.0f), translate) * object->inv_M;
+      }
       // Stupid catch for faulty .pov files
       if (line[line.size() - 1].find("}}") != std::string::npos) {
          break;
@@ -82,8 +82,8 @@ void Loader::addProperties(GeoObject *object, std::vector<std::string> line, std
       line = getLine(&file);
    }
 
-	// Invert model matrix before returning
-	object->inv_M = glm::inverse(object->inv_M);
+   // Invert model matrix before returning
+   object->inv_M = glm::inverse(object->inv_M);
 }
 
 Triangle* Loader::createTriangle(std::vector<std::string> line, std::ifstream& file) {
@@ -107,7 +107,7 @@ Triangle* Loader::createTriangle(std::vector<std::string> line, std::ifstream& f
    // Object properties
    addProperties(triangle, line, file);
 
-  return triangle;
+   return triangle;
 }
 
 Plane* Loader::createPlane(std::vector<std::string> line, std::ifstream& file) {
@@ -125,7 +125,7 @@ Plane* Loader::createPlane(std::vector<std::string> line, std::ifstream& file) {
    // Object properties
    addProperties(plane, line, file);
 
-  return plane;
+   return plane;
 }
 
 Sphere* Loader::createSphere(std::vector<std::string> line, std::ifstream& file) {
@@ -169,14 +169,14 @@ Camera* Loader::createCamera(std::vector<std::string> line, std::ifstream& file)
 
    // Continue parsing/storing file components until we reach '}' line
    while(line[0].compare("}")) {
-		// Stupid catch for .pov formatting
-		for (unsigned int i = 0; i < line.size(); i++) {
- 		   if (line[i].find("location") != std::string::npos) {
-   	      floats = findFloatsInLine(line);
-   	      camera->location = glm::vec3(floats[0], floats[1], floats[2]);
-			}
-		}
-     if (!line[0].compare("up")) {
+      // Stupid catch for .pov formatting
+      for (unsigned int i = 0; i < line.size(); i++) {
+         if (line[i].find("location") != std::string::npos) {
+            floats = findFloatsInLine(line);
+            camera->location = glm::vec3(floats[0], floats[1], floats[2]);
+         }
+      }
+      if (!line[0].compare("up")) {
          floats = findFloatsInLine(line);
          camera->up = glm::vec3(floats[0], floats[1], floats[2]);
       }
@@ -190,16 +190,15 @@ Camera* Loader::createCamera(std::vector<std::string> line, std::ifstream& file)
       }
       line = getLine(&file);
    }
-
    return camera;
 }
 
 void Loader::parse(const char *file_name, Scene &scene) {
    // Create file pointer
    std::ifstream inFile(file_name, std::ios::in | std::ios::binary);
-	if (!inFile) {
-		std::cout << "Error opening file: " << file_name << std::endl;
-	}
+   if (!inFile) {
+      std::cout << "Error opening file: " << file_name << std::endl;
+   }
    std::string word;
 
    // Walk through file line by line
@@ -216,40 +215,40 @@ void Loader::parse(const char *file_name, Scene &scene) {
          scene.camera = createCamera(line, inFile);
       }
       else if (!line[0].compare("light_source")) {
-			scene.lights.push_back(createLight(line, inFile));
+         scene.lights.push_back(createLight(line, inFile));
       }
       else if (!line[0].compare("sphere")){
          Sphere *sphere = createSphere(line, inFile);
          sphere->id = scene.objects.size()+1;
-			scene.objects.push_back(sphere);
+         scene.objects.push_back(sphere);
       }
       else if (!line[0].compare("plane")) {
          Plane *plane = createPlane(line, inFile);
          plane->id = scene.objects.size()+1;
          scene.objects.push_back(plane);
       }
-		else if (!line[0].compare("triangle")) {
+      else if (!line[0].compare("triangle")) {
          Triangle *triangle = createTriangle(line, inFile);
          triangle->id = scene.objects.size()+1;
-			scene.objects.push_back(triangle);
-		}
+         scene.objects.push_back(triangle);
+      }
    }
    inFile.close();
 }
 
 std::vector<std::string> Loader::getLine(std::ifstream *file) {
-	char line[256];
-	file->getline(line, 256);
-	std::stringstream sstream(line);
+   char line[256];
+   file->getline(line, 256);
+   std::stringstream sstream(line);
 
-	std::vector<std::string> words;
-	std::string word;
+   std::vector<std::string> words;
+   std::string word;
 
-	while(sstream >> word) {
-		words.push_back(word);
-	}
+   while(sstream >> word) {
+      words.push_back(word);
+   }
 
-	return words;
+   return words;
 }
 
 std::vector<float> Loader::findFloatsInLine(std::vector<std::string> line) {

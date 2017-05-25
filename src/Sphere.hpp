@@ -7,16 +7,16 @@
 #include "GeoObject.hpp"
 
 class Sphere: public GeoObject {
-public: 
-	Sphere();
+public:
+   Sphere();
 
-	glm::vec3 center;
-	float radius;
+   glm::vec3 center;
+   float radius;
 
-	float intersect(const Ray &);
+   float intersect(const Ray &);
    glm::vec3 findNormal(const glm::vec3 intersection_point);
 
-	void print();
+   void print();
 };
 
 #endif

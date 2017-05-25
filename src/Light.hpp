@@ -9,12 +9,12 @@
 #include <iostream>	// print
 
 class Light {
-public: 
-	Light();
-	void print();
+public:
+   Light();
+   void print();
 
-	glm::vec3 position;
-	glm::vec3 color;
+   glm::vec3 position;
+   glm::vec3 color;
 };
 
 #endif

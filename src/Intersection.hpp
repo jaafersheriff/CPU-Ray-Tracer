@@ -12,24 +12,24 @@
 
 class Intersection {
 public:
-	Intersection() {};
+   Intersection() {};
    Intersection(std::vector<GeoObject *>, Ray&);
 
    void print();
 
-	// Object intersected and normal at point of intersection
-	// Set to nullptr if no object is intersected
+   // Object intersected and normal at point of intersection
+   // Set to nullptr if no object is intersected
    GeoObject *object = nullptr;
-	glm::vec3 normal;
+   glm::vec3 normal;
 
-	// Ray of intersection and transformed ray of intersection
+   // Ray of intersection and transformed ray of intersection
    Ray ray;
-	Ray objectRay;
-	// t value of intersection, world coords of intersection
-	float t;
+   Ray objectRay;
+   // t value of intersection, world coords of intersection
+   float t;
    glm::vec3 point;
 
-	// True if object is intersected, false otherwise
+   // True if object is intersected, false otherwise
    bool hit;
 };
 

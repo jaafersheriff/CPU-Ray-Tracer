@@ -18,20 +18,20 @@
 
 class Scene {
 public:
-	Scene() {};
+   Scene() {};
 
-	// Scene objects
-	Camera *camera;
-	std::vector<Light *> lights;
-	std::vector<GeoObject *> objects;
+   // Scene objects
+   Camera *camera;
+   std::vector<Light *> lights;
+   std::vector<GeoObject *> objects;
 
    // Creates a ray from the camera's position to a pixel
    Ray createCameraRay(const int width, const int height, const int x, const int y, const int m, const int n, const int s);
 
-	// Calculates the color in the world at an Intersection
-	glm::vec3 findColor(const glm::ivec2, const int, const int, const int, int);
-	
-	void print();
+   // Calculates the color in the world at an Intersection
+   glm::vec3 findColor(const glm::ivec2, const int, const int, const int, int);
+
+   void print();
 };
 
 #endif

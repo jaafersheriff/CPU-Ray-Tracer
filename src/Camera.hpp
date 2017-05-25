@@ -9,13 +9,13 @@
 
 class Camera {
 public:
-	Camera();
-	void print();
+   Camera();
+   void print();
 
-	glm::vec3 location;
-	glm::vec3 up;
-	glm::vec3 right;
-	glm::vec3 lookAt;
+   glm::vec3 location;
+   glm::vec3 up;
+   glm::vec3 right;
+   glm::vec3 lookAt;
 };
 
 #endif

@@ -8,16 +8,15 @@
 
 class Plane: public GeoObject {
 public:
-	Plane();
+   Plane();
 
-	glm::vec3 normal;
-	float distance;
+   glm::vec3 normal;
+   float distance;
 
-	float intersect(const Ray &);
+   float intersect(const Ray &);
    glm::vec3 findNormal(const glm::vec3 intersection_point);
-	
-	void print();
 
+   void print();
 };
 
 #endif
