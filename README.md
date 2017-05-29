@@ -11,3 +11,4 @@ My fresnel1.pov doesn't include the specular highilght in the center of each sph
 My fresnel3.pov lacks reflection.
 
 ![myPlanes](myplanes.png)
+![myPlanes](myPlanes2.png)
