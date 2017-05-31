@@ -88,7 +88,16 @@ void Loader::addProperties(GeoObject *object, std::vector<std::string> line, std
 
 BoxRenderable* Loader::createBox(std::vector<std::string> line, std::ifstream& file) {
    BoxRenderable *box = new BoxRenderable;
-   /* TODO */
+   std::vector<float> floats;
+
+   floats = findFloatsInLine(line);
+   
+   glm::vec3 minCorner = glm::vec3(floats[0], floats[1], floats[2]);
+   glm::vec3 maxCorner = glm::vec3(floats[3], floats[4], floats[5]);
+   box->updateBox(minCorner, maxCorner);
+
+   addProperties(box, line, file);
+
    return box;
 }
 

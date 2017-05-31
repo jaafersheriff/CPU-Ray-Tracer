@@ -7,7 +7,8 @@ Sphere::Sphere() : GeoObject() {
 	this->radius = 0;
 }
 
-glm::vec3 Sphere::findNormal(const glm::vec3 intersection_point) {
+glm::vec3 Sphere::findNormal(Ray &ray, float t) {
+	glm::vec3 intersection_point = ray.calculatePoint(t);
 	return glm::normalize(intersection_point - center);
 }
 

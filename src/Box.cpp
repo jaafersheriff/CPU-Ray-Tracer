@@ -17,6 +17,10 @@ void Box::updateBox(glm::vec3 min, glm::vec3 max) {
 
 void Box::transform(glm::mat4 &inv_M) {
   /* TODO */
+  // Calculate 8 points
+  // Transform 8 points
+  // this->mincorner = min(8 points)
+  // this->maxcorner = max(8 points)
 }
 
 float Box::intersect(const Ray &ray) {
@@ -27,19 +31,14 @@ float Box::intersect(const Ray &ray) {
   updateT(ray, &tgmin, &tgmax, 1); // Y
   updateT(ray, &tgmin, &tgmax, 2); // Z
 
-  if (tgmin > tgmax) {
-    return -1;
+  if (tgmin < tgmax && tgmax > 0) {
+    if (tgmin > 0) {
+      return std::min(tgmin, tgmax);
+    }
+    else {
+      return tgmax;
+    }
   }
-
-	if (tgmin > 0 && tgmax > 0) {
-    return tgmin;
-	}
-	if (tgmin > 0) {
-		return tgmin;
-	}
-	if (tgmax > 0) {
-		return tgmax;
-	} 
 
   return -1;
 }
@@ -48,9 +47,7 @@ void Box::updateT(const Ray &ray, float *tgmin, float *tgmax, int axis) {
   float t1 = (this->minCorner[axis] - ray.position[axis]) / ray.direction[axis];
   float t2 = (this->maxCorner[axis] - ray.position[axis]) / ray.direction[axis];
   if (t1 > t2) {
-    float t = t1;
-    t1 = t2;
-    t2 = t;
+    std::swap(t1, t2);
   }
   if (t1 > *tgmin) {
     *tgmin = t1;

@@ -7,7 +7,7 @@ Plane::Plane() : GeoObject() {
    this->distance = 0;
 }
 
-glm::vec3 Plane::findNormal(const glm::vec3 intersection_point) {
+glm::vec3 Plane::findNormal(Ray &ray, float t) {
    return normal;
 }
 

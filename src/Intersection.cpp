@@ -30,7 +30,7 @@ void Intersection::createIntersection(GeoObject *object, Ray &ray) {
       this->point = this->ray.calculatePoint(this->t);
 
       // Coordinate transform normal
-      glm::vec3 obj_normal = this->object->findNormal(this->objectRay.calculatePoint(this->t));
+      glm::vec3 obj_normal = this->object->findNormal(this->objectRay, this->t);
       glm::vec3 world_normal = glm::vec3(glm::transpose(this->object->inv_M) * glm::vec4(obj_normal, 0.0f));
       this->normal = glm::normalize(world_normal);
   }

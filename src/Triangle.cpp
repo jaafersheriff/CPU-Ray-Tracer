@@ -59,7 +59,7 @@ float Triangle::intersect(const Ray &ray) {
    return t;
 }
 
-glm::vec3 Triangle::findNormal(const glm::vec3 intersection_point) {
+glm::vec3 Triangle::findNormal(Ray &ray, float t) {
    glm::vec3 V = v2 - v1;
    glm::vec3 W = v3 - v1;
 

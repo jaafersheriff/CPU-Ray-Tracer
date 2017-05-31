@@ -14,7 +14,7 @@ public:
    float radius;
 
    float intersect(const Ray &);
-   glm::vec3 findNormal(const glm::vec3 intersection_point);
+   glm::vec3 findNormal(Ray &, float);
    BoundingBox* createBox();
    void print();
 };

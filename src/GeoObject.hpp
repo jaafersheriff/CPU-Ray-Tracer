@@ -48,7 +48,7 @@ public:
 
    // Abstract functions
    virtual float intersect(const Ray &) = 0;
-   virtual glm::vec3 findNormal(const glm::vec3 intersection_point) = 0;
+   virtual glm::vec3 findNormal(Ray &, const float) = 0;
    virtual BoundingBox *createBox() = 0;
    virtual void print() = 0;
 

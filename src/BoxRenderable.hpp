@@ -12,8 +12,10 @@ class BoxRenderable : public GeoObject, Box {
 public:
    BoxRenderable();
 
+   void updateBox(glm::vec3, glm::vec3);
+
    float intersect(const Ray &);
-   glm::vec3 findNormal(const glm::vec3);
+   glm::vec3 findNormal(Ray &, const float);
    BoundingBox *createBox();
    void print();
 };
