@@ -17,6 +17,15 @@ static inline float determinant(float M[3][3]) {
    return a-b+c;
 }
 
+BoundingBox* Triangle::createBox() {
+   BoundingBox* box = new BoundingBox;
+   box->addPoint(v1);
+   box->addPoint(v2);
+   box->addPoint(v3);
+   box->transform(this->inv_M);
+   return box;
+}
+
 float Triangle::intersect(const Ray &ray) {
    // Alpha?
    float A[3][3] = { {v1.x-v2.x, v1.x-v3.x, ray.direction.x},

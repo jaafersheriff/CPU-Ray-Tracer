@@ -36,6 +36,7 @@ public:
    void setVerbose(int flag) { brdf.verbose_flag = flag; }
    void setRenderFlag(int flag) { brdf.render_flag = flag; }
    void setFresnelFlag(int flag) { brdf.fresnel_flag = flag; }
+   void setSpatialFlag(int flag) { brdf.spatial_flag = flag; }
 };
 
 #endif

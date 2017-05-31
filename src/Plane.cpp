@@ -11,7 +11,6 @@ glm::vec3 Plane::findNormal(const glm::vec3 intersection_point) {
    return normal;
 }
 
-
 float Plane::intersect(const Ray &ray) {
    float den = dot(ray.direction, normal);
    if (!den) {
@@ -19,6 +18,11 @@ float Plane::intersect(const Ray &ray) {
    }
    float num = distance-dot(ray.position, normal);
    return num/den;
+}
+
+BoundingBox* Plane::createBox() {
+   // Planes will never need a bounding box
+   return new BoundingBox;
 }
 
 void Plane::print() {

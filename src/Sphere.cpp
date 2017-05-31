@@ -40,6 +40,14 @@ float Sphere::intersect(const Ray &ray) {
 	return -1;
 }
 
+BoundingBox* Sphere::createBox() {
+	glm::vec3 min = this->center - radius;
+	glm::vec3 max = this->center + radius;
+	BoundingBox* box = new BoundingBox(min, max);
+	box->transform(this->inv_M);
+	return box;
+}
+
 void Sphere::print() {
 	std::cout << "- Type: Sphere" << std::endl;
 	std::cout << "- Center: {";

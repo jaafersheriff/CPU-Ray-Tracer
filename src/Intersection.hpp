@@ -9,11 +9,18 @@
 #include <vector> // vector
 
 #include "GeoObject.hpp"
+#include "Scene.hpp"
 
 class Intersection {
 public:
    Intersection() {};
-   Intersection(std::vector<GeoObject *>, Ray&);
+   Intersection(Scene &, Ray &, int);
+
+   // Recursive traversal of spatial data structure to find intersection object
+   void boxTraversal(Scene::BoxNode *, Ray &);
+   // Create intersection w object intersection 
+   void createIntersection(std::vector<GeoObject *>, Ray &);
+   void createIntersection(GeoObject *, Ray &);
 
    void print();
 

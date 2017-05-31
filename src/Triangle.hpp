@@ -16,7 +16,7 @@ public:
 
    float intersect(const Ray &);
    glm::vec3 findNormal(const glm::vec3);
-
+   BoundingBox* createBox();
    void print();
 };
 

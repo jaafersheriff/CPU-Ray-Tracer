@@ -57,6 +57,10 @@ int main(int args, char **argv) {
 			if (std::string(argv[i]).find("fresnel") != std::string::npos) {
 				renderer.setFresnelFlag(1);
 			}
+			// Spatial data structures
+			if (std::string(argv[i]).find("sds") != std::string::npos) {
+				renderer.setSpatialFlag(1);
+			}
 		}
 	}
 
@@ -64,6 +68,23 @@ int main(int args, char **argv) {
 
 	// Parse file + create scene
 	loader.parse(argv[2], scene);
+
+	if (renderer.brdf.spatial_flag) {
+		// Split objects into planes and other
+		std::vector<GeoObject *> planes;
+		std::vector<GeoObject *> other;
+		for (unsigned int i = 0; i < scene.objects.size(); i++) {
+			/* TODO: dont check w/ spring parsing.. */
+			if (!strcmp(scene.objects[i]->type.c_str(), "Plane")) {
+				planes.push_back(scene.objects[i]);
+			}
+			else {
+				other.push_back(scene.objects[i]);
+			}
+		}
+		scene.objects = planes;
+		scene.createSpatialStructures(other, scene.rootBox, 0);
+	}
 
 	// Render
 	if (arg_flags[0]) {
@@ -83,7 +104,7 @@ int main(int args, char **argv) {
 		int pixel_x = atoi(argv[5]);
 		int pixel_y = atoi(argv[6]);
 		Ray ray = scene.createCameraRay(window_width, window_height, pixel_x, pixel_y, 1, 1, 1);
-		Intersection in(scene.objects, ray);
+		Intersection in(scene, ray, renderer.brdf.spatial_flag);
 		std::cout << "Pixel: [" << pixel_x << ", " << pixel_y << "] ";
 	if (arg_flags[2] || arg_flags[3]) {
 		std::cout << "Ray: ";

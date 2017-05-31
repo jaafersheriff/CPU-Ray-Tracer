@@ -39,7 +39,7 @@ glm::vec3 BRDF::calculateColor(Scene &scene, Intersection &intersection, int rec
 
 glm::vec3 BRDF::raytrace(Scene &scene, Ray &incident_ray, int recurse_count, printNode* parent) {
 	// If no intersection from camera to object, return black
-	Intersection incident_int(scene.objects, incident_ray);
+	Intersection incident_int(scene, incident_ray, spatial_flag);
 	if (!incident_int.hit) {
 		return glm::vec3(0, 0, 0);
 	}
@@ -62,7 +62,7 @@ glm::vec3 BRDF::calculateLocalColor(Scene &scene, Intersection &intersection, pr
 		Ray light_ray(intersection.point, light_dir);
 
 		// If no objects are blocking incoming light, BRDF
-		Intersection light_int(scene.objects, light_ray);
+		Intersection light_int(scene, light_ray, spatial_flag);
 		if (!light_int.hit || distance(intersection.point, light->position) < distance(intersection.point, light_int.point)) {
 			local_color += render_flag ? CookTorrance(light, intersection) : BlinnPhong(light, intersection, parent);
 		}
@@ -108,7 +108,7 @@ glm::vec3 BRDF::calculateRefractionColor(Scene &scene, Intersection &intersectio
 	}
 
 	Ray refraction_ray = createRefractionRay(intersection);
-	Intersection ref_intersection = Intersection(scene.objects, refraction_ray);
+	Intersection ref_intersection = Intersection(scene, refraction_ray, spatial_flag);
 	// If no intersection
 	if (!ref_intersection.hit) {
 		return glm::vec3(0, 0, 0);
@@ -215,7 +215,7 @@ glm::vec3 BRDF::CookTorrance(Light *light, Intersection &object_in) {
 }
 
 float BRDF::calculateFresnelReflectance(float ior, Intersection &intersection) {
-	if (dot(intersection.ray.direction, intersection.normal) > 0) {
+	if (dot(intersection.normal, intersection.ray.direction) > 0) {
 		return fresnel(ior, -intersection.normal, -intersection.ray.direction);
 	}
 	else {

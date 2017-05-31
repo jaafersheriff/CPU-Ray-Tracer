@@ -27,7 +27,7 @@ if(WIN32)
 	set(GLM_INCLUDE_DIR "$ENV{GLM_INCLUDE_DIR_WIN32}")
 else()
   # Enable all pedantic warnings.
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x -Wall -pedantic")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3 -std=c++0x -Wall -pedantic")
 endif()
 
 if(NOT GLM_INCLUDE_DIR)

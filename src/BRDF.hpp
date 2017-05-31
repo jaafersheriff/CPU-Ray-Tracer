@@ -43,10 +43,15 @@ public:
 	// 1 - fresnel calculations
 	int fresnel_flag;
 
+	// 0 - iterate through each object to find intersection
+	// 1 - use spatial data structure tree
+	int spatial_flag;
+
 	BRDF() {
 		render_flag = 0;
 		verbose_flag = 0;
 		fresnel_flag = 0;
+		spatial_flag = 0;
 	};
 
 	// Master recursive function for tracing rays

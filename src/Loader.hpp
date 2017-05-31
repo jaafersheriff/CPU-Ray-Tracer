@@ -1,6 +1,5 @@
 // Loader class
 // Parses .pov files and creates the various Camera, Light, and GeoObjects objects
-
 #pragma once
 #ifndef _LOADER_H_
 #define _LOADER_H_
@@ -46,14 +45,11 @@ private:
    // Create a Light object given a file pointing to a light line
    Light*  createLight(std::vector<std::string>, std::ifstream &file);
 
-   // Create a Sphere object given a file pointing to a sphere line
+   // Create geometric objects given a file pointing to a object line
    Sphere* createSphere(std::vector<std::string>, std::ifstream &file);
-
-   // Create a Plane object given a file pointing to a plane line
    Plane* createPlane(std::vector<std::string>, std::ifstream &file);
-
-   // Create a Triangle object
    Triangle* createTriangle(std::vector<std::string>, std::ifstream &file);
+   BoxRenderable* createBox(std::vector<std::string>, std::ifstream &file);
 };
 
 #endif

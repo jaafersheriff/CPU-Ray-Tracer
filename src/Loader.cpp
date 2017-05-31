@@ -86,6 +86,12 @@ void Loader::addProperties(GeoObject *object, std::vector<std::string> line, std
    object->inv_M = glm::inverse(object->inv_M);
 }
 
+BoxRenderable* Loader::createBox(std::vector<std::string> line, std::ifstream& file) {
+   BoxRenderable *box = new BoxRenderable;
+   /* TODO */
+   return box;
+}
+
 Triangle* Loader::createTriangle(std::vector<std::string> line, std::ifstream& file) {
    // Create empty triangle object
    Triangle *triangle = new Triangle;
@@ -106,7 +112,7 @@ Triangle* Loader::createTriangle(std::vector<std::string> line, std::ifstream& f
 
    // Object properties
    addProperties(triangle, line, file);
-
+   
    return triangle;
 }
 
@@ -163,7 +169,7 @@ Light* Loader::createLight(std::vector<std::string> line, std::ifstream& file) {
 
 Camera* Loader::createCamera(std::vector<std::string> line, std::ifstream& file) {
    // Create empty Camera object pointer
-   Camera *camera = new Camera();
+   Camera *camera = new Camera;
 
    std::vector<float> floats;
 
@@ -231,6 +237,11 @@ void Loader::parse(const char *file_name, Scene &scene) {
          Triangle *triangle = createTriangle(line, inFile);
          triangle->id = scene.objects.size()+1;
          scene.objects.push_back(triangle);
+      }
+      else if (!line[0].compare("box")) {
+         BoxRenderable *box = createBox(line, inFile);
+         box->id = scene.objects.size()+1;
+         scene.objects.push_back(box);
       }
    }
    inFile.close();
