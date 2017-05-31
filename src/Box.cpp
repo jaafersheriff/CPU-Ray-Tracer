@@ -27,11 +27,21 @@ float Box::intersect(const Ray &ray) {
   updateT(ray, &tgmin, &tgmax, 1); // Y
   updateT(ray, &tgmin, &tgmax, 2); // Z
 
-  if (tgmin > tgmax || tgmax < 0) {
+  if (tgmin > tgmax) {
     return -1;
   }
 
-  return tgmin;
+	if (tgmin > 0 && tgmax > 0) {
+    return tgmin;
+	}
+	if (tgmin > 0) {
+		return tgmin;
+	}
+	if (tgmax > 0) {
+		return tgmax;
+	} 
+
+  return -1;
 }
 
 void Box::updateT(const Ray &ray, float *tgmin, float *tgmax, int axis) {

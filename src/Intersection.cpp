@@ -44,20 +44,11 @@ void Intersection::boxTraversal(Scene::BoxNode* node, Ray& ray) {
          return;
       }
       // Travesal
-      float left_t = std::numeric_limits<float>::max();
-      float right_t = std::numeric_limits<float>::max();
-      
-      if (node->leftChild != nullptr) {
-         left_t = node->leftChild->boundingBox.intersect(ray);
-      }
-      if (node->rightChild != nullptr) {
-         right_t = node->rightChild->boundingBox.intersect(ray);
-      }
-      if (left_t > EPSILON && left_t < right_t) {
+      if (node->leftChild != nullptr && node->leftChild->boundingBox.intersect(ray) > EPSILON) {
         boxTraversal(node->leftChild, ray);
       }
-      else if (right_t > EPSILON) {
-         boxTraversal(node->rightChild, ray);
+      if (node->rightChild != nullptr && node->rightChild->boundingBox.intersect(ray) > EPSILON) {
+        boxTraversal(node->rightChild, ray);
       }
    }
 }
