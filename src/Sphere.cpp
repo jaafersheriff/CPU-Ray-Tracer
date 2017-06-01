@@ -12,6 +12,9 @@ glm::vec3 Sphere::findNormal(Ray &ray, float t) {
 	return glm::normalize(intersection_point - center);
 }
 
+glm::vec3 Sphere::findCenter() {
+	return center;
+}
 
 float Sphere::intersect(const Ray &ray) {
 	glm::vec3 pc = ray.position - center;
@@ -42,8 +45,12 @@ float Sphere::intersect(const Ray &ray) {
 }
 
 BoundingBox* Sphere::createBox() {
-	glm::vec3 min = this->center - radius;
-	glm::vec3 max = this->center + radius;
+	glm::vec3 min = this->center;
+	glm::vec3 max = this->center;
+	for (int axis = 0; axis <= 2; axis++) {
+		min[axis] -= radius;
+		max[axis] += radius;
+	}
 	BoundingBox* box = new BoundingBox(min, max);
 	box->transform(this->inv_M);
 	return box;

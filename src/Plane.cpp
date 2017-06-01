@@ -11,6 +11,11 @@ glm::vec3 Plane::findNormal(Ray &ray, float t) {
    return normal;
 }
 
+glm::vec3 Plane::findCenter() {
+   // No such center for plane
+   return glm::vec3(0, 0, 0);
+}
+
 float Plane::intersect(const Ray &ray) {
    float den = dot(ray.direction, normal);
    if (!den) {

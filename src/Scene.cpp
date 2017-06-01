@@ -45,24 +45,19 @@ void Scene::createSpatialStructures(std::vector<GeoObject *> objects, BoxNode *p
 void Scene::sortObjects(std::vector<GeoObject *> objects, int axis) {
    // Selection sort
    for (unsigned int i = 0; i < objects.size(); i++) {
-      BoundingBox* iBox = objects[i]->createBox();
+      glm::vec3 icen = objects[i]->findCenter();
       unsigned int min = i;
       unsigned int j = i+1;
       for ( ; j < objects.size(); j++) {
-         BoundingBox* jBox = objects[j]->createBox();
-         if (jBox->center[axis] < iBox->center[axis]) {
-            min = j;
-         }
-         delete jBox;
+        glm::vec3 jcen = objects[j]->findCenter();
+        if (jcen[axis] < icen[axis]) {
+          min = j;
+        }
       }
-      delete iBox;
-      if (min != j) {
-         GeoObject *temp = objects[i];
-         objects[i] = objects[min];
-         objects[min] = temp;
+      if (min != i) {
+        std::swap(objects[i], objects[min]);
       }
-   }
-
+  }
 }
 
 Ray Scene::createCameraRay(const int width, const int height, const int x, const int y, const int m, const int n, const int s) {

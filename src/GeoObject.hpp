@@ -50,6 +50,7 @@ public:
    virtual float intersect(const Ray &) = 0;
    virtual glm::vec3 findNormal(Ray &, const float) = 0;
    virtual BoundingBox *createBox() = 0;
+   virtual glm::vec3 findCenter() = 0;
    virtual void print() = 0;
 
    // Parent print functionality

@@ -2,7 +2,7 @@
 #include "glm/gtc/epsilon.hpp"   // Epsilon equals
 
 BoxRenderable::BoxRenderable() : GeoObject(), Box() {
-
+   this->type = "Box";
 }
 
 void BoxRenderable::updateBox(glm::vec3 min, glm::vec3 max) {
@@ -19,12 +19,19 @@ float BoxRenderable::intersect(const Ray &ray) {
    return Box::intersect(ray);
 }
 
+glm::vec3 BoxRenderable::findCenter() {
+   return this->center;
+}
+
 static inline bool Equals(const float a, const float b, const float epsilon = 0.0001f) {
    return std::abs(a - b) < epsilon;
 }
 
 glm::vec3 BoxRenderable::findNormal(Ray &ray, const float t) {
-
+   // Check for uninitialized box
+   if (!this->hasBeenInit()) {
+      return glm::vec3(0, 0, 0);
+   }
    glm::vec3 intersection_point = ray.calculatePoint(t);
    
    glm::vec3 normal = glm::vec3(0, 0, 0);

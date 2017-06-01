@@ -17,7 +17,7 @@ public:
 
    void addPoint(glm::vec3);
    void addBox(BoundingBox *);
-
+   void transform(glm::mat4 &);
 };
 
 #endif

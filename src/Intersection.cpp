@@ -39,15 +39,15 @@ void Intersection::createIntersection(GeoObject *object, Ray &ray) {
 void Intersection::boxTraversal(Scene::BoxNode* node, Ray& ray) {
    if (node->boundingBox.intersect(ray) > EPSILON) {
       // Base case
-      if (node->objects.size() <= 1) {
+      if (node->objects.size() == 1) {
          createIntersection(node->objects[0], ray);
          return;
       }
       // Travesal
-      if (node->leftChild != nullptr && node->leftChild->boundingBox.intersect(ray) > EPSILON) {
+      if (node->leftChild != nullptr) {
         boxTraversal(node->leftChild, ray);
       }
-      if (node->rightChild != nullptr && node->rightChild->boundingBox.intersect(ray) > EPSILON) {
+      if (node->rightChild != nullptr) {
         boxTraversal(node->rightChild, ray);
       }
    }

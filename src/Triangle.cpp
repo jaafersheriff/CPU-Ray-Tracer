@@ -26,6 +26,10 @@ BoundingBox* Triangle::createBox() {
    return box;
 }
 
+glm::vec3 Triangle::findCenter() {
+   return (this->v1 + this->v2 + this->v3) / 3.f;
+}
+
 float Triangle::intersect(const Ray &ray) {
    // Alpha?
    float A[3][3] = { {v1.x-v2.x, v1.x-v3.x, ray.direction.x},
