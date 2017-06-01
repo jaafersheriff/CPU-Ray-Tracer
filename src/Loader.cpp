@@ -203,7 +203,11 @@ Camera* Loader::createCamera(std::vector<std::string> line, std::ifstream& file)
          floats = findFloatsInLine(line);
          camera->lookAt = glm::vec3(floats[0], floats[1], floats[2]);
       }
-      line = getLine(&file);
+      // Stupid catch for faulty .pov files
+      if (line[line.size() - 1].find(">}") != std::string::npos) {
+         break;
+      }
+     line = getLine(&file);
    }
    return camera;
 }
@@ -225,7 +229,7 @@ void Loader::parse(const char *file_name, Scene &scene) {
       if (line.size() <= 0) {
          continue;
       }
-
+  
       if(!line[0].compare("camera")) {
          scene.camera = createCamera(line, inFile);
       }
