@@ -26,21 +26,28 @@ void Box::transform(glm::mat4 &inv_M) {
 float Box::intersect(const Ray &ray) {
   float tgmax =  std::numeric_limits<float>::max();
   float tgmin = -tgmax;
- 
-  updateT(ray, &tgmin, &tgmax, 0); // X
-  updateT(ray, &tgmin, &tgmax, 1); // Y
-  updateT(ray, &tgmin, &tgmax, 2); // Z
-
-  if (tgmin < tgmax && tgmax > 0) {
-    if (tgmin > 0) {
-      return std::min(tgmin, tgmax);
-    }
-    else {
-      return tgmax;
+  
+  // Check for parallel ray
+  for (int axis = 0; axis < 2; axis++) {
+    if (!ray.direction[axis] && (ray.position[axis] >= this->minCorner[axis] || ray.position[axis] < this->maxCorner[axis])) {
+      return -1;
     }
   }
 
-  return -1;
+  updateT(ray, &tgmin, &tgmax, 0);  // X
+  updateT(ray, &tgmin, &tgmax, 1);  // Y
+  updateT(ray, &tgmin, &tgmax, 2);  // Z
+
+  if (tgmin > tgmax || tgmax < 0) {
+    return -1;
+  }
+
+  if (tgmin > 0) {
+    return tgmin;
+  }
+
+  return tgmax;
+
 }
 
 void Box::updateT(const Ray &ray, float *tgmin, float *tgmax, int axis) {

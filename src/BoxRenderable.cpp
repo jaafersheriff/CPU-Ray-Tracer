@@ -1,12 +1,14 @@
 #include "BoxRenderable.hpp"
-
+#include "glm/gtc/epsilon.hpp"   // Epsilon equals
 
 BoxRenderable::BoxRenderable() : GeoObject(), Box() {
 
 }
+
 void BoxRenderable::updateBox(glm::vec3 min, glm::vec3 max) {
    Box::updateBox(min, max);
 }
+
 BoundingBox* BoxRenderable::createBox() {
    BoundingBox *box = new BoundingBox(this->minCorner, this->maxCorner);
    box->transform(this->inv_M);
@@ -17,40 +19,38 @@ float BoxRenderable::intersect(const Ray &ray) {
    return Box::intersect(ray);
 }
 
+static inline bool Equals(const float a, const float b, const float epsilon = 0.0001f) {
+   return std::abs(a - b) < epsilon;
+}
+
 glm::vec3 BoxRenderable::findNormal(Ray &ray, const float t) {
-   glm::vec3 intersection_point = ray.calculatePoint(t); 
-   updateBox(this->minCorner, this->maxCorner);
 
-   glm::vec3 normal = glm::vec3(0, 0, 0);
-   glm::vec3 local_point = intersection_point - center;  // Center works?
+   glm::vec3 intersection_point = ray.calculatePoint(t);
    
-   float min = std::numeric_limits<float>::max();
-   float dist = std::abs(std::abs(maxCorner.x - minCorner.x) - std::abs(local_point.x));
-   if (dist < min) {
-      min = dist;
+   glm::vec3 normal = glm::vec3(0, 0, 0);
+   // X
+   if (Equals(intersection_point.x, this->minCorner.x)) {
+      normal = glm::vec3(-1, 0, 0);
+   }
+   else if (Equals(intersection_point.x, this->maxCorner.x)) {
       normal = glm::vec3(1, 0, 0);
-      if (local_point.x < 0) {
-         normal = -normal;
-      }
    }
-   dist = std::abs(std::abs(maxCorner.y - minCorner.y) - std::abs(local_point.y));
-   if (dist < min) {
-      min = dist;
+   // Y
+   else if (Equals(intersection_point.y, this->minCorner.y)) {
+      normal = glm::vec3(0, -1, 0);
+   }
+   else if (Equals(intersection_point.y, this->maxCorner.y)) {
       normal = glm::vec3(0, 1, 0);
-      if (local_point.y < 0) {
-         normal = -normal;
-      }
    }
-   dist = std::abs(std::abs(maxCorner.z - minCorner.z) - std::abs(local_point.z));
-   if (dist < min) {
-      min = dist;
+   // Z
+   else if (Equals(intersection_point.z, this->minCorner.z)) {
+      normal = glm::vec3(0, 0, -1);
+   }
+   else if (Equals(intersection_point.z, this->maxCorner.z)) {
       normal = glm::vec3(0, 0, 1);
-      if (local_point.z < 0) {
-         normal = -normal;
-      }
    }
-   return glm::normalize(normal);
 
+   return normal;
 }
 
 void BoxRenderable::print() {

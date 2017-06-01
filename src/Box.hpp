@@ -9,10 +9,10 @@ public:
 	Box();
 	Box(glm::vec3, glm::vec3);
 
-	void updateT(const Ray &, float*, float*, int);
+	void updateBox(glm::vec3, glm::vec3);
 	void transform(glm::mat4 &);
 	float intersect(const Ray &);
-	void updateBox(glm::vec3, glm::vec3);
+	void updateT(const Ray &, float*, float*, int);
 
 	glm::vec3 minCorner, maxCorner;
 	glm::vec3 center;
