@@ -22,7 +22,7 @@ BoundingBox* Triangle::createBox() {
    box->addPoint(v1);
    box->addPoint(v2);
    box->addPoint(v3);
-   box->transform(this->inv_M);
+   box->transform(this->M);
    return box;
 }
 

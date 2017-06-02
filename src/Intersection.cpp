@@ -37,13 +37,14 @@ void Intersection::createIntersection(GeoObject *object, Ray &ray) {
 }
 
 void Intersection::boxTraversal(Scene::BoxNode* node, Ray& ray) {
+   // Base case
+   if (node->objects.size() <= 1) {
+      createIntersection(node->objects[0], ray);
+      return;
+   }
    if (node->boundingBox.intersect(ray) > EPSILON) {
-      // Base case
-      if (node->objects.size() == 1) {
-         createIntersection(node->objects[0], ray);
-         return;
-      }
       // Travesal
+      // TODO: I dont think we have to traverse both levels...
       if (node->leftChild != nullptr) {
         boxTraversal(node->leftChild, ray);
       }

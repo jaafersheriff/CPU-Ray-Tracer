@@ -37,7 +37,6 @@ void Scene::createSpatialStructures(std::vector<GeoObject *> objects, BoxNode *p
       parent->rightChild = new BoxNode;
       createSpatialStructures(rightObjects, parent->rightChild, (axis+1)%3);
    }
-
    parent->objects = objects;
    createNodeBoundingBox(parent);
 }
@@ -55,7 +54,9 @@ void Scene::sortObjects(std::vector<GeoObject *> objects, int axis) {
         }
       }
       if (min != i) {
-        std::swap(objects[i], objects[min]);
+        GeoObject* temp = objects[i];
+        objects[i] = objects[min];
+        objects[min] = temp;
       }
   }
 }

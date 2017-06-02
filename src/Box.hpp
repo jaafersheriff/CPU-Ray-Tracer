@@ -17,6 +17,8 @@ public:
 	
 	glm::vec3 minCorner, maxCorner;
 	glm::vec3 center;
+
+	void print();
 };
 
 #endif

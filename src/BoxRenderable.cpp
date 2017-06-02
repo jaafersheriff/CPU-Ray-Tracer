@@ -11,7 +11,7 @@ void BoxRenderable::updateBox(glm::vec3 min, glm::vec3 max) {
 
 BoundingBox* BoxRenderable::createBox() {
    BoundingBox *box = new BoundingBox(this->minCorner, this->maxCorner);
-   box->transform(this->inv_M);
+   box->transform(this->M);
    return box;
 }
 
@@ -61,5 +61,5 @@ glm::vec3 BoxRenderable::findNormal(Ray &ray, const float t) {
 }
 
 void BoxRenderable::print() {
-   std::cout << "THIS IS A BOX" << std::endl;
+   Box::print();
 }

@@ -60,5 +60,11 @@ void Box::updateT(const Ray &ray, float *tgmin, float *tgmax, int axis) {
 }
 
 bool Box::hasBeenInit() {
-  return this->minCorner[0] != std::numeric_limits<float>::max();
+  return this->minCorner[0] < std::numeric_limits<float>::max();
+}
+
+void Box::print() {
+  std::cout << "Min Corner: {" << minCorner.x << " " << minCorner.y << " " << minCorner.z << "}" << std::endl; 
+  std::cout << "Max Corner: {" << maxCorner.x << " " << maxCorner.y << " " << maxCorner.z << "}" << std::endl; 
+  std::cout << "Center    : {" << center.x << " " << center.y << " " << center.z << "}" << std::endl; 
 }

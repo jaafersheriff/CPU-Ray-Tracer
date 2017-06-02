@@ -48,6 +48,7 @@ void Loader::createFinish(GeoObject::Finish *f, std::vector<std::string> line) {
 void Loader::addProperties(GeoObject *object, std::vector<std::string> line, std::ifstream& file) {
    std::vector<float> floats;
 
+   object->M = glm::mat4(1.f);
    // Continue parsing/storing file components until we reach '}' line
    while(line[0].compare("}")) {
       // Finish
@@ -61,19 +62,19 @@ void Loader::addProperties(GeoObject *object, std::vector<std::string> line, std
       if (!line[0].compare("scale")) {
          floats = findFloatsInLine(line);
          glm::vec3 scale = glm::vec3(floats[0], floats[1], floats[2]);
-         object->inv_M = glm::scale(glm::mat4(1.0f), scale) * object->inv_M;
+         object->M = glm::scale(glm::mat4(1.0f), scale) * object->M;
       }
       if (!line[0].compare("rotate")) {
          floats = findFloatsInLine(line);
          glm::vec3 rot = glm::vec3(glm::radians(floats[0]), glm::radians(floats[1]), glm::radians(floats[2]));
-         object->inv_M = glm::rotate(glm::mat4(1.0f), rot.z, glm::vec3(0, 0, 1)) * object->inv_M;
-         object->inv_M = glm::rotate(glm::mat4(1.0f), rot.y, glm::vec3(0, 1, 0)) * object->inv_M;
-         object->inv_M = glm::rotate(glm::mat4(1.0f), rot.x, glm::vec3(1, 0, 0)) * object->inv_M;
+         object->M = glm::rotate(glm::mat4(1.0f), rot.z, glm::vec3(0, 0, 1)) * object->M;
+         object->M = glm::rotate(glm::mat4(1.0f), rot.y, glm::vec3(0, 1, 0)) * object->M;
+         object->M = glm::rotate(glm::mat4(1.0f), rot.x, glm::vec3(1, 0, 0)) * object->M;
       }
       if (!line[0].compare("translate")) {
          floats = findFloatsInLine(line);
          glm::vec3 translate = glm::vec3(floats[0], floats[1], floats[2]);
-         object->inv_M = glm::translate(glm::mat4(1.0f), translate) * object->inv_M;
+         object->M = glm::translate(glm::mat4(1.0f), translate) * object->M;
       }
       // Stupid catch for faulty .pov files
       if (line[line.size() - 1].find("}}") != std::string::npos) {
@@ -83,7 +84,7 @@ void Loader::addProperties(GeoObject *object, std::vector<std::string> line, std
    }
 
    // Invert model matrix before returning
-   object->inv_M = glm::inverse(object->inv_M);
+   object->inv_M = glm::inverse(object->M);
 }
 
 BoxRenderable* Loader::createBox(std::vector<std::string> line, std::ifstream& file) {

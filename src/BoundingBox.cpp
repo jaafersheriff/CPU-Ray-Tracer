@@ -8,7 +8,7 @@ BoundingBox::BoundingBox(glm::vec3 min, glm::vec3 max) {
    updateBox(min, max);
 }
 
-void BoundingBox::transform(glm::mat4 &inv_M) {
+void BoundingBox::transform(glm::mat4 &M) {
    // Catch for uninitialized box
    if (!this->hasBeenInit()) {
       return;
@@ -26,16 +26,11 @@ void BoundingBox::transform(glm::mat4 &inv_M) {
    vertices.push_back(glm::vec3(maxCorner.x, maxCorner.y, minCorner.z));
    vertices.push_back(glm::vec3(maxCorner.x, maxCorner.y, maxCorner.z));
 
-   // Reset min and max corner
-   float inf = std::numeric_limits<float>::max();
-   this->minCorner = glm::vec3(inf, inf, inf);
-   this->maxCorner = glm::vec3(inf, inf, inf);
-
    // Transform 8 points
    // Update min and max as we go
    for (int i = 0; i < 8; i++) {
-      glm::vec4 t = glm::vec4(vertices[i], 0.f);
-      vertices[i] = glm::vec3(inv_M * t);
+      glm::vec4 t = glm::vec4(vertices[i], 1.f);
+      vertices[i] = glm::vec3(M * t);
       addPoint(vertices[i]);
    }
 

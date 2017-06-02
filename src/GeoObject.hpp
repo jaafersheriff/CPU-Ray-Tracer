@@ -42,8 +42,8 @@ public:
    // Material properties
    Finish finish;
 
-   // Model matrix is stored as its inverse because we never
-   // use it in its normal state
+   // Model matrix and its inverse
+   glm::mat4 M;
    glm::mat4 inv_M;
 
    // Abstract functions

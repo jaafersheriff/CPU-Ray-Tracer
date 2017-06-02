@@ -52,7 +52,7 @@ BoundingBox* Sphere::createBox() {
 		max[axis] += radius;
 	}
 	BoundingBox* box = new BoundingBox(min, max);
-	box->transform(this->inv_M);
+	box->transform(this->M);
 	return box;
 }
 
