@@ -61,6 +61,10 @@ int main(int args, char **argv) {
 			if (std::string(argv[i]).find("sds") != std::string::npos) {
 				renderer.setSpatialFlag(1);
 			}
+			// Percent printing
+			if (std::string(argv[i]).find("percent") != std::string::npos) {
+				renderer.setPercentFlag(1);
+			}
 		}
 	}
 
@@ -68,7 +72,6 @@ int main(int args, char **argv) {
 
 	// Parse file + create scene
 	loader.parse(argv[2], scene);
-
 	if (renderer.brdf.spatial_flag) {
 		// Split objects into planes and other
 		std::vector<GeoObject *> planes;

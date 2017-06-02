@@ -19,6 +19,10 @@ public:
    // BRDF object for recursive raytracing
    BRDF brdf;
 
+   // 0 - don't print
+   // 1 - print
+   int percent_flag = 0;
+
    // Super-sample count
    int SSCount = 1;
    void setSSCount(const int in) { this->SSCount = in; }
@@ -37,6 +41,7 @@ public:
    void setRenderFlag(int flag) { brdf.render_flag = flag; }
    void setFresnelFlag(int flag) { brdf.fresnel_flag = flag; }
    void setSpatialFlag(int flag) { brdf.spatial_flag = flag; }
+   void setPercentFlag(int flag) { percent_flag = flag; }
 };
 
 #endif
