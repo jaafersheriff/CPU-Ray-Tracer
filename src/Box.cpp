@@ -66,5 +66,4 @@ bool Box::hasBeenInit() {
 void Box::print() {
   std::cout << "Min Corner: {" << minCorner.x << " " << minCorner.y << " " << minCorner.z << "}" << std::endl; 
   std::cout << "Max Corner: {" << maxCorner.x << " " << maxCorner.y << " " << maxCorner.z << "}" << std::endl; 
-  std::cout << "Center    : {" << center.x << " " << center.y << " " << center.z << "}" << std::endl; 
 }

@@ -158,7 +158,7 @@ Sphere* Loader::createSphere(std::vector<std::string> line, std::ifstream& file)
 
    // Object properties
    addProperties(sphere, line, file);
-
+ 
    return sphere;
 }
 
