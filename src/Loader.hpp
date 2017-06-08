@@ -38,6 +38,7 @@ private:
    // Break up the current line in a file into a vector<string>
    // Separating by white space
    std::vector<std::string> getLine(std::ifstream *file);
+   std::vector<std::string> cleanseLine(std::vector<std::string>);
 
    // Create a Camera object given a file pointing to a camera line
    Camera* createCamera(std::vector<std::string>, std::ifstream &file);

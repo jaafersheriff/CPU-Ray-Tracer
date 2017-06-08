@@ -1,4 +1,5 @@
 #include "BRDF.hpp"
+#include "glm/gtc/matrix_transform.hpp"	// Matrix transformations
 
 const static float EPSILON = 0.0001f;
 
@@ -15,7 +16,7 @@ glm::vec3 BRDF::calculateColor(Scene &scene, Intersection &intersection, int rec
 	createParentNode(parent, intersection);
 
 	// Colors
-	glm::vec3 local_color 		= calculateLocalColor(scene, intersection, parent);
+	glm::vec3 local_color 		= calculateLocalColor(scene, intersection, recurse_count, parent);
 	glm::vec3 reflection_color = calculateReflectionColor(scene, intersection, recurse_count, parent);
 	glm::vec3 refraction_color = calculateRefractionColor(scene, intersection, recurse_count, parent);
 
@@ -47,9 +48,46 @@ glm::vec3 BRDF::raytrace(Scene &scene, Ray &incident_ray, int recurse_count, pri
 	return calculateColor(scene, incident_int, recurse_count, parent);
 }
 
-glm::vec3 BRDF::calculateLocalColor(Scene &scene, Intersection &intersection, printNode* parent) {
+glm::vec3 BRDF::createSamplePoint(Intersection &intersection) {
+	// Generate random UV
+	float u = rand() / (float) RAND_MAX;
+	float v = rand() / (float) RAND_MAX;
+	// Stratified sample
+	u += 1/sqrt(gi_samples) * rand() / (float) RAND_MAX;
+	v += 1/sqrt(gi_samples) * rand() / (float) RAND_MAX;
+
+	// Create point on hemisphere
+	float radial = sqrt(u);
+	float theta = 2.f*PI*v;
+	float x = radial*glm::cos(theta);
+	float y = radial*glm::sin(theta);
+	glm::vec3 point = glm::vec3(x, y, sqrt(1-u));
+
+	// Align hemisphere w/ intersection
+	float angle = glm::acos(glm::dot(glm::vec3(0, 0, 1), intersection.normal));
+	glm::vec3 axis = glm::cross(glm::vec3(0, 0, 1), intersection.normal);
+	glm::mat4 matrix = glm::rotate(glm::mat4(1.0f), angle, axis);	
+
+	return glm::vec3(matrix * glm::vec4(point, 1.f));
+}
+
+glm::vec3 BRDF::calculateLocalColor(Scene &scene, Intersection &intersection, int recurse_count, printNode* parent) {
 	// Ambient
 	glm::vec3 local_color = intersection.object->finish.color * intersection.object->finish.ambient;
+	if (gi_flag) {
+		// Global illumination
+		local_color = glm::vec3(0, 0, 0);
+		int numSamples = gi_samples;
+		if (gi_bounces - recurse_count > 0) {
+			numSamples /= ((gi_bounces - recurse_count) * gi_ratio);
+		}
+		for (int i = 0; i < numSamples; i++) {
+			glm::vec3 sample_point = createSamplePoint(intersection);
+			Ray sample_ray(intersection.point + sample_point * EPSILON, sample_point);
+			local_color += raytrace(scene, sample_ray, std::min(recurse_count-1, gi_bounces), parent);
+		}
+		local_color /= numSamples;
+	}
 	if (parent != nullptr) {
 		parent->ambient = local_color;
 	}
@@ -148,6 +186,7 @@ Ray BRDF::createRefractionRay(const Intersection &intersection) {
 }
 
 glm::vec3 BRDF::BlinnPhong(Light *light, Intersection &object_in, printNode* p) {
+	// Initialize local vars
 	GeoObject::Finish *finish = &object_in.object->finish;
 	glm::vec3 light_dir = glm::normalize(light->position - object_in.point);
 	glm::vec3 half = glm::normalize(light_dir - object_in.ray.direction);
@@ -177,6 +216,7 @@ glm::vec3 BRDF::BlinnPhong(Light *light, Intersection &object_in, printNode* p) 
 }
 
 glm::vec3 BRDF::CookTorrance(Light *light, Intersection &object_in) {
+	// Initialize local vars
 	GeoObject::Finish *finish = &object_in.object->finish;
 	glm::vec3 light_dir = glm::normalize(light->position - object_in.point);
 	glm::vec3 half = glm::normalize(light_dir - object_in.ray.direction);
@@ -215,12 +255,12 @@ glm::vec3 BRDF::CookTorrance(Light *light, Intersection &object_in) {
 }
 
 float BRDF::calculateFresnelReflectance(float ior, Intersection &intersection) {
+	glm::vec3 norm = intersection.normal;
 	if (dot(intersection.normal, intersection.ray.direction) > 0) {
-		return fresnel(ior, -intersection.normal, -intersection.ray.direction);
+		norm = -norm;
 	}
-	else {
-		return fresnel(ior, intersection.normal, -intersection.ray.direction);
-	}
+		
+	return fresnel(ior, norm, -intersection.ray.direction);
 }
 
 float BRDF::fresnel(float n, glm::vec3 a, glm::vec3 b) {

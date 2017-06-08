@@ -11,6 +11,10 @@
 
 #define PI 3.14159265359f
 
+#define DEFAULT_SAMPLES 128
+#define DEFAULT_BOUNCES 2
+#define DEFAULT_RATIO   8
+
 class BRDF {
 public:
 	// Used for verbose printing
@@ -47,11 +51,22 @@ public:
 	// 1 - use spatial data structure tree
 	int spatial_flag;
 
+	// 0 - default ambient calculation
+	// 1 - global illumination ambient calculation
+	int gi_flag;
+	int gi_samples;
+	int gi_bounces;
+	int gi_ratio;
+
 	BRDF() {
 		render_flag = 0;
 		verbose_flag = 0;
 		fresnel_flag = 0;
 		spatial_flag = 0;
+		gi_flag = 0;
+		gi_samples = DEFAULT_SAMPLES;
+		gi_bounces = DEFAULT_BOUNCES;
+		gi_ratio   = DEFAULT_RATIO;
 	};
 
 	// Master recursive function for tracing rays
@@ -61,7 +76,7 @@ public:
 	// Color calculation functions
 	float calculateFresnelReflectance(float, Intersection &);
 	float fresnel(float, glm::vec3, glm::vec3);
-	glm::vec3 calculateLocalColor(Scene &, Intersection &, printNode*);
+	glm::vec3 calculateLocalColor(Scene &, Intersection &, int, printNode*);
 	glm::vec3 calculateReflectionColor(Scene &, Intersection &, int, printNode*);
 	glm::vec3 calculateRefractionColor(Scene &, Intersection &, int, printNode*);
 
@@ -70,6 +85,7 @@ public:
 	Ray createRefractionRay(const Intersection &);
 
 	// Shading calculations
+	glm::vec3 createSamplePoint(Intersection &);
 	glm::vec3 BlinnPhong(Light *, Intersection &, printNode*);
 	glm::vec3 CookTorrance(Light *, Intersection &);
 

@@ -11,7 +11,6 @@
 #include "Scene.hpp"
 #include "BRDF.hpp"
 
-// Number of times to recurse when reflecting/refracting
 #define RECURSE_COUNT 6
 
 class Renderer {
@@ -26,6 +25,12 @@ public:
    // Super-sample count
    int SSCount = 1;
    void setSSCount(const int in) { this->SSCount = in; }
+
+   // Global Illumination values
+   void setGIFlag(int flag) { brdf.gi_flag = flag; }
+   void setGISamples(int n) { brdf.gi_samples = n; }
+   void setGIBounces(int n) { brdf.gi_bounces = n; }
+   void setGIRatio(int n) { brdf.gi_ratio = n; }
 
    // printNode object for verbose printing
    BRDF::printNode *root = nullptr;

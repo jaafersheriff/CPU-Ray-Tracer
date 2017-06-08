@@ -107,18 +107,28 @@ Triangle* Loader::createTriangle(std::vector<std::string> line, std::ifstream& f
    Triangle *triangle = new Triangle;
    std::vector<float> floats;
 
-   // v1
-   line = getLine(&file);
+   // Same line vertices
    floats = findFloatsInLine(line);
-   triangle->v1 = glm::vec3(floats[0], floats[1], floats[2]);
-   // v2
-   line = getLine(&file);
-   floats = findFloatsInLine(line);
-   triangle->v2 = glm::vec3(floats[0], floats[1], floats[2]);
-   // v3
-   line = getLine(&file);
-   floats = findFloatsInLine(line);
-   triangle->v3 = glm::vec3(floats[0], floats[1], floats[2]);
+   if (floats.size() > 0) {
+      triangle->v1 = glm::vec3(floats[0], floats[1], floats[2]);
+      triangle->v2 = glm::vec3(floats[3], floats[4], floats[5]);
+      triangle->v3 = glm::vec3(floats[6], floats[7], floats[8]);  
+   }
+   // Different line vertices
+   else {
+      // v1
+      line = getLine(&file);
+      floats = findFloatsInLine(line);
+      triangle->v1 = glm::vec3(floats[0], floats[1], floats[2]);
+      // v2
+      line = getLine(&file);
+      floats = findFloatsInLine(line);
+      triangle->v2 = glm::vec3(floats[0], floats[1], floats[2]);
+      // v3
+      line = getLine(&file);
+      floats = findFloatsInLine(line);
+      triangle->v3 = glm::vec3(floats[0], floats[1], floats[2]);
+   }
 
    // Object properties
    addProperties(triangle, line, file);

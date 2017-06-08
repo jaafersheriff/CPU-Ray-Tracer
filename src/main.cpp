@@ -1,6 +1,6 @@
 #include <iostream>	// std::std::cout
 #include <string.h>	// strcpy
-#include <vector>	// vectors
+#include <vector>		// vectors
 #include <iomanip>	//set precision
 
 #include <glm/glm.hpp>
@@ -51,6 +51,25 @@ int main(int args, char **argv) {
 			if (std::string(argv[i]).find("ss") != std::string::npos) {
 				if (char *num = (strchr(argv[i], '=') + 1)) {
 					renderer.setSSCount(atoi(num));
+				}
+			}
+			// Global illumination
+			if (std::string(argv[i]).find("gi") != std::string::npos) {
+				renderer.setGIFlag(1);
+				if (std::string(argv[i]).find("gi_samples") != std::string::npos) {
+					if (char *num = (strchr(argv[i], '=') + 1)) {
+						renderer.setGISamples(atoi(num));
+					}					
+				}
+				else if (std::string(argv[i]).find("gi_bounces") != std::string::npos) {
+					if (char *num = (strchr(argv[i], '=') + 1)) {
+						renderer.setGIBounces(atoi(num));
+					}
+				}
+				else if (std::string(argv[i]).find("gi_ratio") != std::string::npos) {
+					if (char *num = (strchr(argv[i], '=') + 1)) {
+						renderer.setGIRatio(atoi(num));
+					}	
 				}
 			}
 			// Fresnel
