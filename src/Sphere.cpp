@@ -1,4 +1,5 @@
 #include "Sphere.hpp"
+#include <algorithm>
 
 Sphere::Sphere() : GeoObject() {
 	this->type = "Sphere";

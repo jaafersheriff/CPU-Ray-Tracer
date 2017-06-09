@@ -1,4 +1,5 @@
 #include "BoundingBox.hpp"
+#include <algorithm>
 
 BoundingBox::BoundingBox() {
    Box();

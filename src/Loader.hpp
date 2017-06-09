@@ -17,7 +17,7 @@ public:
    Loader(){};
 
    // Walk through an input file creating a Scene object
-   void parse(const char *file_name, Scene &scene);
+   int parse(const char *file_name, Scene &scene);
 
 private:
    // Parse through remaining object adding object properties

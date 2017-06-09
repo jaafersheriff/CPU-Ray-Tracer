@@ -96,7 +96,10 @@ int main(int args, char **argv) {
 	std::cout << std::setprecision(4);
 
 	// Parse file + create scene
-	loader.parse(argv[2], scene);
+	if (loader.parse(argv[2], scene)) {
+		return 1;
+	}
+
 	if (renderer.brdf.spatial_flag) {
 		// Split objects into planes and other
 		std::vector<GeoObject *> planes;

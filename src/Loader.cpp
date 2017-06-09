@@ -223,11 +223,12 @@ Camera* Loader::createCamera(std::vector<std::string> line, std::ifstream& file)
    return camera;
 }
 
-void Loader::parse(const char *file_name, Scene &scene) {
+int Loader::parse(const char *file_name, Scene &scene) {
    // Create file pointer
    std::ifstream inFile(file_name, std::ios::in | std::ios::binary);
    if (!inFile) {
       std::cout << "Error opening file: " << file_name << std::endl;
+	  return 1;
    }
    std::string word;
 
@@ -269,6 +270,7 @@ void Loader::parse(const char *file_name, Scene &scene) {
       }
    }
    inFile.close();
+   return 0;
 }
 
 std::vector<std::string> Loader::getLine(std::ifstream *file) {
