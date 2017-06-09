@@ -11,10 +11,15 @@
 #include "Scene.hpp"
 #include "BRDF.hpp"
 
+#define OUTPUT_NAME "output.png"
+
 #define RECURSE_COUNT 6
 
 class Renderer {
 public:
+   // Output file name
+   std::string fileName = OUTPUT_NAME;
+
    // BRDF object for recursive raytracing
    BRDF brdf;
 
@@ -47,6 +52,7 @@ public:
    void setFresnelFlag(int flag) { brdf.fresnel_flag = flag; }
    void setSpatialFlag(int flag) { brdf.spatial_flag = flag; }
    void setPercentFlag(int flag) { percent_flag = flag; }
+   void setOutputName(char *name) { fileName = std::string(name); }
 };
 
 #endif

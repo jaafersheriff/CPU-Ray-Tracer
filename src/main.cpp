@@ -84,6 +84,12 @@ int main(int args, char **argv) {
 			if (std::string(argv[i]).find("percent") != std::string::npos) {
 				renderer.setPercentFlag(1);
 			}
+			// Custom output file name
+			if (std::string(argv[i]).find("out") != std::string::npos) {
+				if (char *name = (strchr(argv[i], '=') + 1)) {
+					renderer.setOutputName(name);
+				}
+			}
 		}
 	}
 

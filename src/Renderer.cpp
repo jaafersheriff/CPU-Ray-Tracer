@@ -30,7 +30,6 @@ glm::vec3 Renderer::calculateColor(Scene &scene, const glm::ivec2 size, const in
 
 void Renderer::render(Scene &scene, const int window_width, const int window_height) {
    const int numChannels = 3;
-   const std::string fileName = "output.png";
    const glm::ivec2 size = glm::ivec2(window_width, window_height);
 
    unsigned char *data = new unsigned char[size.x * size.y * numChannels];
