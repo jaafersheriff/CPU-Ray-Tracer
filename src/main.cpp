@@ -100,6 +100,7 @@ int main(int args, char **argv) {
 		return 1;
 	}
 
+	/* TODO: Move out of main */
 	if (renderer.brdf.spatial_flag) {
 		// Split objects into planes and other
 		std::vector<GeoObject *> planes;

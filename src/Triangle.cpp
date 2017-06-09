@@ -8,15 +8,6 @@ Triangle::Triangle() : GeoObject() {
    this->v3 = glm::vec3(0, 0, 0);
 }
 
-static inline float determinant(float M[3][3]) {
-   // Matrix access [y][x]
-   float a = M[0][0] * (M[1][1]*M[2][2]-M[1][2]*M[2][1]);
-   float b = M[0][1] * (M[1][0]*M[2][2]-M[1][2]*M[2][0]);
-   float c = M[0][2] * (M[1][0]*M[2][1]-M[1][1]*M[2][0]);
-
-   return a-b+c;
-}
-
 BoundingBox* Triangle::createBox() {
    BoundingBox* box = new BoundingBox;
    box->addPoint(v1);
@@ -31,36 +22,36 @@ glm::vec3 Triangle::findCenter() {
 }
 
 float Triangle::intersect(const Ray &ray) {
-   // Alpha?
-   float A[3][3] = { {v1.x-v2.x, v1.x-v3.x, ray.direction.x},
-                     {v1.y-v2.y, v1.y-v3.y, ray.direction.y},
-                     {v1.z-v2.z, v1.z-v3.z, ray.direction.z} };
-   float detA = determinant(A);
+
+   // Alpha ?
+   glm::mat3 A = glm::mat3(v1.x-v2.x, v1.x-v3.x, ray.direction.x,
+                           v1.y-v2.y, v1.y-v3.y, ray.direction.y,
+                           v1.z-v2.z, v1.z-v3.z, ray.direction.z) ;
+   float detA = glm::determinant(A);
 
    // Beta
-   float B[3][3] = { {v1.x-ray.position.x, v1.x-v3.x, ray.direction.x},
-                     {v1.y-ray.position.y, v1.y-v3.y, ray.direction.y},
-                     {v1.z-ray.position.z, v1.z-v3.z, ray.direction.z} };
-   float beta = determinant(B)/detA;
+   glm::mat3 B = glm::mat3(v1.x-ray.position.x, v1.x-v3.x, ray.direction.x,
+                           v1.y-ray.position.y, v1.y-v3.y, ray.direction.y,
+                           v1.z-ray.position.z, v1.z-v3.z, ray.direction.z);
+   float beta = glm::determinant(B)/detA;
    if (beta < 0 || beta > 1) {
       return -1;
    }
 
    // Gamma
-   float G[3][3] = { {v1.x-v2.x, v1.x-ray.position.x, ray.direction.x},
-                     {v1.y-v2.y, v1.y-ray.position.y, ray.direction.y},
-                     {v1.z-v2.z, v1.z-ray.position.z, ray.direction.z} };
-   float gamma = determinant(G)/detA;
+   glm::mat3 G = glm::mat3(v1.x-v2.x, v1.x-ray.position.x, ray.direction.x,
+                           v1.y-v2.y, v1.y-ray.position.y, ray.direction.y,
+                           v1.z-v2.z, v1.z-ray.position.z, ray.direction.z);
+   float gamma = glm::determinant(G)/detA;
    if (gamma < 0 || gamma > 1 - beta) {
       return -1;
    }
 
    // t
-   float T[3][3] = { {v1.x-v2.x, v1.x-v3.x, v1.x-ray.position.x},
-                     {v1.y-v2.y, v1.y-v3.y, v1.y-ray.position.y},
-                     {v1.z-v2.z, v1.z-v3.z, v1.z-ray.position.z} };
-   float t = determinant(T)/detA;
-   return t;
+   glm::mat3 T = glm::mat3(v1.x-v2.x, v1.x-v3.x, v1.x-ray.position.x,
+                           v1.y-v2.y, v1.y-v3.y, v1.y-ray.position.y,
+                           v1.z-v2.z, v1.z-v3.z, v1.z-ray.position.z);
+   return glm::determinant(T)/detA;
 }
 
 glm::vec3 Triangle::findNormal(Ray &ray, float t) {
