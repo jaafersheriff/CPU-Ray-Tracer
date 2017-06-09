@@ -12,4 +12,5 @@ raytrace.*
 
 output.png
 *.py
-*.sh
+
+compare.sh

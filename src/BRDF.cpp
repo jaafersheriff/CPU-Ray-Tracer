@@ -69,21 +69,29 @@ glm::vec3 BRDF::createSamplePoint(Intersection &intersection, glm::mat4 &matrix)
 glm::vec3 BRDF::calculateLocalColor(Scene &scene, Intersection &intersection, int recurse_count, printNode* parent) {
 	// Ambient
 	glm::vec3 local_color = intersection.object->finish.color * intersection.object->finish.ambient;
-	if (gi_flag && gi_bounces - recurse_count != 1) {
+	if (gi_flag) {
+		// Global illumination
+		int numSamples = gi_samples;
+
+		if (gi_bounces < recurse_count) {
+			recurse_count = gi_bounces;
+		} 
+		else {
+			recurse_count--;
+		}
+
+		if (gi_bounces - recurse_count > 0) {
+			numSamples /= ((gi_bounces - recurse_count) * gi_ratio);
+		}
+
 		float angle = glm::acos(glm::dot(glm::vec3(0, 0, 1), intersection.normal));
 		glm::vec3 axis = glm::cross(glm::vec3(0, 0, 1), intersection.normal);
 		glm::mat4 matrix = glm::rotate(glm::mat4(1.0f), angle, axis);	
 
-		// Global illumination
-		local_color = glm::vec3(0, 0, 0);
-		int numSamples = gi_samples;
-		if (gi_bounces - recurse_count > 0) {
-			numSamples /= ((gi_bounces - recurse_count) * gi_ratio);
-		}
 		for (int i = 0; i < numSamples; i++) {
 			glm::vec3 sample_point = createSamplePoint(intersection, matrix);
 			Ray sample_ray(intersection.point + sample_point * EPSILON, sample_point);
-			local_color += raytrace(scene, sample_ray, std::min(recurse_count-1, gi_bounces), parent) * glm::dot(sample_point, intersection.normal);
+			local_color += raytrace(scene, sample_ray, recurse_count, parent);
 		}
 		local_color /= numSamples;
 	}
