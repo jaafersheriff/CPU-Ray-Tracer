@@ -85,7 +85,7 @@ public:
 	Ray createRefractionRay(const Intersection &);
 
 	// Shading calculations
-	glm::vec3 createSamplePoint(Intersection &);
+	glm::vec3 createSamplePoint(Intersection &, glm::mat4 &);
 	glm::vec3 BlinnPhong(Light *, Intersection &, printNode*);
 	glm::vec3 CookTorrance(Light *, Intersection &);
 

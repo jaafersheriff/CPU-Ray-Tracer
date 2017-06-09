@@ -48,7 +48,7 @@ glm::vec3 BRDF::raytrace(Scene &scene, Ray &incident_ray, int recurse_count, pri
 	return calculateColor(scene, incident_int, recurse_count, parent);
 }
 
-glm::vec3 BRDF::createSamplePoint(Intersection &intersection) {
+glm::vec3 BRDF::createSamplePoint(Intersection &intersection, glm::mat4 &matrix) {
 	// Generate random UV
 	float u = rand() / (float) RAND_MAX;
 	float v = rand() / (float) RAND_MAX;
@@ -59,15 +59,9 @@ glm::vec3 BRDF::createSamplePoint(Intersection &intersection) {
 	// Create point on hemisphere
 	float radial = sqrt(u);
 	float theta = 2.f*PI*v;
-	float x = radial*glm::cos(theta);
-	float y = radial*glm::sin(theta);
-	glm::vec3 point = glm::vec3(x, y, sqrt(1-u));
+	glm::vec3 point = glm::vec3(radial*glm::cos(theta), radial*glm::sin(theta), sqrt(1-u));
 
 	// Align hemisphere w/ intersection
-	float angle = glm::acos(glm::dot(glm::vec3(0, 0, 1), intersection.normal));
-	glm::vec3 axis = glm::cross(glm::vec3(0, 0, 1), intersection.normal);
-	glm::mat4 matrix = glm::rotate(glm::mat4(1.0f), angle, axis);	
-
 	return glm::vec3(matrix * glm::vec4(point, 1.f));
 }
 
@@ -75,6 +69,10 @@ glm::vec3 BRDF::calculateLocalColor(Scene &scene, Intersection &intersection, in
 	// Ambient
 	glm::vec3 local_color = intersection.object->finish.color * intersection.object->finish.ambient;
 	if (gi_flag) {
+		float angle = glm::acos(glm::dot(glm::vec3(0, 0, 1), intersection.normal));
+		glm::vec3 axis = glm::cross(glm::vec3(0, 0, 1), intersection.normal);
+		glm::mat4 matrix = glm::rotate(glm::mat4(1.0f), angle, axis);	
+
 		// Global illumination
 		local_color = glm::vec3(0, 0, 0);
 		int numSamples = gi_samples;
@@ -82,7 +80,7 @@ glm::vec3 BRDF::calculateLocalColor(Scene &scene, Intersection &intersection, in
 			numSamples /= ((gi_bounces - recurse_count) * gi_ratio);
 		}
 		for (int i = 0; i < numSamples; i++) {
-			glm::vec3 sample_point = createSamplePoint(intersection);
+			glm::vec3 sample_point = createSamplePoint(intersection, matrix);
 			Ray sample_ray(intersection.point + sample_point * EPSILON, sample_point);
 			local_color += raytrace(scene, sample_ray, std::min(recurse_count-1, gi_bounces), parent);
 		}
