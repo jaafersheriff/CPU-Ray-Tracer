@@ -40,6 +40,11 @@ glm::vec3 BRDF::calculateColor(Scene &scene, Intersection &intersection, int rec
 }
 
 glm::vec3 BRDF::raytrace(Scene &scene, Ray &incident_ray, int recurse_count, printNode* parent) {
+	// Base Case
+	if (recurse_count <= 0) {
+		return glm::vec3(0, 0, 0);
+	}
+
 	// If no intersection from camera to object, return black
 	Intersection incident_int(scene, incident_ray, spatial_flag);
 	if (!incident_int.hit) {
