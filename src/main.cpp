@@ -106,6 +106,8 @@ int main(int args, char **argv) {
 		std::vector<GeoObject *> planes;
 		std::vector<GeoObject *> other;
 		for (unsigned int i = 0; i < scene.objects.size(); i++) {
+			/* TODO: Give objects an enum defining their type. 
+			 * Don't use parsing.. */
 			if (!strcmp(scene.objects[i]->type.c_str(), "Plane")) {
 				planes.push_back(scene.objects[i]);
 			}

@@ -57,6 +57,11 @@ BoundingBox* Sphere::createBox() {
 	return box;
 }
 
+glm::vec2 Sphere::getUVCoords(glm::vec3 point) {
+	/* TODO */
+	return glm::vec2(0, 0);
+}
+
 void Sphere::print() {
 	std::cout << "- Type: Sphere" << std::endl;
 	std::cout << "- Center: {";

@@ -11,17 +11,21 @@
 #include <string>    // find
 
 #include "Scene.hpp"
+#include "TextureBatch.hpp"
 
 class Loader {
 public:
    Loader(){};
-
+   TextureBatch batch;
    // Walk through an input file creating a Scene object
    int parse(const char *file_name, Scene &scene);
 
 private:
    // Parse through remaining object adding object properties
    void addProperties(GeoObject *, std::vector<std::string>, std::ifstream&);
+
+   // Textures
+   void createTexture(GeoObject *, std::string);
 
    // Find all floats inside a line
    std::vector<float> findFloatsInLine(std::vector<std::string>);

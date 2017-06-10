@@ -213,7 +213,13 @@ glm::vec3 BRDF::BlinnPhong(Light *light, Intersection &object_in, printNode* p) 
 	glm::vec3 specular = glm::vec3(0, 0, 0);;
 	if (HdotN && finish->specular) {
 		float r_squared = finish->roughness*finish->roughness;
-		specular = finish->specular * finish->color  * (float) pow(HdotN, 2/r_squared - 2) * light->color;
+		specular = finish->specular * (float) pow(HdotN, 2/r_squared - 2) * light->color;
+		if (object_in.object->texture != nullptr) {
+			specular *= object_in.object->texture->getColor(object_in.object->getUVCoords(object_in.point));
+		}
+		else {
+			specular *= finish->color;
+		}
 		if (p != nullptr) {
 			p->specular += specular;
 		}

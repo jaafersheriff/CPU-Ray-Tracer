@@ -45,6 +45,14 @@ void Loader::createFinish(GeoObject::Finish *f, std::vector<std::string> line) {
    }
 }
 
+void Loader::createTexture(GeoObject *object, std::string name) {
+   Texture *texture = batch.getTexture(name);
+   if (texture == nullptr) {
+      texture = batch.addTexture(name);
+   }
+   object->texture = texture;
+}
+
 void Loader::addProperties(GeoObject *object, std::vector<std::string> line, std::ifstream& file) {
    std::vector<float> floats;
 
@@ -75,6 +83,9 @@ void Loader::addProperties(GeoObject *object, std::vector<std::string> line, std
          floats = findFloatsInLine(line);
          glm::vec3 translate = glm::vec3(floats[0], floats[1], floats[2]);
          object->M = glm::translate(glm::mat4(1.0f), translate) * object->M;
+      }
+      if (!line[0].compare("texture")) {
+         createTexture(object, line[1]);
       }
       // Stupid catch for faulty .pov files
       if (line[line.size() - 1].find("}}") != std::string::npos) {

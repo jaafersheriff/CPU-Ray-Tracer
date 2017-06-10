@@ -30,6 +30,11 @@ BoundingBox* Plane::createBox() {
    return new BoundingBox;
 }
 
+glm::vec2 Plane::getUVCoords(glm::vec3 point) {
+   /* TODO */
+   return glm::vec2(0, 0);
+} 
+
 void Plane::print() {
    std::cout << "- Type: Plane" << std::endl;
    std::cout << "- Normal: {";

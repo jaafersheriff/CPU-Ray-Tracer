@@ -60,6 +60,11 @@ glm::vec3 BoxRenderable::findNormal(Ray &ray, const float t) {
    return normal;
 }
 
+glm::vec2 BoxRenderable::getUVCoords(glm::vec3 point) {
+   /* TODO */
+   return glm::vec2(0, 0);
+}
+
 void BoxRenderable::print() {
    Box::print();
 }

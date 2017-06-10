@@ -61,6 +61,11 @@ glm::vec3 Triangle::findNormal(Ray &ray, float t) {
    return normalize(glm::vec3(V.y*W.z-V.z*W.y, V.z*W.x-V.x*W.z, V.x*W.y-V.y*W.x));
 }
 
+glm::vec2 Triangle::getUVCoords(glm::vec3 point) {
+   /* TODO */
+   return glm::vec2(0, 0);
+}
+
 void Triangle::print() {
    std::cout << "- Type: Triangle" << std::endl;
    std::cout << "- Corner 1: {";

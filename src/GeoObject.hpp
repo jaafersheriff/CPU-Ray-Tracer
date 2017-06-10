@@ -10,6 +10,7 @@
 #include <iostream>	// std::cout
 #include <iomanip>
 
+#include "Texture.hpp"
 #include "BoundingBox.hpp"
 #include "Ray.hpp"
 
@@ -41,6 +42,7 @@ public:
 
    // Material properties
    Finish finish;
+   Texture *texture;
 
    // Model matrix and its inverse
    glm::mat4 M;
@@ -48,6 +50,7 @@ public:
 
    // Abstract functions
    virtual float intersect(const Ray &) = 0;
+   virtual glm::vec2 getUVCoords(glm::vec3) = 0;
    virtual glm::vec3 findNormal(Ray &, const float) = 0;
    virtual BoundingBox *createBox() = 0;
    virtual glm::vec3 findCenter() = 0;
