@@ -15,8 +15,12 @@ public:
    Texture(std::string);
 
    std::string name;
-      
-   /* TODO: Any other texture-specific data */
+	int width;
+	int height;
+	int components;
+	unsigned char *data;
+    
+	void init();  
    glm::vec3 getColor(glm::vec2);
 };
 
