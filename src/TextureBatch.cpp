@@ -4,6 +4,7 @@
 Texture* TextureBatch::addTexture(std::string name) {
    Texture *texture = getTexture(name);
    if (texture == nullptr) {
+      texture = new Texture(name);
       textures[texture->name] = texture;
    }
    return texture;
