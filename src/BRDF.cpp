@@ -6,7 +6,7 @@ const static float EPSILON = 0.0001f;
 
 glm::vec3 BRDF::calculateColor(Scene &scene, Intersection &intersection, int recurse_count, printNode* parent) {
 	// Base case
-	if (recurse_count <= 0) {
+	if (recurse_count < 0) {
 		return glm::vec3(0, 0, 0);
 	}
 
@@ -41,7 +41,7 @@ glm::vec3 BRDF::calculateColor(Scene &scene, Intersection &intersection, int rec
 
 glm::vec3 BRDF::raytrace(Scene &scene, Ray &incident_ray, int recurse_count, printNode* parent) {
 	// Base Case
-	if (recurse_count <= 0) {
+	if (recurse_count < 0) {
 		return glm::vec3(0, 0, 0);
 	}
 
