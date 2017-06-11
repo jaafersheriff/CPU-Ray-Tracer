@@ -27,13 +27,15 @@ void Texture::init() {
 		std::cerr << "ERROR OPENING TEXTURE: " << name << std::endl;
 		return;
 	}
-
-	std::cout << name << " created: " << width << "x" << height << "x" << components << std::endl;
 }
 
 glm::vec3 Texture::getColor(glm::vec2 uv_point) {
 	// UV->ST
 	glm::vec2 st_point = glm::vec2(std::floor(uv_point.x * width), std::floor(uv_point.y * width));
-	int index = st_point.y * st_point.x + st_point.x;
+	int index = st_point.x * st_point.y + st_point.y;
 	return glm::vec3(data[index], data[index+1], data[index+2]);
+}
+
+void Texture::print() {
+	std::cout << name << ": " << width << "x" << height << "x" << components << std::endl;
 }

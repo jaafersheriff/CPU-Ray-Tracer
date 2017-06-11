@@ -24,6 +24,9 @@ public:
 
    void print();
 
+   // True if object is intersected, false otherwise
+   bool hit;
+
    // Object intersected and normal at point of intersection
    // Set to nullptr if no object is intersected
    GeoObject *object = nullptr;
@@ -38,8 +41,10 @@ public:
    glm::vec3 point;
 	glm::vec3 objectPoint;
 
-   // True if object is intersected, false otherwise
-   bool hit;
+	// Color of object at a given intersection point
+	// Pulled from object pigment or from texture
+	glm::vec3 pigment;
+
 };
 
 #endif

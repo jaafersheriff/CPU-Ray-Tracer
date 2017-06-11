@@ -51,6 +51,8 @@ void Loader::createTexture(GeoObject *object, std::string name) {
       texture = batch.addTexture(name);
    }
    object->texture = texture;
+	std::cout << "Object " << object->id << " texture created: ";
+	texture->print();
 }
 
 void Loader::addProperties(GeoObject *object, std::vector<std::string> line, std::ifstream& file) {

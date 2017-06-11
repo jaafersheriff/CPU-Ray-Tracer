@@ -22,6 +22,7 @@ public:
     
 	void init();  
    glm::vec3 getColor(glm::vec2);
+	void print();
 };
 
 #endif

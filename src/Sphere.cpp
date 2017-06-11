@@ -1,5 +1,8 @@
 #include "Sphere.hpp"
 #include <algorithm>
+#include <math.h>
+
+#define PI 3.14159265359
 
 Sphere::Sphere() : GeoObject() {
 	this->type = "Sphere";
@@ -8,9 +11,8 @@ Sphere::Sphere() : GeoObject() {
 	this->radius = 0;
 }
 
-glm::vec3 Sphere::findNormal(Ray &ray, float t) {
-	glm::vec3 intersection_point = ray.calculatePoint(t);
-	return glm::normalize(intersection_point - center);
+glm::vec3 Sphere::findNormal(glm::vec3 point) {
+	return glm::normalize(point - center);
 }
 
 glm::vec3 Sphere::findCenter() {
@@ -58,8 +60,11 @@ BoundingBox* Sphere::createBox() {
 }
 
 glm::vec2 Sphere::getUVCoords(glm::vec3 point) {
-	/* TODO */
-	return glm::vec2(0, 0);
+	glm::vec3 N = findNormal(point);
+	float u = (1 + atan2(N.z, N.x) / PI) * 0.5; 
+   float v = acosf(N.y) / PI; 
+
+	return glm::vec2(std::max(0.f, u), std::max(0.f, v));
 }
 
 void Sphere::print() {

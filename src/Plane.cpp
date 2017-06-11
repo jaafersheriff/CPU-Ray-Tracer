@@ -7,7 +7,7 @@ Plane::Plane() : GeoObject() {
    this->distance = 0;
 }
 
-glm::vec3 Plane::findNormal(Ray &ray, float t) {
+glm::vec3 Plane::findNormal(glm::vec3 point) {
    return normal;
 }
 

@@ -50,25 +50,38 @@ glm::vec3 BRDF::raytrace(Scene &scene, Ray &incident_ray, int recurse_count, pri
 }
 
 glm::vec3 BRDF::createSamplePoint(Intersection &intersection, glm::mat4 &matrix) {
-	// Generate random UV
-	float u = rand() / (float) RAND_MAX;
-	float v = rand() / (float) RAND_MAX;
-	// Stratified sample
-	u += 1/sqrt(gi_samples) * rand() / (float) RAND_MAX;
-	v += 1/sqrt(gi_samples) * rand() / (float) RAND_MAX;
+	// Generate random XY
+	float x = rand() / (float) RAND_MAX;
+	float y = rand() / (float) RAND_MAX;
+
+	/* TODO: Fix stratified sample */
+	x += 1/sqrt(gi_samples) * rand() / (float) RAND_MAX;
+	y += 1/sqrt(gi_samples) * rand() / (float) RAND_MAX;
 
 	// Create point on hemisphere
-	float radial = sqrt(u);
-	float theta = 2.f*PI*v;
-	glm::vec3 point = glm::vec3(radial*glm::cos(theta), radial*glm::sin(theta), sqrt(1-u));
+	float radial = sqrt(x);
+	float theta = 2.f*PI*y;
+	glm::vec3 point = glm::vec3(radial*glm::cos(theta), radial*glm::sin(theta), sqrt(1-x));
 
 	// Align hemisphere w/ intersection
 	return glm::vec3(matrix * glm::vec4(point, 1.f));
 }
 
 glm::vec3 BRDF::calculateLocalColor(Scene &scene, Intersection &intersection, int recurse_count, printNode* parent) {
+	glm::vec3 object_pigment;
+	if (intersection.object->texture != nullptr) {
+		intersection.pigment = intersection.object->texture->getColor(intersection.object->getUVCoords(intersection.objectPoint));
+	}
+	else {
+		intersection.pigment = intersection.object->finish.color;
+	} 
+
+	/* TODO: optimize -gi so that we're not always calculating non-gi ambient */
 	// Ambient
-	glm::vec3 local_color = intersection.object->finish.color * intersection.object->finish.ambient;
+	glm::vec3 local_color;
+ 	local_color = intersection.object->finish.ambient * object_pigment;
+
+	/* TODO: Functional programming */
 	if (gi_flag) {
 		// Global illumination
 		int numSamples = gi_samples;
@@ -130,7 +143,7 @@ glm::vec3 BRDF::calculateReflectionColor(Scene &scene, Intersection &intersectio
 	glm::vec3 reflection_color = raytrace(scene, reflection_ray, recurse-1, createChildNode(parent, 0));
 
 	// Reflection color is scaled by object's material
-	reflection_color *= intersection.object->finish.color;
+	reflection_color *= intersection.pigment;
 
 	updateParentNode(parent, reflection_ray, reflection_color, 0);
 
@@ -163,7 +176,7 @@ glm::vec3 BRDF::calculateRefractionColor(Scene &scene, Intersection &intersectio
 
 	// Beers law
 	float dist = glm::distance(ref_intersection.point, intersection.point);
-	glm::vec3 absorb = (1.f - intersection.object->finish.color) * (0.15f) * -dist;
+	glm::vec3 absorb = (1.f - intersection.pigment) * (0.15f) * -dist;
 	glm::vec3 atten = glm::vec3( exp(absorb.r), exp(absorb.g), exp(absorb.b) );
 	refraction_color *= atten;
 
@@ -203,7 +216,7 @@ glm::vec3 BRDF::BlinnPhong(Light *light, Intersection &object_in, printNode* p) 
 	// Diffuse
 	glm::vec3 diffuse = glm::vec3(0, 0, 0);
 	if (NdotL && finish->diffuse) {
-		diffuse = finish->diffuse * finish->color * NdotL * light->color;
+		diffuse = finish->diffuse * NdotL * light->color * object_in.pigment;
 		if (p != nullptr) {
 			p->diffuse += diffuse;
 		}
@@ -213,13 +226,7 @@ glm::vec3 BRDF::BlinnPhong(Light *light, Intersection &object_in, printNode* p) 
 	glm::vec3 specular = glm::vec3(0, 0, 0);;
 	if (HdotN && finish->specular) {
 		float r_squared = finish->roughness*finish->roughness;
-		specular = finish->specular * (float) pow(HdotN, 2/r_squared - 2) * light->color;
-		if (object_in.object->texture != nullptr) {
-			specular *= object_in.object->texture->getColor(object_in.object->getUVCoords(object_in.objectPoint));
-		}
-		else {
-			specular *= finish->color;
-		}
+		specular = finish->specular * object_in.pigment * (float) pow(HdotN, 2/r_squared - 2) * light->color;
 		if (p != nullptr) {
 			p->specular += specular;
 		}
