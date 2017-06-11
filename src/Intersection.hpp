@@ -29,12 +29,14 @@ public:
    GeoObject *object = nullptr;
    glm::vec3 normal;
 
-   // Ray of intersection and transformed ray of intersection
+   // Ray of intersection in object and world space
    Ray ray;
    Ray objectRay;
-   // t value of intersection, world coords of intersection
+
+   // t value of intersection and intersection point in object and world space
    float t;
    glm::vec3 point;
+	glm::vec3 objectPoint;
 
    // True if object is intersected, false otherwise
    bool hit;

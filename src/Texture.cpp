@@ -31,7 +31,9 @@ void Texture::init() {
 	std::cout << name << " created: " << width << "x" << height << "x" << components << std::endl;
 }
 
-glm::vec3 Texture::getColor(glm::vec2 point) {
-	int index = point.y * point.x + point.x;
+glm::vec3 Texture::getColor(glm::vec2 uv_point) {
+	// UV->ST
+	glm::vec2 st_point = glm::vec2(std::floor(uv_point.x * width), std::floor(uv_point.y * width));
+	int index = st_point.y * st_point.x + st_point.x;
 	return glm::vec3(data[index], data[index+1], data[index+2]);
 }

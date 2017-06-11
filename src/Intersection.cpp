@@ -28,6 +28,7 @@ void Intersection::createIntersection(GeoObject *object, Ray &ray) {
       this->object = object;
       this->objectRay = objectRay;
       this->point = this->ray.calculatePoint(this->t);
+		this->objectPoint = this.->objectRay.calculatePoint(this->t);
 
       // Coordinate transform normal
       glm::vec3 obj_normal = this->object->findNormal(this->objectRay, this->t);
