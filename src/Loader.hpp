@@ -51,10 +51,10 @@ private:
    Light*  createLight(std::vector<std::string>, std::ifstream &file);
 
    // Create geometric objects given a file pointing to a object line
-   Sphere* createSphere(std::vector<std::string>, std::ifstream &file);
-   Plane* createPlane(std::vector<std::string>, std::ifstream &file);
-   Triangle* createTriangle(std::vector<std::string>, std::ifstream &file);
-   BoxRenderable* createBox(std::vector<std::string>, std::ifstream &file);
+   Sphere* createSphere(int, std::vector<std::string>, std::ifstream &file);
+   Plane* createPlane(int, std::vector<std::string>, std::ifstream &file);
+   Triangle* createTriangle(int, std::vector<std::string>, std::ifstream &file);
+   BoxRenderable* createBox(int, std::vector<std::string>, std::ifstream &file);
 };
 
 #endif

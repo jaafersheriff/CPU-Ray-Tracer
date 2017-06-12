@@ -68,7 +68,6 @@ glm::vec3 BRDF::createSamplePoint(Intersection &intersection, glm::mat4 &matrix)
 }
 
 glm::vec3 BRDF::calculateLocalColor(Scene &scene, Intersection &intersection, int recurse_count, printNode* parent) {
-	glm::vec3 object_pigment;
 	if (intersection.object->texture != nullptr) {
 		intersection.pigment = intersection.object->texture->getColor(intersection.object->getUVCoords(intersection.objectPoint));
 	}
@@ -78,8 +77,7 @@ glm::vec3 BRDF::calculateLocalColor(Scene &scene, Intersection &intersection, in
 
 	/* TODO: optimize -gi so that we're not always calculating non-gi ambient */
 	// Ambient
-	glm::vec3 local_color;
- 	local_color = intersection.object->finish.ambient * object_pigment;
+	glm::vec3 local_color = intersection.object->finish.ambient * intersection.pigment;
 
 	/* TODO: Functional programming */
 	if (gi_flag) {
