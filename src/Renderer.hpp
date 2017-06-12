@@ -37,18 +37,14 @@ public:
    void setGIBounces(int n) { brdf.gi_bounces = n; }
    void setGIRatio(int n) { brdf.gi_ratio = n; }
 
-   // printNode object for verbose printing
-   BRDF::printNode *root = nullptr;
-
    void render(Scene &, const int, const int);
    glm::vec3 calculateColor(Scene &, const glm::ivec2, const int, const int);
 
    void print();
-   void pixeltrace(BRDF::printNode*, int );
-   void printrays(BRDF::printNode*, int);
+   void pixeltrace(int);
+   void printrays(int);
 
    void setVerbose(int flag) { brdf.verbose_flag = flag; }
-   void setRenderFlag(int flag) { brdf.render_flag = flag; }
    void setFresnelFlag(int flag) { brdf.fresnel_flag = flag; }
    void setSpatialFlag(int flag) { brdf.spatial_flag = flag; }
    void setPercentFlag(int flag) { percent_flag = flag; }

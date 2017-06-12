@@ -16,10 +16,7 @@ public:
    Intersection() {};
    Intersection(Scene &, Ray &, int);
 
-   // Recursive traversal of spatial data structure to find intersection object
-   void boxTraversal(Scene::BoxNode *, Ray &);
    // Create intersection w object intersection 
-   void createIntersection(std::vector<GeoObject *>, Ray &);
    void createIntersection(GeoObject *, Ray &);
 
    void print();

@@ -6,7 +6,6 @@
 #define _GEOOBJECT_H_
 
 #include <glm/glm.hpp>
-#include <glm/gtx/string_cast.hpp>	// print matrices
 #include <iostream>	// std::cout
 #include <iomanip>
 

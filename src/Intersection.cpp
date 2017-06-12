@@ -11,7 +11,10 @@ Intersection::Intersection(Scene &scene, Ray& ray, int spatial_flag) {
     createIntersection(scene.objects[i], ray);
   }
   if (spatial_flag) {
-    boxTraversal(scene.rootBox, ray);
+    GeoObject* object = scene.boxTraversal(scene.rootBox, ray);
+	 if (object != nullptr) {
+		createIntersection(object, ray);
+	}
   }
 }
 
@@ -35,24 +38,6 @@ void Intersection::createIntersection(GeoObject *object, Ray &ray) {
       glm::vec3 world_normal = glm::vec3(glm::transpose(this->object->inv_M) * glm::vec4(obj_normal, 0.0f));
       this->normal = glm::normalize(world_normal);
   }
-}
-
-void Intersection::boxTraversal(Scene::BoxNode* node, Ray& ray) {
-   // Base case
-   if (node->objects.size() <= 1) {
-      createIntersection(node->objects[0], ray);
-      return;
-   }
-   if (node->boundingBox.intersect(ray) > EPSILON) {
-      // Travesal
-      // TODO: I dont think we have to traverse both levels...
-      if (node->leftChild != nullptr) {
-        boxTraversal(node->leftChild, ray);
-      }
-      if (node->rightChild != nullptr) {
-        boxTraversal(node->rightChild, ray);
-      }
-   }
 }
 
 void Intersection::print() {

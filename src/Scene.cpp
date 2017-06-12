@@ -2,6 +2,7 @@
 #include "Intersection.hpp"
 #include "BRDF.hpp"
 
+const static float EPSILON = 0.0001f;
 
 Scene::Scene() {
    this->rootBox = new BoxNode;
@@ -61,6 +62,43 @@ void Scene::sortObjects(std::vector<GeoObject *> objects, int axis) {
   }
 }
 
+GeoObject* Scene::boxTraversal(BoxNode *node, const Ray &ray) {
+	// Base Case
+	if (node->objects.size() == 1) {
+		return node->objects[0];
+	}
+
+	// Traversal	
+	if (node->boundingBox.intersect(ray) > EPSILON) {
+		if (node->leftChild != nullptr) {
+			return boxTraversal(node->leftChild, ray);
+		}
+		if (node->rightChild != nullptr) {
+			return boxTraversal(node->rightChild, ray);
+		}
+	}
+
+	return nullptr;
+}
+
+glm::vec3 Scene::createSamplePoint(Intersection &intersection, glm::mat4 &matrix) {
+	// Generate random XY
+	float x = rand() / (float) RAND_MAX;
+	float y = rand() / (float) RAND_MAX;
+
+	/* TODO: Fix stratifie samples -- gi_samples changes per bounce */
+	// x += 1/sqrt(gi_samples) * rand() / (float) RAND_MAX;
+	// y += 1/sqrt(gi_samples) * rand() / (float) RAND_MAX;
+	
+	// Create point on hemisphere
+	float radial = sqrt(x);
+	float theta = 2.f*PI*y;
+	glm::vec3 point = glm::vec3(radial*glm::cos(theta), radial*glm::sin(theta), sqrt(1-x));
+
+	// Align hemisphere with intersection before returning
+	return glm::vec3(matrix * glm::vec4(point, 1.f));
+}
+
 Ray Scene::createCameraRay(const int width, const int height, const int x, const int y, const int m, const int n, const int s) {
    Ray ray;
 
@@ -74,6 +112,33 @@ Ray Scene::createCameraRay(const int width, const int height, const int x, const
    ray.direction = glm::normalize(glm::vec3(u*camera->right + v*camera->up + w));
 
    return ray;
+}
+
+Ray Scene::createReflectionRay(const Intersection &intersection) {
+	glm::vec3 reflection_dir = glm::normalize(intersection.ray.direction - 2 * glm::dot(intersection.ray.direction, intersection.normal) * intersection.normal);
+	
+	return Ray(intersection.point + reflection_dir * EPSILON, reflection_dir);
+}
+
+Ray Scene::createRefractionRay(const Intersection &intersection) {
+	float n1 = 1;
+	float n2 = intersection.object->finish.ior;
+	glm::vec3 norm = intersection.normal;
+
+	// If we're 'exiting' an object
+	if (dot(norm, intersection.ray.direction) > 0) {
+		n1 = n2;
+		n2 = 1;
+		norm = -norm;
+	}
+
+	float dDotN = dot(intersection.ray.direction, norm);
+	float ratio = n1/n2;
+	float root = 1-(ratio*ratio)*(1-dDotN*dDotN);
+
+	glm::vec3 refraction_dir = glm::normalize(ratio*(intersection.ray.direction-dDotN*norm)-norm*(float)sqrt(root));
+	
+	return Ray(intersection.point + refraction_dir * EPSILON, refraction_dir);
 }
 
 void Scene::print() {

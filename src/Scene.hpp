@@ -19,6 +19,8 @@
 #include "Triangle.hpp"
 #include "BoxRenderable.hpp"
 
+class Intersection;	// Forward declaration
+
 class Scene {
 public:
    // Spatial data structure node
@@ -45,9 +47,15 @@ public:
    void createNodeBoundingBox(BoxNode *);
    void createSpatialStructures(std::vector<GeoObject *>, BoxNode*, int);  // Recursively build spatial structure tree
    void sortObjects(std::vector<GeoObject *>, int);
-   
-   // Creates a ray from the camera's position to a pixel
+	GeoObject* boxTraversal(BoxNode *, const Ray &); 
+  
+   // Ray creation
    Ray createCameraRay(const int width, const int height, const int x, const int y, const int m, const int n, const int s);
+	Ray createReflectionRay(const Intersection &);
+	Ray createRefractionRay(const Intersection &);
+
+	// Used for creating global illumination sample rays
+	glm::vec3 createSamplePoint(Intersection &, glm::mat4 &);
 
    // Calculates the color in the world at an Intersection
    glm::vec3 findColor(const glm::ivec2, const int, const int, const int, int);
