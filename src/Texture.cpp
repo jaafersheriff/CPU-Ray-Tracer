@@ -40,11 +40,13 @@ void Texture::init() {
 
 glm::vec3 Texture::getColor(glm::vec2 uv_point) {
 	// UV->ST
-	glm::vec2 st_point = glm::vec2(std::floor(uv_point.x * width-1), std::floor(uv_point.y * width-1));
+	glm::vec2 st_point = glm::vec2(std::floor(uv_point.x * width), std::floor(uv_point.y * height));
 	int index = st_point.y * (width) * components + st_point.x * components;
+
 	if (index > width*height*components) {
-		std::cerr << index << ">" << width*height*components << std::endl;
+		std::cerr << st_point.x << ", " << st_point.y << std::endl;
 	}
+
 	return glm::vec3(data[index], data[index+1], data[index+2]);
 }
 

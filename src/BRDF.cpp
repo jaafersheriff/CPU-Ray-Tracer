@@ -75,7 +75,6 @@ glm::vec3 BRDF::calculateLocalColor(Scene &scene, Intersection &intersection, in
 		intersection.pigment = intersection.object->finish.color;
 	} 
 
-	/* TODO: optimize -gi so that we're not always calculating non-gi ambient */
 	// Ambient
 	glm::vec3 local_color = intersection.object->finish.ambient * intersection.pigment;
 
