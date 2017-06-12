@@ -8,13 +8,28 @@ camera {
 }
 
 
-light_source {<-100, 100, 100> color rgb <1.5, 1.5, 1.5>}
+light_source {<-100, 100, 100> color rgb <1.0, 1.0, 1.0>}
 
-sphere { <0, 0, 0>, 2
+sphere { <2, 0, 0>, 2
   pigment { color rgb <1.0, 0.0, 1.0>}
   finish {ambient 0.2 diffuse 0.4}
   translate <0, 0, 0>
-  texture checkerboard-256x256.bmp
+  texture earth.bmp
+}
+
+sphere { <0, 4, 0>, 2
+  pigment { color rgb <1.0, 0.0, 1.0>}
+  finish {ambient 0.2 diffuse 0.4}
+  translate <0, 0, 0>
+  texture checkerboard.bmp
+}
+
+
+sphere { <-2, 0, 0>, 2
+  pigment { color rgb <1.0, 0.0, 1.0>}
+  finish {ambient 0.2 diffuse 0.4}
+  translate <0, 0, 0>
+  texture world.bmp
 }
 
 plane {<0, 1, 0>, -4
