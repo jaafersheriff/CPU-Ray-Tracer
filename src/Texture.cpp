@@ -50,7 +50,7 @@ glm::vec3 Texture::getColor(glm::vec2 uv_point) {
 
 glm::vec3 Texture::getPixelColor(glm::vec2 st_point) {
 	int index = st_point.y * (width) * components + st_point.x * components;
-	return glm::vec3(data[index], data[index+1], data[index+2]);
+	return glm::vec3(data[index]/255.f, data[index+1]/255.f, data[index+2]/255.f);
 }
 
 void Texture::print() {

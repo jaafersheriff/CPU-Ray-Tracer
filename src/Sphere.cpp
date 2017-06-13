@@ -61,9 +61,10 @@ BoundingBox* Sphere::createBox() {
 
 glm::vec2 Sphere::getUVCoords(glm::vec3 point) {
 	glm::vec3 N = findNormal(point);
-	float u = (1 + atan2(N.z, N.x) / PI) * 0.5; 
-   float v = acosf(N.y) / PI; 
 
+   float u = glm::asin(N.x)/PI + 0.5f;
+   float v = glm::asin(N.y)/PI + 0.5f;
+   
 	return glm::vec2(std::max(0.f, u), std::max(0.f, v));
 }
 

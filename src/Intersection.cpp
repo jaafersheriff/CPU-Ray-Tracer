@@ -12,8 +12,8 @@ Intersection::Intersection(Scene &scene, Ray& ray, int spatial_flag) {
   }
   if (spatial_flag) {
     GeoObject* object = scene.boxTraversal(scene.rootBox, ray);
-	 if (object != nullptr) {
-		createIntersection(object, ray);
+    if (object != nullptr) {
+      createIntersection(object, ray);
 	}
   }
 }
