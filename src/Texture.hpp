@@ -23,6 +23,9 @@ public:
 	void init();  
    glm::vec3 getColor(glm::vec2);
 	void print();
+
+private:
+	glm::vec3 getPixelColor(glm::vec2);
 };
 
 #endif
