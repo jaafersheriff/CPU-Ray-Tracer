@@ -41,11 +41,13 @@ void Texture::init() {
 glm::vec3 Texture::getColor(glm::vec2 uv_point) {
 	// UV->ST
 	glm::vec2 st_point = glm::vec2(std::floor(uv_point.x * width), std::floor(uv_point.y * height));
-	return getPixelColor(st_point);
 
-	// TODO: Bilinear interpolation -- make this a flag option?
-	// glm::vec2 uvp = glm::vec2(uv_point.x * width - st_point.x, uv_point.y * height - st_point.y);
-	// return (1-uvp.x)*(1-uvp.y)*getPixelColor(st_point) + uvp.x*(1-uvp.y)*getPixelColor(glm::vec2(st_point.x+1, st_point.y)) + (1-uvp.x)*uvp.y*getPixelColor(glm::vec2(st_point.x, st_point.y+1)) + uvp.x*uvp.y*getPixelColor(glm::vec2(st_point.x+1, st_point.y+1));
+	// Bilinear interpolation 
+	glm::vec2 uvp = glm::vec2(uv_point.x * width - st_point.x, uv_point.y * height - st_point.y);
+	return (1-uvp.x)*(1-uvp.y)*getPixelColor(st_point) + uvp.x*(1-uvp.y)*
+          getPixelColor(glm::vec2(st_point.x+1, st_point.y)) + (1-uvp.x)*
+          uvp.y*getPixelColor(glm::vec2(st_point.x, st_point.y+1)) + 
+          uvp.x*uvp.y*getPixelColor(glm::vec2(st_point.x+1, st_point.y+1));
 }
 
 glm::vec3 Texture::getPixelColor(glm::vec2 st_point) {
