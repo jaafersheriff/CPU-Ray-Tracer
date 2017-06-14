@@ -60,12 +60,12 @@ BoundingBox* Sphere::createBox() {
 }
 
 glm::vec2 Sphere::getUVCoords(glm::vec3 point) {
-	glm::vec3 N = findNormal(point);
+   glm::vec3 N = findNormal(point);
 
    float u = glm::asin(N.x)/PI + 0.5f;
    float v = glm::asin(N.y)/PI + 0.5f;
-   
-	return glm::vec2(std::max(0.f, u), std::max(0.f, v));
+
+   return glm::vec2(glm::clamp(u, 0.f, 1.f), glm::clamp(v, 0.f, 1.f));
 }
 
 void Sphere::print() {

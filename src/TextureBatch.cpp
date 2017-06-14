@@ -1,19 +1,26 @@
 #include "TextureBatch.hpp"
-
+#include <iostream>  // cout
 
 Texture* TextureBatch::addTexture(std::string name) {
-   Texture *texture = getTexture(name);
-   if (texture == nullptr) {
-      texture = new Texture(name);
-      textures[texture->name] = texture;
-   }
+   Texture *texture = new Texture(name);
+   textures.push_back(texture);
    return texture;
 }
 
 Texture* TextureBatch::getTexture(std::string name) {
-   std::map<std::string, Texture*>::iterator i = textures.find(name);
-   if (i != textures.end()) {
-      return i->second;
+   for (Texture *t : textures) {
+      if (!name.compare(t->name)) {
+         return t;
+      }
    }
-   return nullptr;
+
+   return addTexture(name);
 }
+
+void TextureBatch::print() {
+   std::cout << "Textures: " << textures.size() << std::endl;
+   for (Texture *t : textures) {
+      std::cout << t->name << std::endl;
+   }
+}
+

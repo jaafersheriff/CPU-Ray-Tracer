@@ -7,20 +7,23 @@
 #ifndef _TEXTURE_BATCH_H_
 #define _TEXTURE_BATCH_H_
 
-#include <map>
+#include <vector> 
 
 #include "Texture.hpp"
 
 class TextureBatch {
 public:
-   // Hashmap of textures
-   std::map<std::string, Texture*> textures;
+   // List of Textures
+   std::vector<Texture *> textures;
 
-   // Add a new texture to the hashmap
-   Texture* addTexture(std::string);
 
    // Get a texture from the hashmap
    Texture* getTexture(std::string);
+
+   void print();
+private:
+   // Add a new texture to the hashmap
+   Texture* addTexture(std::string);
 };
 
 #endif
