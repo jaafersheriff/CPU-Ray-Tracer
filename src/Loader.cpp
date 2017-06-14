@@ -45,6 +45,20 @@ void Loader::createFinish(GeoObject::Finish *f, std::vector<std::string> line) {
    }
 }
 
+void Loader::createTextures(GeoObject::Textures *t, std::vector<std::string> line) {
+   for (unsigned int i = 1; i < line.size(); i++) {
+      if (line[i].find("color") != std::string::npos) {
+         t->colorMap = batch.getTexture(line[i+1], Texture::Type::ColorMap);
+      }
+      if (line[i].find("normal") != std::string::npos) {
+         t->normalMap = batch.getTexture(line[i+1], Texture::Type::NormalMap);
+      }
+      if (line[i].find("bump") != std::string::npos) {
+         t->bumpMap = batch.getTexture(line[i+1], Texture::Type::BumpMap);
+      }
+   }
+}
+
 void Loader::addProperties(GeoObject *object, std::vector<std::string> line, std::ifstream& file) {
    std::vector<float> floats;
 
@@ -77,7 +91,7 @@ void Loader::addProperties(GeoObject *object, std::vector<std::string> line, std
          object->M = glm::translate(glm::mat4(1.0f), translate) * object->M;
       }
       if (!line[0].compare("texture")) {
-         object->texture = batch.getTexture(line[1]);
+         createTextures(&object->textures, line);
       }
       // Stupid catch for faulty .pov files
       if (line[line.size() - 1].find("}}") != std::string::npos) {

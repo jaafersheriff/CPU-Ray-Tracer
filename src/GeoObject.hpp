@@ -30,9 +30,15 @@ public:
       float ior = 0;
    };
 
+   // Types of textures
+   struct Textures {
+      Texture *colorMap = nullptr;
+      Texture *normalMap = nullptr;
+      Texture *bumpMap = nullptr;
+   };
+
    GeoObject() {
       inv_M = glm::mat4(1.0f);
-		texture = nullptr;
    };
 
 
@@ -42,7 +48,7 @@ public:
 
    // Material properties
    Finish finish;
-   Texture *texture;
+   Textures textures;
 
    // Model matrix and its inverse
    glm::mat4 M;
@@ -88,11 +94,18 @@ public:
          std::cout << "  " << std::setw(4) << inv_M[0][1] << " " << std::setw(4) << inv_M[1][1] << " " << std::setw(4) << inv_M[2][1] << " " << std::setw(4) << inv_M[3][1] << std::endl;
          std::cout << "  " << std::setw(4) << inv_M[0][2] << " " << std::setw(4) << inv_M[1][2] << " " << std::setw(4) << inv_M[2][2] << " " << std::setw(4) << inv_M[3][2] << std::endl;
          std::cout << "  " << std::setw(4) << inv_M[0][3] << " " << std::setw(4) << inv_M[1][3] << " " << std::setw(4) << inv_M[2][3] << " " << std::setw(4) << inv_M[3][3] << std::endl;
-   	if (texture != nullptr) {
-   		std::cout << " - Texture: " << std::endl;
-   			std::cout << "  ";
-   			texture->print();
-   	}
+   		
+   
+      std::cout << " - Texture: " << std::endl;
+         if (textures.colorMap != nullptr) {
+            textures.colorMap->print();
+         }
+         if (textures.normalMap != nullptr) {
+            textures.normalMap->print();
+         }
+         if (textures.bumpMap != nullptr) {
+            textures.bumpMap->print();
+         }
    }
 };
 

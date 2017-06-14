@@ -36,6 +36,9 @@ private:
    // Initializes Finish struct containing all GeoObject finish properties
    void createFinish(GeoObject::Finish*, std::vector<std::string>);
 
+   // Initializes Textures struct in Object as well as individual textures themselves
+   void createTextures(GeoObject::Textures*, std::vector<std::string>);
+
    // Break up the current line in a file into a vector<string>
    // Separating by white space
    std::vector<std::string> getLine(std::ifstream *file);

@@ -46,8 +46,8 @@ glm::vec3 BRDF::calculateColor(Scene &scene, Intersection &intersection, int rec
 }
 
 glm::vec3 BRDF::calculateLocalColor(Scene &scene, Intersection &intersection, int recurse_count) {
-	if (intersection.object->texture != nullptr) {
-		intersection.pigment = intersection.object->texture->getColor(intersection.object->getUVCoords(intersection.objectPoint));
+	if (intersection.object->textures.colorMap != nullptr) {
+		intersection.pigment = intersection.object->textures.colorMap->getColor(intersection.object->getUVCoords(intersection.objectPoint));
 	}
 	else {
 		intersection.pigment = intersection.object->finish.color;
@@ -156,8 +156,8 @@ glm::vec3 BRDF::BlinnPhong(Light *light, Intersection &object_in) {
 	// Specular
 	glm::vec3 specular = glm::vec3(0, 0, 0);;
 	if (HdotN && finish->specular) {
-		float r_squared = finish->roughness*finish->roughness;
-		specular = finish->specular * object_in.pigment * (float) pow(HdotN, 2/r_squared - 2) * light->color;
+	   float r_squared = finish->roughness*finish->roughness;
+	   specular = finish->specular * object_in.pigment * (float) pow(HdotN, 2/r_squared - 2) * light->color;
 	}
 
 	return diffuse + specular;

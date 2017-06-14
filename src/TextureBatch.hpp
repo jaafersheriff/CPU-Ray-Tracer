@@ -18,12 +18,12 @@ public:
 
 
    // Get a texture from the hashmap
-   Texture* getTexture(std::string);
+   Texture* getTexture(std::string, Texture::Type);
 
    void print();
 private:
    // Add a new texture to the hashmap
-   Texture* addTexture(std::string);
+   Texture* addTexture(std::string, Texture::Type);
 };
 
 #endif

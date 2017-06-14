@@ -10,32 +10,41 @@ Texture::Texture() {
    width = height = 0;
 }
 
-Texture::Texture(std::string name) {
+Texture::Texture(std::string name, Type type) {
 	this->name = name;
+   this->type = type;
 	init();
 }
 
 void Texture::init() {
 	if (strcmp(name.c_str() + name.size() - 3, "bmp") ) {
-		std::cerr << "NOT A BMP FILE" << std::endl;
+		std::cerr << name << " is not a .bmp file"  << std::endl;
 		return;
 	}
 
 	stbi_set_flip_vertically_on_load(true);
 	data = stbi_load(name.c_str(), &width, &height, &components, 0);
-	// valid data, valid componeents, image size is power of 2
+
+
+   // Ensure valid data
+   int errorFlag = 0;
 	if (!data) {
 		std::cerr << name << " not found" << std::endl;
-		return;
+      errorFlag = 1;
 	}
 	if (components != 3) {
 		std::cerr << name << " is not RGB" << std::endl;
-		return;
+      errorFlag = 1;
 	}
 	if ((width & (width-1)) != 0 || (height & (height-1)) != 0) {
 		std::cerr << name << " must be a power of 2" << std::endl;
-		return;
+      errorFlag = 1;
 	}
+
+   if (errorFlag) {
+      width = height = components = 0;
+      data = nullptr;
+  }
 }
 
 glm::vec3 Texture::getColor(glm::vec2 uv_point) {
@@ -56,5 +65,19 @@ glm::vec3 Texture::getPixelColor(glm::vec2 st_point) {
 }
 
 void Texture::print() {
+   switch(type) {
+      case ColorMap:
+         std::cout << "Color Map: ";
+         break;
+      case NormalMap:
+         std::cout << "Normal Map: ";
+         break;
+      case BumpMap: 
+         std::cout << "Bump Map: ";
+         break;
+      default:
+         std::cout << "No type: "; 
+         break;
+   }
 	std::cout << name << ": " << width << "x" << height << "x" << components << std::endl;
 }
