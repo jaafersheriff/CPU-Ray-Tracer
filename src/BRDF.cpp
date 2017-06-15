@@ -6,7 +6,12 @@
 const static float EPSILON = 0.0001f;
 
 glm::vec3 BRDF::raytrace(Scene &scene, Ray &incident_ray, int recurse_count) {
-	// If no intersection from camera to object, return black
+	// Base case
+	if (recurse_count <= 0) {
+		return glm::vec3(0, 0, 0);
+	}
+
+  // If no intersection from camera to object, return black
 	Intersection incident_int(scene, incident_ray, spatial_flag);
 	if (!incident_int.hit) {
 		return glm::vec3(0, 0, 0);
@@ -17,7 +22,7 @@ glm::vec3 BRDF::raytrace(Scene &scene, Ray &incident_ray, int recurse_count) {
 
 glm::vec3 BRDF::calculateColor(Scene &scene, Intersection &intersection, int recurse_count) {
 	// Base case
-	if (recurse_count <= 0) {
+	if (recurse_count <= 0 || !intersection.hit) {
 		return glm::vec3(0, 0, 0);
 	}
 
@@ -46,7 +51,7 @@ glm::vec3 BRDF::calculateColor(Scene &scene, Intersection &intersection, int rec
 }
 
 glm::vec3 BRDF::calculateLocalColor(Scene &scene, Intersection &intersection, int recurse_count) {
-	if (intersection.object->textures.colorMap != nullptr) {
+  if (intersection.object->textures.colorMap != nullptr) {
 		intersection.pigment = intersection.object->textures.colorMap->getColor(intersection.object->getUVCoords(intersection.objectPoint));
 	}
 	else {
