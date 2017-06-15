@@ -7,7 +7,7 @@ Plane::Plane() : GeoObject() {
    this->distance = 0;
 }
 
-glm::vec3 Plane::findNormal(Ray &ray, float t) {
+glm::vec3 Plane::findNormal(glm::vec3 point) {
    return normal;
 }
 
@@ -29,6 +29,25 @@ BoundingBox* Plane::createBox() {
    // Planes will never need a bounding box
    return new BoundingBox;
 }
+
+glm::vec2 Plane::getUVCoords(glm::vec3 point) {
+   glm::vec3 p = glm::vec3(point.x - std::floor(point.x), point.y - std::floor(point.y), point.z - std::floor(point.z)); 
+   p /= 5.f;
+   glm::vec2 ret;
+
+   /* TODO: There must be a better way to do this */
+   if (normal.x) {
+      ret = glm::vec2(p.y, p.z);
+   }
+   else if (normal.y) {
+      ret = glm::vec2(p.x, p.z);
+   }
+   else {
+      ret = glm::vec2(p.x, p.y);
+   }
+
+   return ret;
+} 
 
 void Plane::print() {
    std::cout << "- Type: Plane" << std::endl;

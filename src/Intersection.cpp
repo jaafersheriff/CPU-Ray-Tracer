@@ -11,7 +11,10 @@ Intersection::Intersection(Scene &scene, Ray& ray, int spatial_flag) {
     createIntersection(scene.objects[i], ray);
   }
   if (spatial_flag) {
-    boxTraversal(scene.rootBox, ray);
+    GeoObject* object = scene.boxTraversal(scene.rootBox, ray);
+    if (object != nullptr) {
+      createIntersection(object, ray);
+	}
   }
 }
 
@@ -28,30 +31,27 @@ void Intersection::createIntersection(GeoObject *object, Ray &ray) {
       this->object = object;
       this->objectRay = objectRay;
       this->point = this->ray.calculatePoint(this->t);
+		this->objectPoint = this->objectRay.calculatePoint(this->t);
 
       // Coordinate transform normal
-      glm::vec3 obj_normal = this->object->findNormal(this->objectRay, this->t);
+      glm::vec3 obj_normal = this->object->findNormal(objectPoint);
       glm::vec3 world_normal = glm::vec3(glm::transpose(this->object->inv_M) * glm::vec4(obj_normal, 0.0f));
+      
+      // Pull normal from normal map or from calcualtion 
+      if (object->textures.normalMap != nullptr) {
+         glm::vec3 t = glm::cross(world_normal, glm::vec3(0, 1, 0));
+         if (!t.length()) {
+            t = glm::cross(world_normal, glm::vec3(0, 0, 1));
+         }
+         t = glm::normalize(t);
+         glm::vec3 b = glm::normalize(glm::cross(world_normal, t));
+         glm::vec3 m = this->object->textures.normalMap->getColor(this->object->getUVCoords(objectPoint));
+         m = 2.f*m - glm::vec3(1, 1, 1);
+         glm::mat3 mat = glm::mat3(t, b, world_normal);
+         world_normal = glm::normalize(mat * m);
+      }
       this->normal = glm::normalize(world_normal);
   }
-}
-
-void Intersection::boxTraversal(Scene::BoxNode* node, Ray& ray) {
-   // Base case
-   if (node->objects.size() <= 1) {
-      createIntersection(node->objects[0], ray);
-      return;
-   }
-   if (node->boundingBox.intersect(ray) > EPSILON) {
-      // Travesal
-      // TODO: I dont think we have to traverse both levels...
-      if (node->leftChild != nullptr) {
-        boxTraversal(node->leftChild, ray);
-      }
-      if (node->rightChild != nullptr) {
-        boxTraversal(node->rightChild, ray);
-      }
-   }
 }
 
 void Intersection::print() {

@@ -15,7 +15,8 @@ public:
    void updateBox(glm::vec3, glm::vec3);
 
    float intersect(const Ray &);
-   glm::vec3 findNormal(Ray &, const float);
+   glm::vec2 getUVCoords(glm::vec3);
+   glm::vec3 findNormal(glm::vec3);
    glm::vec3 findCenter();
    BoundingBox *createBox();
    void print();

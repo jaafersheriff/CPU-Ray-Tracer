@@ -45,6 +45,20 @@ void Loader::createFinish(GeoObject::Finish *f, std::vector<std::string> line) {
    }
 }
 
+void Loader::createTextures(GeoObject::Textures *t, std::vector<std::string> line) {
+   for (unsigned int i = 1; i < line.size(); i++) {
+      if (line[i].find("color") != std::string::npos) {
+         t->colorMap = batch.getTexture(line[i+1], Texture::Type::ColorMap);
+      }
+      if (line[i].find("normal") != std::string::npos) {
+         t->normalMap = batch.getTexture(line[i+1], Texture::Type::NormalMap);
+      }
+      if (line[i].find("bump") != std::string::npos) {
+         t->bumpMap = batch.getTexture(line[i+1], Texture::Type::BumpMap);
+      }
+   }
+}
+
 void Loader::addProperties(GeoObject *object, std::vector<std::string> line, std::ifstream& file) {
    std::vector<float> floats;
 
@@ -76,6 +90,9 @@ void Loader::addProperties(GeoObject *object, std::vector<std::string> line, std
          glm::vec3 translate = glm::vec3(floats[0], floats[1], floats[2]);
          object->M = glm::translate(glm::mat4(1.0f), translate) * object->M;
       }
+      if (!line[0].compare("texture")) {
+         createTextures(&object->textures, line);
+      }
       // Stupid catch for faulty .pov files
       if (line[line.size() - 1].find("}}") != std::string::npos) {
          break;
@@ -87,10 +104,11 @@ void Loader::addProperties(GeoObject *object, std::vector<std::string> line, std
    object->inv_M = glm::inverse(object->M);
 }
 
-BoxRenderable* Loader::createBox(std::vector<std::string> line, std::ifstream& file) {
+BoxRenderable* Loader::createBox(int id, std::vector<std::string> line, std::ifstream& file) {
    BoxRenderable *box = new BoxRenderable;
-   std::vector<float> floats;
+	box->id = id;
 
+   std::vector<float> floats;
    floats = findFloatsInLine(line);
    
    glm::vec3 minCorner = glm::vec3(floats[0], floats[1], floats[2]);
@@ -102,9 +120,11 @@ BoxRenderable* Loader::createBox(std::vector<std::string> line, std::ifstream& f
    return box;
 }
 
-Triangle* Loader::createTriangle(std::vector<std::string> line, std::ifstream& file) {
+Triangle* Loader::createTriangle(int id, std::vector<std::string> line, std::ifstream& file) {
    // Create empty triangle object
    Triangle *triangle = new Triangle;
+	triangle->id = id;
+
    std::vector<float> floats;
 
    // Same line vertices
@@ -136,9 +156,10 @@ Triangle* Loader::createTriangle(std::vector<std::string> line, std::ifstream& f
    return triangle;
 }
 
-Plane* Loader::createPlane(std::vector<std::string> line, std::ifstream& file) {
+Plane* Loader::createPlane(int id, std::vector<std::string> line, std::ifstream& file) {
    // Create empty Plane object pointer
    Plane *plane = new Plane;
+	plane->id = id;
 
    std::vector<float> floats;
 
@@ -154,9 +175,10 @@ Plane* Loader::createPlane(std::vector<std::string> line, std::ifstream& file) {
    return plane;
 }
 
-Sphere* Loader::createSphere(std::vector<std::string> line, std::ifstream& file) {
+Sphere* Loader::createSphere(int id, std::vector<std::string> line, std::ifstream& file) {
    // Create empty Sphere object pointer
    Sphere *sphere = new Sphere;
+	sphere->id = id;
 
    std::vector<float> floats;
 
@@ -249,27 +271,26 @@ int Loader::parse(const char *file_name, Scene &scene) {
          scene.lights.push_back(createLight(line, inFile));
       }
       else if (!line[0].compare("sphere")){
-         Sphere *sphere = createSphere(line, inFile);
-         sphere->id = scene.objects.size()+1;
+         Sphere *sphere = createSphere(scene.objects.size()+1, line, inFile);
          scene.objects.push_back(sphere);
       }
       else if (!line[0].compare("plane")) {
-         Plane *plane = createPlane(line, inFile);
-         plane->id = scene.objects.size()+1;
+         Plane *plane = createPlane(scene.objects.size()+1, line, inFile);
          scene.objects.push_back(plane);
       }
       else if (!line[0].compare("triangle")) {
-         Triangle *triangle = createTriangle(line, inFile);
-         triangle->id = scene.objects.size()+1;
+         Triangle *triangle = createTriangle(scene.objects.size()+1, line, inFile);
          scene.objects.push_back(triangle);
       }
       else if (!line[0].compare("box")) {
-         BoxRenderable *box = createBox(line, inFile);
-         box->id = scene.objects.size()+1;
+         BoxRenderable *box = createBox(scene.objects.size()+1, line, inFile);
          scene.objects.push_back(box);
       }
    }
    inFile.close();
+
+   batch.print();
+
    return 0;
 }
 

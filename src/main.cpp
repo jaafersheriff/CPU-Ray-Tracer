@@ -43,10 +43,6 @@ int main(int args, char **argv) {
 	// Optional flags
 	for (int i = 0; i < args; i++) {
 		if (argv[i][0] == '-') {
-			// Cook-Torrance
-			if (std::string(argv[i]).find("altbrdf") != std::string::npos) {
-				renderer.setRenderFlag(1);
-			}
 			// SuperSampling
 			if (std::string(argv[i]).find("ss") != std::string::npos) {
 				if (char *num = (strchr(argv[i], '=') + 1)) {
@@ -106,6 +102,8 @@ int main(int args, char **argv) {
 		std::vector<GeoObject *> planes;
 		std::vector<GeoObject *> other;
 		for (unsigned int i = 0; i < scene.objects.size(); i++) {
+			/* TODO: Give objects an enum defining their type. 
+			 * Don't use parsing.. */
 			if (!strcmp(scene.objects[i]->type.c_str(), "Plane")) {
 				planes.push_back(scene.objects[i]);
 			}
@@ -149,13 +147,6 @@ int main(int args, char **argv) {
 		const glm::ivec2 size = glm::ivec2(window_width, window_height);
 		glm::vec3 color = renderer.calculateColor(scene, size, pixel_x, pixel_y);
 		std::cout << "Color: (" << color.x << ", " << color.y  << ", " << color.z << ")" << std::endl;
-		if (renderer.brdf.verbose_flag == 1) {
-			renderer.pixeltrace(renderer.root, 0);
-		}
-		if (renderer.brdf.verbose_flag == 2) {
-			std::cout << "----" << std::endl;
-			renderer.printrays(renderer.root, 0);
-		}
 	}
 }
 

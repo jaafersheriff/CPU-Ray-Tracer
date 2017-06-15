@@ -54,11 +54,16 @@ float Triangle::intersect(const Ray &ray) {
    return glm::determinant(T)/detA;
 }
 
-glm::vec3 Triangle::findNormal(Ray &ray, float t) {
+glm::vec3 Triangle::findNormal(glm::vec3 point) {
    glm::vec3 V = v2 - v1;
    glm::vec3 W = v3 - v1;
 
    return normalize(glm::vec3(V.y*W.z-V.z*W.y, V.z*W.x-V.x*W.z, V.x*W.y-V.y*W.x));
+}
+
+glm::vec2 Triangle::getUVCoords(glm::vec3 point) {
+   /* TODO */
+   return glm::vec2(0, 0);
 }
 
 void Triangle::print() {
