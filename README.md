@@ -1,20 +1,21 @@
 ### CSC-473-Raytracer
 
-![myPlanes](myPlanes2.png)
+![myPlanes](output/myPlanes2.png)
 
 - Spatial Data Structures
-![balls](balls2.png)
+![balls](output/balls2.png)
 
 - Boxes with global illumination
-![boxes](boxgi.png)
+![boxes](output/boxgi.png)
 
 - Texture mapping
-![texture](texture.png)
+![texture](output/texture.png)
 
 - Normal mapping
-![norm](norm.png)
+![norm](output/norm.png)
+![norm1](output/norm1.png)
 
 - Bilinear Interpolation
-![bi](bi.png)
+![bi](output/bi.png)
 
 
