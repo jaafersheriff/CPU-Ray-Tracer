@@ -16,13 +16,12 @@ public:
    // List of Textures
    std::vector<Texture *> textures;
 
-
-   // Get a texture from the hashmap
+   // Get a texture from the list
    Texture* getTexture(std::string, Texture::Type);
 
    void print();
 private:
-   // Add a new texture to the hashmap
+   // Add a new texture to the list
    Texture* addTexture(std::string, Texture::Type);
 };
 

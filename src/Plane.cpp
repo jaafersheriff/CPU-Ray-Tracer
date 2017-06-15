@@ -32,7 +32,7 @@ BoundingBox* Plane::createBox() {
 
 glm::vec2 Plane::getUVCoords(glm::vec3 point) {
    glm::vec3 p = glm::vec3(point.x - std::floor(point.x), point.y - std::floor(point.y), point.z - std::floor(point.z)); 
-
+   p /= 5.f;
    glm::vec2 ret;
 
    /* TODO: There must be a better way to do this */

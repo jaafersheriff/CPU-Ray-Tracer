@@ -32,11 +32,11 @@ void Texture::init() {
 		std::cerr << name << " not found" << std::endl;
       errorFlag = 1;
 	}
-	if (components != 3) {
+	else if (components != 3) {
 		std::cerr << name << " is not RGB" << std::endl;
       errorFlag = 1;
 	}
-	if ((width & (width-1)) != 0 || (height & (height-1)) != 0) {
+	else if ((width & (width-1)) != 0 || (height & (height-1)) != 0) {
 		std::cerr << name << " must be a power of 2" << std::endl;
       errorFlag = 1;
 	}
