@@ -1,7 +1,7 @@
 # CSC-473-Raytracer
 
 ### Project Description
-The goal of this project was to create a robust and efficient raytracer using C++. Implementation features include:
+The goal of this project was to create a robust and efficient ray tracer using C++. Implementation features include:
 * POV-Ray file parsing
 * Blinn-Phong shading
 * Refraction and reflection recursive raytracing
@@ -11,7 +11,20 @@ The goal of this project was to create a robust and efficient raytracer using C+
 * Texture/Normal mapping
 * Bilinear Interpolation
 
-![glitch](output/glitch.png)
+### Final Project
+For my final project I chose to do texture mapping. Texture mapping is a low-cost, high-reward feature in graphics that is  conceptually straightforward, relatively simple to implement, and makes our project look much more realistic.
+
+### Software Design Improvement
+Adding textures to this project was easy enough, but doing it well from a software design standpoint added some extra functionality.
+The first thing I did was implemented what I call a TextureBatch. The TextureBatch holds on to all of the different textures that have been loaded thus far. When my POV-Ray parser finds a texture, it first checks with the TextureBatch to make sure the texture hasn't already been loaded. If the texture already exists, we can reference that texture rather than loading it again.
+As of now each texture is individualized only by its file name, but I would like to implement unique ID's per texture for added security and efficiency. 
+The other thing I had to think about was the added functionality of texture *types*. In my implementation I include color maps and normal maps. Looking ahead, I may add bump maps or specular maps, so I wanted to create a system that would allow different objects to contain multiple different texture types.  To do this, I used enums to denote which type a texture is. In my GeoObject class I have struct of textures that contains one texture pointer of each type. This design allows me to add many different types of textures for future implementations.
+
+### Research
+Realistic Ray Tracing by Peter Shirley and R. Keith Morley
+Ray Tracing Tutorial by The CoderMind Team
+![opengameart.org](opengameart.org) for color and normal map pairs
+![Normal Map Online](http://cpetry.github.io/NormalMap-Online/) for creating my own normal maps
 
 ### Reflection 
 ![shiny](output/shiny.png)
@@ -36,18 +49,5 @@ The goal of this project was to create a robust and efficient raytracer using C+
 ![norm1](output/norm1.png)
 
 ### Bilinear Interpolation
-# TODO - gray bg
 ![bi](output/bi.png)
-
-### Final Project
-For my final project I chose to do texture mapping. Professor Wood always emphasized the importance of this low-cost, high-reward feature in graphics, and I couldn't agree more. Texture mapping is conceptually straightforward, relatively easy to implement, and of course makes our project look much more realistic than just using single RGB values for object shading.
-
-### Research
-# TODO 
-
-### Software Design Improvement
-In my final project I had to create a completely new data structure to handle loading in new textures. To do this I had to implement a few things. 
-The first thing I did was implemented what I call a TextureBatch. The TextureBatch holds on to all of the textures that have been loaded thus far. When my POV parser finds a texture, it first checks with the TextureBatch to make sure the texture hasn't been loaded yet. If it has, we can reference that texture. If it hasn't we load in a new texture.
-As of now each texture is defined by its file name. I would like to implement unique ID's per texture for added security and efficiency. 
-The other thing I had to think about was that because I was using multiple textures *types*, I had to allow different objects to reference multiple textures. To do this, I used enums to denote which type a texture is (color or normal). And in my GeoObject class I have struct of textures that contains one texture pointer of each type. This design allows me to add many different types of textures (bump, specular, etc.) for future implementations.
 
