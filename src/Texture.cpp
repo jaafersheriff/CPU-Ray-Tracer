@@ -7,12 +7,12 @@
 
 Texture::Texture() {
 	name = "";
-   width = height = 0;
+	width = height = 0;
 }
 
 Texture::Texture(std::string name, Type type) {
 	this->name = name;
-   this->type = type;
+	this->type = type;
 	init();
 }
 
@@ -26,24 +26,24 @@ void Texture::init() {
 	data = stbi_load(name.c_str(), &width, &height, &components, 0);
 
 
-   // Ensure valid data
-   int errorFlag = 0;
+	// Ensure valid data
+	int errorFlag = 0;
 	if (!data) {
 		std::cerr << name << " not found" << std::endl;
-      errorFlag = 1;
+		errorFlag = 1;
 	}
 	else if (components != 3) {
 		std::cerr << name << " is not RGB" << std::endl;
-      errorFlag = 1;
+		errorFlag = 1;
 	}
 	else if ((width & (width-1)) != 0 || (height & (height-1)) != 0) {
 		std::cerr << name << " must be a power of 2" << std::endl;
-      errorFlag = 1;
+		errorFlag = 1;
 	}
 
-   if (errorFlag) {
-      width = height = components = 0;
-      data = nullptr;
+	if (errorFlag) {
+		width = height = components = 0;
+		data = nullptr;
   }
 }
 
@@ -54,9 +54,9 @@ glm::vec3 Texture::getColor(glm::vec2 uv_point) {
 	// Bilinear interpolation 
 	glm::vec2 uvp = glm::vec2(uv_point.x * width - st_point.x, uv_point.y * height - st_point.y);
 	return (1-uvp.x)*(1-uvp.y)*getPixelColor(st_point) + uvp.x*(1-uvp.y)*
-          getPixelColor(glm::vec2(st_point.x+1, st_point.y)) + (1-uvp.x)*
-          uvp.y*getPixelColor(glm::vec2(st_point.x, st_point.y+1)) + 
-          uvp.x*uvp.y*getPixelColor(glm::vec2(st_point.x+1, st_point.y+1));
+			 getPixelColor(glm::vec2(st_point.x+1, st_point.y)) + (1-uvp.x)*
+			 uvp.y*getPixelColor(glm::vec2(st_point.x, st_point.y+1)) + 
+			 uvp.x*uvp.y*getPixelColor(glm::vec2(st_point.x+1, st_point.y+1));
 }
 
 glm::vec3 Texture::getPixelColor(glm::vec2 st_point) {
@@ -65,19 +65,19 @@ glm::vec3 Texture::getPixelColor(glm::vec2 st_point) {
 }
 
 void Texture::print() {
-   switch(type) {
-      case ColorMap:
-         std::cout << "Color Map: ";
-         break;
-      case NormalMap:
-         std::cout << "Normal Map: ";
-         break;
-      case BumpMap: 
-         std::cout << "Bump Map: ";
-         break;
-      default:
-         std::cout << "No type: "; 
-         break;
-   }
+	switch(type) {
+		case ColorMap:
+			std::cout << "Color Map: ";
+			break;
+		case NormalMap:
+			std::cout << "Normal Map: ";
+			break;
+		case BumpMap: 
+			std::cout << "Bump Map: ";
+			break;
+		default:
+			std::cout << "No type: "; 
+			break;
+	}
 	std::cout << name << ": " << width << "x" << height << "x" << components << std::endl;
 }

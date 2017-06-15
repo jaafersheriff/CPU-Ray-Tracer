@@ -13,16 +13,16 @@
 
 class TextureBatch {
 public:
-   // List of Textures
-   std::vector<Texture *> textures;
+	// List of Textures
+	std::vector<Texture *> textures;
 
-   // Get a texture from the list
-   Texture* getTexture(std::string, Texture::Type);
+	// Get a texture from the list
+	Texture* getTexture(std::string, Texture::Type);
 
-   void print();
+	void print();
 private:
-   // Add a new texture to the list
-   Texture* addTexture(std::string, Texture::Type);
+	// Add a new texture to the list
+	Texture* addTexture(std::string, Texture::Type);
 };
 
 #endif
