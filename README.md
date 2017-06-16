@@ -16,14 +16,19 @@ For my final project I chose to do texture mapping. Texture mapping is a low-cos
 
 ### Software Design Improvement
 Adding textures to this project was easy enough, but doing it well from a software design standpoint added some extra functionality.
+
 The first thing I did was implemented what I call a TextureBatch. The TextureBatch holds on to all of the different textures that have been loaded thus far. When my POV-Ray parser finds a texture, it first checks with the TextureBatch to make sure the texture hasn't already been loaded. If the texture already exists, we can reference that texture rather than loading it again.
 As of now each texture is individualized only by its file name, but I would like to implement unique ID's per texture for added security and efficiency. 
+
 The other thing I had to think about was the added functionality of texture *types*. In my implementation I include color maps and normal maps. Looking ahead, I may add bump maps or specular maps, so I wanted to create a system that would allow different objects to contain multiple different texture types.  To do this, I used enums to denote which type a texture is. In my GeoObject class I have struct of textures that contains one texture pointer of each type. This design allows me to add many different types of textures for future implementations.
 
 ### Research
 Realistic Ray Tracing by Peter Shirley and R. Keith Morley
+
 Ray Tracing Tutorial by The CoderMind Team
-![opengameart.org](opengameart.org) for color and normal map pairs
+
+![opengameart.org](https://opengameart.org/) for color and normal map pairs
+
 ![Normal Map Online](http://cpetry.github.io/NormalMap-Online/) for creating my own normal maps
 
 ### Reflection 
