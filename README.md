@@ -31,6 +31,8 @@ opengameart.org for color and normal map pairs
 
 Normal Map Online for creating my own normal maps
 
+# Output
+
 ### Reflection 
 ![shiny](output/shiny.png)
 
