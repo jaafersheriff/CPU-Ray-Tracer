@@ -1,3 +1,5 @@
+.gitignore
+
 build/
 tests/
 res/
@@ -11,6 +13,7 @@ sonar-project.properties
 raytrace.*
 
 output.png
-*.py
 
+*.py
 compare.sh
+run.sh

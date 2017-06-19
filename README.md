@@ -12,15 +12,16 @@ The goal of this project was to create a robust and efficient ray tracer using C
 * Bilinear Interpolation
 
 ### Final Project
-For my final project I chose to do texture mapping. Texture mapping is a low-cost, high-reward feature in graphics that is conceptually straightforward, relatively simple to implement, and makes our project look much more realistic.
+For my final project I chose to do texture mapping. Texture mapping is a low-cost, high-reward feature in computer graphics that is conceptually straightforward, relatively simple to implement, and makes our project much more realistic.
 
-### Software Design Improvement
-Adding textures to this project was easy enough, but doing it properly from a software design standpoint added some extra modifications.
+### Software Design
+Adding textures to a ray tracer isn't terribly difficult, but doing it well from a software design standpoint requires some extra functionality.
 
-The first thing I did was I implemented what I call a TextureBatch. The TextureBatch holds on to all of the different textures that have been loaded thus far. When my POV-Ray parser finds a texture, it first checks with the TextureBatch to make sure the texture hasn't already been loaded. If the texture already exists, we can reference that texture rather than loading it again.
-As of now each texture is individualized only by its file name, but I would like to implement unique ID's per texture for added security and efficiency. 
+The first thing I did was I implemented what I call a TextureBatch. The TextureBatch contains a list of all the different textures that have been loaded thus far. When my POV-Ray parser finds a texture, it first communicates with the TextureBatch to make sure that texture hasn't already been loaded. If the texture already exists, we can reference that texture rather than load it again.
 
-The other thing I had to think about was the added functionality of texture *types*. In my implementation I include color maps and normal maps. Looking ahead, I may add bump maps or specular maps, so I wanted to create a system that would allow objects to contain different texture types.  To do this, I used enums to denote which type a texture is, and in my GeoObject class I have struct of textures that contains one texture pointer of each type. This design allows me to add many different types of textures for future implementations.
+As of now each texture is individualized by only its file name. I would like to implement unique ID's per texture for added security and efficiency. 
+
+The other thing I had to implement was different texture *types*. In my implementation I allow objects to reference both color maps and normal maps. Looking ahead I want to add bump maps or specular maps, so I created a system that would allow objects to contain multiple texture types. To do this, I used enums to denote a texture's type. I also allow objects to reference at most one of each texture type. This design allows me to add many different types of textures in the future.
 
 ### Research
 Realistic Ray Tracing by Peter Shirley and R. Keith Morley
