@@ -55,7 +55,7 @@ public:
 	Ray createRefractionRay(const Intersection &);
 
 	// Used for creating global illumination sample rays
-	glm::vec3 createSamplePoint(Intersection &, glm::mat4 &);
+	glm::vec3 createSamplePoint(Intersection &, glm::mat4 &, float, float);
 
    // Calculates the color in the world at an Intersection
    glm::vec3 findColor(const glm::ivec2, const int, const int, const int, int);

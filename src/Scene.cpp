@@ -81,15 +81,8 @@ GeoObject* Scene::boxTraversal(BoxNode *node, const Ray &ray) {
 	return nullptr;
 }
 
-glm::vec3 Scene::createSamplePoint(Intersection &intersection, glm::mat4 &matrix) {
-	// Generate random XY
-	float x = rand() / (float) RAND_MAX;
-	float y = rand() / (float) RAND_MAX;
+glm::vec3 Scene::createSamplePoint(Intersection &intersection, glm::mat4 &matrix, float x, float y) {
 
-	/* TODO: Fix stratifie samples -- gi_samples changes per bounce */
-	// x += 1/sqrt(gi_samples) * rand() / (float) RAND_MAX;
-	// y += 1/sqrt(gi_samples) * rand() / (float) RAND_MAX;
-	
 	// Create point on hemisphere
 	float radial = sqrt(x);
 	float theta = 2.f*PI*y;

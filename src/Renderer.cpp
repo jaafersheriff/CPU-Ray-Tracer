@@ -31,13 +31,13 @@ void Renderer::render(Scene &scene, const int window_width, const int window_hei
 
    float count = 0;
    for (int y = 0; y < size.y; y++) {
+      // Print percentages
+      if (percent_flag) {
+         std::cerr << count/(size.x*size.y)*100 << "%" << std::endl;
+      }
       for (int x = 0; x < size.x; x++) {
-         // Print percentages
-         if (percent_flag) {
-            std::cerr << count++/(size.x*size.y)*100 << "%" << std::endl;
-         }
-
-         // Calculate color
+         count++;
+                // Calculate color
          glm::vec3 color = calculateColor(scene, size, x, y);
 
          // Set pixel color
