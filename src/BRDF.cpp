@@ -58,46 +58,22 @@ glm::vec3 BRDF::calculateLocalColor(Scene &scene, Intersection &intersection, in
 		intersection.pigment = intersection.object->finish.color;
 	} 
 
+	glm::vec3 local_color = glm::vec3(0, 0, 0);
+
 	// Ambient
-	glm::vec3 local_color = intersection.object->finish.ambient * intersection.pigment;
-
-	/* TODO: Functional programming */
-	if (gi_flag) {
-		// Global illumination
-		int num_samples = gi_samples;
-
-		if (gi_bounces < recurse_count) {
-			recurse_count = gi_bounces;
-		} 
-		else {
-			recurse_count--;
-		}
-
-		if (gi_bounces - recurse_count > 0) {
-			num_samples /= ((gi_bounces - recurse_count) * gi_ratio);
-		}
-
-		float angle = glm::acos(glm::dot(glm::vec3(0, 0, 1), intersection.normal));
-		glm::vec3 axis = glm::cross(glm::vec3(0, 0, 1), intersection.normal);
-		glm::mat4 matrix = glm::rotate(glm::mat4(1.0f), angle, axis);	
-      
-      float root_num_samples = std::sqrt(num_samples);
-      float ratio = root_num_samples / num_samples;
-
-      // Stratified samples 
-      for (float x = 0.f; x <= num_samples; x += root_num_samples) {
-         for (float y = 0.f; y <= num_samples; y += root_num_samples) {
-            float gridX = x / num_samples + ratio * (rand() / (float) RAND_MAX);
-            float gridY = y / num_samples + ratio * (rand() / (float) RAND_MAX);
-  
- 		      glm::vec3 sample_point = scene.createSamplePoint(intersection, matrix, gridX, gridY);
-			   Ray sample_ray(intersection.point + sample_point * EPSILON, sample_point);
-			   local_color += raytrace(scene, sample_ray, recurse_count);
-        }
-      } 
-
-		local_color /= num_samples;
-	}
+	if (!gi_flag) {
+      local_color = intersection.object->finish.ambient * intersection.pigment;
+   } 
+   else {
+	   // Global illumination
+	   if (gi_bounces < recurse_count) {
+	   	recurse_count = gi_bounces;
+	   } 
+	   else {
+		   recurse_count--;
+   	}     
+      local_color = calculateGlobalIllumination(scene, intersection, recurse_count);
+   }
 
 	// Loop through lights
 	for (unsigned int i = 0; i < scene.lights.size(); i++) {
@@ -114,6 +90,36 @@ glm::vec3 BRDF::calculateLocalColor(Scene &scene, Intersection &intersection, in
 	}
 
 	return local_color;
+}
+
+glm::vec3 BRDF::calculateGlobalIllumination(Scene &scene, Intersection &intersection, int recurse_count) {
+   glm::vec3 out_color = glm::vec3(0, 0, 0);
+	int num_samples = gi_samples;
+
+	if (gi_bounces - recurse_count > 0) {
+		num_samples /= ((gi_bounces - recurse_count) * gi_ratio);
+	}
+
+	float angle = glm::acos(glm::dot(glm::vec3(0, 0, 1), intersection.normal));
+	glm::vec3 axis = glm::cross(glm::vec3(0, 0, 1), intersection.normal);
+	glm::mat4 matrix = glm::rotate(glm::mat4(1.0f), angle, axis);	
+   
+   float root_num_samples = std::sqrt(num_samples);
+   float ratio = root_num_samples / num_samples;
+
+   // Stratified samples 
+   for (float x = 0.f; x <= num_samples; x += root_num_samples) {
+      for (float y = 0.f; y <= num_samples; y += root_num_samples) {
+         float gridX = x / num_samples + ratio * (rand() / (float) RAND_MAX);
+         float gridY = y / num_samples + ratio * (rand() / (float) RAND_MAX);
+  
+         glm::vec3 sample_point = scene.createSamplePoint(intersection, matrix, gridX, gridY);
+         Ray sample_ray(intersection.point + sample_point * EPSILON, sample_point);
+         out_color += raytrace(scene, sample_ray, recurse_count);
+      }
+   } 
+
+   return out_color / (float) num_samples;
 }
 
 glm::vec3 BRDF::calculateReflectionColor(Scene &scene, Intersection &intersection, int recurse) {

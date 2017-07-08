@@ -37,7 +37,8 @@ void Renderer::render(Scene &scene, const int window_width, const int window_hei
       }
       for (int x = 0; x < size.x; x++) {
          count++;
-                // Calculate color
+
+         // Calculate color
          glm::vec3 color = calculateColor(scene, size, x, y);
 
          // Set pixel color

@@ -54,6 +54,7 @@ public:
 	float calculateFresnelReflectance(float, Intersection &);
 	float fresnel(float, glm::vec3, glm::vec3);
 	glm::vec3 calculateLocalColor(Scene &, Intersection &, int);
+   glm::vec3 calculateGlobalIllumination(Scene &, Intersection &, int);
 	glm::vec3 calculateReflectionColor(Scene &, Intersection &, int);
 	glm::vec3 calculateRefractionColor(Scene &, Intersection &, int);
 
