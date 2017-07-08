@@ -1,5 +1,7 @@
 #include "Renderer.hpp"
+
 #include <algorithm>
+#include <thread> // multiple threads
 
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 #include "stb_image_write.h"
@@ -23,35 +25,59 @@ glm::vec3 Renderer::calculateColor(Scene &scene, const glm::ivec2 size, const in
    return color;
 }
 
-void Renderer::render(Scene &scene, const int window_width, const int window_height) {
+void Renderer::threadRender(thread_data *td) {
+   float count = 0;
+   int startX = (int) std::floor(td->index *td->size.x / td->num_threads);
+   int endX   = (int) std::ceil((td->index+1) *td->size.x / td->num_threads);
+
+   std::cout << "Thread " << td->index << ": [" << startX << ", " << endX << "]" << std::endl;
+   for (int x = startX; x < endX; x++) {
+      // Print percentages
+      if (percent_flag) {
+         std::cerr << "Thread " << td->index << ": " << count/((endX-startX)*td->size.y)*100 << "%" << std::endl;
+      }
+      for (int y = 0; y < td->size.y; y++) {
+         count++;
+
+         // Calculate color
+         glm::vec3 color = calculateColor(*td->scene, td->size, x, y);
+
+         // Set pixel color
+         unsigned char red   = (unsigned char) color.r; 
+         unsigned char green = (unsigned char) color.g; 
+         unsigned char blue  = (unsigned char) color.b; 
+         int pixel = (td->size.x * td->numChannels) * (td->size.y - 1 - y) + td->numChannels * x;
+         td->data[pixel + 0] = red;
+         td->data[pixel + 1] = green;
+         td->data[pixel + 2] = blue;
+      }
+   }
+}
+
+void Renderer::render(Scene &scene, const int window_width, const int window_height, const int num_threads) {
    const int numChannels = 3;
    const glm::ivec2 size = glm::ivec2(window_width, window_height);
 
    unsigned char *data = new unsigned char[size.x * size.y * numChannels];
 
-   float count = 0;
-   for (int y = 0; y < size.y; y++) {
-      // Print percentages
-      if (percent_flag) {
-         std::cerr << count/(size.x*size.y)*100 << "%" << std::endl;
-      }
-      for (int x = 0; x < size.x; x++) {
-         count++;
-
-         // Calculate color
-         glm::vec3 color = calculateColor(scene, size, x, y);
-
-         // Set pixel color
-         unsigned char red   = (unsigned char) color.r;
-         unsigned char green = (unsigned char) color.g;
-         unsigned char blue  = (unsigned char) color.b;
-         int pixel = (size.x * numChannels) * (size.y - 1 - y) + numChannels * x;
-         data[pixel + 0] = red;
-         data[pixel + 1] = green;
-         data[pixel + 2] = blue;
-      }
+   // Create threads
+   std::vector<std::thread> threads;
+   struct thread_data td[num_threads];
+   
+   for (int i = 0; i < num_threads; i++) {
+      td[i].scene = &scene;
+      td[i].size = size;
+      td[i].numChannels = numChannels;
+      td[i].data = data;
+      td[i].index = i;
+      td[i].num_threads = num_threads;
+      threads.push_back(std::thread(&Renderer::threadRender, this, &td[i]));
    }
-   if (!stbi_write_png(fileName.c_str(), size.x, size.y, numChannels, data, size.x * numChannels)) {
+   for (auto& thread : threads) {
+      thread.join();
+   }
+
+  if (!stbi_write_png(fileName.c_str(), size.x, size.y, numChannels, data, size.x * numChannels)) {
       std::cout << "FAILED WRITING IMAGE" << std::endl;
    }
    delete[] data;

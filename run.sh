@@ -1,6 +1,7 @@
 #!/usr/bin/bash
 
 # Pre
+clear
 rm out*
 
 #Build

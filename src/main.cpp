@@ -1,8 +1,7 @@
 #include <iostream>	// std::std::cout
 #include <string.h>	// strcpy
 #include <vector>		// vectors
-#include <iomanip>	//set precision
-
+#include <iomanip>	// set precision
 #include <glm/glm.hpp>
 
 #include "Renderer.hpp"
@@ -34,6 +33,7 @@ int main(int args, char **argv) {
 	arg_flags[1] = !strcmp(argv[1], "sceneinfo");
 	arg_flags[2] = !strcmp(argv[1], "pixelray");
 	arg_flags[3] = !strcmp(argv[1], "firsthit") || !strcmp(argv[1], "pixelcolor");
+   int num_threads = 0;
 	if (!strcmp(argv[1], "pixeltrace")) {
 		renderer.setVerbose(1);
 	}
@@ -86,6 +86,12 @@ int main(int args, char **argv) {
 					renderer.setOutputName(name);
 				}
 			}
+         // Threads
+         if (std::string(argv[i]).find("threads") != std::string::npos) {
+            if (char *num = (strchr(argv[i], '=') + 1)) {
+               num_threads = atoi(num);
+            }
+         }
 		}
 	}
 
@@ -119,7 +125,8 @@ int main(int args, char **argv) {
 	if (arg_flags[0]) {
 		int window_width = atoi(argv[3]);
 		int window_height = atoi(argv[4]);
-		renderer.render(scene, window_width, window_height);
+      std::cout << "Num threads: " << num_threads << std::endl;
+		renderer.render(scene, window_width, window_height, (int) std::max(1, num_threads));
 	}
 
 	// Sceneinfo
@@ -135,20 +142,20 @@ int main(int args, char **argv) {
 		Ray ray = scene.createCameraRay(window_width, window_height, pixel_x, pixel_y, 1, 1, 1);
 		Intersection in(scene, ray, renderer.brdf.spatial_flag);
 		std::cout << "Pixel: [" << pixel_x << ", " << pixel_y << "] ";
-	if (arg_flags[2] || arg_flags[3]) {
-		std::cout << "Ray: ";
-		ray.print();
-	}
-	if (arg_flags[3] || renderer.brdf.verbose_flag) {
-		if (arg_flags[3]) {
-			in.print();
-			renderer.print();
-		}
-		const glm::ivec2 size = glm::ivec2(window_width, window_height);
-		glm::vec3 color = renderer.calculateColor(scene, size, pixel_x, pixel_y);
-		std::cout << "Color: (" << color.x << ", " << color.y  << ", " << color.z << ")" << std::endl;
-	}
-}
+	   if (arg_flags[2] || arg_flags[3]) {
+		   std::cout << "Ray: ";
+		   ray.print();
+	   }
+	   if (arg_flags[3] || renderer.brdf.verbose_flag) {
+		   if (arg_flags[3]) {
+			   in.print();
+			   renderer.print();
+		   }
+		   const glm::ivec2 size = glm::ivec2(window_width, window_height);
+		   glm::vec3 color = renderer.calculateColor(scene, size, pixel_x, pixel_y);
+		   std::cout << "Color: (" << color.x << ", " << color.y  << ", " << color.z << ")" << std::endl;
+	   }
+   }
 
-return 0;
+   return 0;
 }

@@ -17,6 +17,16 @@
 
 class Renderer {
 public:
+   // TODO : Move thread stuff elsewhere
+   struct thread_data{
+      Scene *scene;
+      glm::ivec2 size;
+      int numChannels;
+      unsigned char *data;
+      int index;
+      int num_threads;
+   };
+
    // Output file name
    std::string fileName = OUTPUT_NAME;
 
@@ -37,7 +47,8 @@ public:
    void setGIBounces(int n) { brdf.gi_bounces = n; }
    void setGIRatio(int n) { brdf.gi_ratio = n; }
 
-   void render(Scene &, const int, const int);
+   void render(Scene &, const int, const int, const int);
+   void threadRender(thread_data *);
    glm::vec3 calculateColor(Scene &, const glm::ivec2, const int, const int);
 
    void print();
