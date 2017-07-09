@@ -49,6 +49,7 @@ Normal Map Online for creating my own normal maps
 
 ### Monte Carlo Ray tracing
 Single-threaded render: 52 hours
+
 Multi-threaded render: 15 hours
 ![gi](output/cornel1600x1200.png)
 
