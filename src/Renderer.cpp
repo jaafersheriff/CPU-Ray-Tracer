@@ -30,7 +30,7 @@ void Renderer::threadRender(thread_data *td) {
    int startX = (int) std::floor(td->index *td->size.x / td->num_threads);
    int endX   = (int) std::ceil((td->index+1) *td->size.x / td->num_threads);
 
-   std::cout << "Thread " << td->index << ": [" << startX << ", " << endX << "]" << std::endl;
+   std::cout << "Thread " << td->index << ": [" << startX << ", " << endX << "}" << std::endl;
    for (int x = startX; x < endX; x++) {
       // Print percentages
       if (percent_flag) {

@@ -10,6 +10,7 @@ The goal of this project was to create a robust and efficient ray tracer using C
 * Monte Carlo ray tracing 
 * Texture and Normal mapping
 * Bilinear Interpolation
+* Multithreading
 
 ### Final Project
 For my final project I chose to do texture mapping. Texture mapping is a low-cost, high-reward feature in computer graphics that is conceptually straightforward, relatively simple to implement, and makes our project much more realistic.
@@ -47,7 +48,9 @@ Normal Map Online for creating my own normal maps
 ![balls](output/balls2.png)
 
 ### Monte Carlo Ray tracing
-![boxes](output/boxgi.png)
+Single-threaded render: 52 hours
+Multi-threaded render: 15 hours
+![gi](output/cornel1600x1200.png)
 
 ### Texture mapping
 ![texture](output/texture.png)
