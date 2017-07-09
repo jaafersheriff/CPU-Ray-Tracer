@@ -51,7 +51,7 @@ Normal Map Online for creating my own normal maps
 Single-threaded render: 52 hours
 
 Multi-threaded render: 15 hours
-![gi](output/cornel1600x1200.png)
+![gi](output/cornel.png)
 
 ### Texture mapping
 ![texture](output/texture.png)
