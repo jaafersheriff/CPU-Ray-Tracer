@@ -26,18 +26,12 @@ glm::vec3 Renderer::calculateColor(Scene &scene, const glm::ivec2 size, const in
 }
 
 void Renderer::threadRender(thread_data *td) {
-   float count = 0;
-   int startX = (int) std::floor(td->index *td->size.x / td->num_threads);
-   int endX   = (int) std::ceil((td->index+1) *td->size.x / td->num_threads);
-
-   std::cout << "Thread " << td->index << ": [" << startX << ", " << endX << "}" << std::endl;
-   for (int x = startX; x < endX; x++) {
+   for (int x = td->startX; x < td->endX; x++) {
       // Print percentages
       if (percent_flag) {
-         std::cerr << "Thread " << td->index << ": " << count/((endX-startX)*td->size.y)*100 << "%" << std::endl;
+         std::cerr << *td->count/(td->size.x)*100 << "%" << std::endl;
       }
       for (int y = 0; y < td->size.y; y++) {
-         count++;
 
          // Calculate color
          glm::vec3 color = calculateColor(*td->scene, td->size, x, y);
@@ -51,6 +45,7 @@ void Renderer::threadRender(thread_data *td) {
          td->data[pixel + 1] = green;
          td->data[pixel + 2] = blue;
       }
+      (*td->count)++;
    }
 }
 
@@ -63,14 +58,19 @@ void Renderer::render(Scene &scene, const int window_width, const int window_hei
    // Create threads
    std::vector<std::thread> threads;
    struct thread_data td[num_threads];
-   
+ 
+   float count = 0;  
    for (int i = 0; i < num_threads; i++) {
       td[i].scene = &scene;
       td[i].size = size;
       td[i].numChannels = numChannels;
       td[i].data = data;
       td[i].index = i;
-      td[i].num_threads = num_threads;
+      td[i].count = &count;
+      td[i].startX = (int) std::floor(i * size.x / num_threads);
+      td[i].endX   = (int) std::ceil((i+1) * size.x / num_threads);
+
+      std::cout << "Thread " << i << ": [" << td[i].startX << ", " << td[i].endX << "}" << std::endl;
       threads.push_back(std::thread(&Renderer::threadRender, this, &td[i]));
    }
    for (auto& thread : threads) {

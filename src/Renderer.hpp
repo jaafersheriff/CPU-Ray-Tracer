@@ -24,7 +24,9 @@ public:
       int numChannels;
       unsigned char *data;
       int index;
-      int num_threads;
+      float *count;
+      int startX;
+      int endX;
    };
 
    // Output file name
