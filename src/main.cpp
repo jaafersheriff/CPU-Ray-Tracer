@@ -70,7 +70,10 @@ int main(int args, char **argv) {
 			}
 			// Fresnel
 			if (std::string(argv[i]).find("fresnel") != std::string::npos) {
-				renderer.setFresnelFlag(1);
+            /////////////////////////////////////////////////////////////
+            // FIX SDS                                                 //
+				// renderer.setFresnelFlag(1);                             //
+				/////////////////////////////////////////////////////////////
 			}
 			// Spatial data structures
 			if (std::string(argv[i]).find("sds") != std::string::npos) {
