@@ -7,7 +7,7 @@ The goal of this project was to create an efficient ray tracer in C++ with many 
 * Cook Torrance BRDF
 * Refractions and reflections
 * Object transformations
-* Spatial data structures
+* Bounding Volume Hierarchy
 * Monte Carlo global illumination
 * Texture and Normal mapping
 * Bilinear Interpolation
@@ -45,10 +45,10 @@ Normal Map Online for creating my own normal maps
 ### Object Transformations
 ![valentine](output/valentine.png)
 
-### Spatial Data Structures
+### Bounding Volume Hierarchy
 ![balls](output/balls2.png)
 
-### Monte Carlo Ray tracing and Multithreading
+### Monte Carlo global illumination and Multithreading
 Single-threaded render: 52:34:58
 
 Multi-threaded render: 15:02:18
