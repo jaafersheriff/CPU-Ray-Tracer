@@ -1,4 +1,4 @@
-# CSC-473-Raytracer
+# CPU-Ray-Tracer
 
 ### Project Description
 The goal of this project was to create an efficient ray tracer in C++ with many practical features. Implementation features include:
