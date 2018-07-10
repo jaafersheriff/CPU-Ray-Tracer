@@ -13,6 +13,26 @@ The goal of this project was to create an efficient ray tracer in C++ with many 
 * Bilinear Interpolation
 * Multithreading
 
+# Usage
+## Building
+* Install `glm` under environment variable `GLM_INCLUDE_DIR`
+* Clone project
+* In project directory run `mkdir buid; cd build; cmake ..; make` or use CMake GUI to build the executable
+
+## Running
+Supported povray files can be found in /res/
+
+Command line arguments: 
+* `sceneinfo <input_file.pov>` - Prints out povray scene info without rendering
+* `render <input_file.pov> <width> <height> - Renders the povray scene using defined width and height
+* `out <filename>` - Specify output image name - default is output.png
+* `-fresnel` - Render scene including Fresnel reflectance
+* `-ss=N` - Render scene with super sampling with NxN samples
+* `-gi` - Render scene using Monte Carlo global illumination
+* `-gi_samples=N` - Render scene using at most N bounces for Monte Carlo global illumination
+* `-threads=N` - Specify number of threads to be used for rendering
+* `-percent` - Print out per-thread percent completion
+
 # Output
 
 ### Reflection 
@@ -28,9 +48,9 @@ The goal of this project was to create an efficient ray tracer in C++ with many 
 ![balls](output/balls2.png)
 
 ### Monte Carlo global illumination and Multithreading
-Single-threaded render: 52:34:58
+Single-threaded: 52h:34m:58s
 
-Multi-threaded render: 15:02:18
+Multi-threaded: 15h:02m:18s
 ![gi](output/cornel.png)
 
 ### Texture mapping
