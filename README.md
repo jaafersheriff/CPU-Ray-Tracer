@@ -15,7 +15,7 @@ The goal of this project was to create an efficient ray tracer in C++ with many 
 
 # Usage
 ## Building
-* Install `glm` under environment variable `GLM_INCLUDE_DIR`
+* Install `[glm]`(https://glm.g-truc.net/) under environment variable `GLM_INCLUDE_DIR`
 * Clone project
 * In project directory run `mkdir buid; cd build; cmake ..; make` or use CMake GUI to build the executable
 
@@ -24,7 +24,7 @@ Supported povray files can be found in /res/
 
 Command line arguments: 
 * `sceneinfo <input_file.pov>` - Prints out povray scene info without rendering
-* `render <input_file.pov> <width> <height> - Renders the povray scene using defined width and height
+* `render <input_file.pov> <width> <height>` - Renders the povray scene using defined width and height
 * `out <filename>` - Specify output image name - default is output.png
 * `-fresnel` - Render scene including Fresnel reflectance
 * `-ss=N` - Render scene with super sampling with NxN samples
