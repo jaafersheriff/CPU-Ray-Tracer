@@ -17,7 +17,7 @@ The goal of this project was to create an efficient ray tracer in C++ with many 
 ## Building
 * Install [GLM](https://glm.g-truc.net/) under environment variable `GLM_INCLUDE_DIR`
 * Clone project
-* In project directory run `mkdir buid; cd build; cmake ..; make` or use CMake GUI to build the executable
+* In project directory run `mkdir buid; cd build; cmake ..; make` or use CMake GUI to build 
 
 ## Running
 Supported povray files can be found in /res/
