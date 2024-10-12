@@ -29,7 +29,7 @@ void Renderer::threadRender(thread_data *td) {
    for (int x = td->startX; x < td->endX; x++) {
       // Print percentages
       if (percent_flag) {
-         std::cerr << *td->count/(td->size.x)*100 << "%" << std::endl;
+         std::cout << *td->count/(td->size.x)*100 << "%" << std::endl;
       }
       for (int y = 0; y < td->size.y; y++) {
 
@@ -52,12 +52,14 @@ void Renderer::threadRender(thread_data *td) {
 void Renderer::render(Scene &scene, const int window_width, const int window_height, const int num_threads) {
    const int numChannels = 3;
    const glm::ivec2 size = glm::ivec2(window_width, window_height);
+     std::cout << "Writing to " << fileName.c_str() << "[" << size.x << ", " << size.y << "]" << std::endl;
 
    unsigned char *data = new unsigned char[size.x * size.y * numChannels];
 
    // Create threads
    std::vector<std::thread> threads;
-   struct thread_data td[num_threads];
+   std::vector<thread_data> td;
+   td.resize(num_threads);
  
    float count = 0;  
    for (int i = 0; i < num_threads; i++) {

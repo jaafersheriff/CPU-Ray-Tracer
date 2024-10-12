@@ -25,7 +25,7 @@ Supported povray files can be found in /res/
 Command line arguments: 
 * `sceneinfo <input_file.pov>` - Prints out povray scene info without rendering
 * `render <input_file.pov> <width> <height>` - Renders the povray scene using defined width and height
-* `out <filename>` - Specify output image name - default is output.png
+* `-out=<filename>` - Specify output image name - default is output.png
 * `-fresnel` - Render scene including Fresnel reflectance
 * `-ss=N` - Render scene with super sampling with NxN samples
 * `-gi` - Render scene using Monte Carlo global illumination

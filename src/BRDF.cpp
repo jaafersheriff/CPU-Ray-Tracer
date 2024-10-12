@@ -94,7 +94,7 @@ glm::vec3 BRDF::calculateLocalColor(Scene &scene, Intersection &intersection, in
 
 glm::vec3 BRDF::calculateGlobalIllumination(Scene &scene, Intersection &intersection, int recurse_count) {
    glm::vec3 out_color = glm::vec3(0, 0, 0);
-	int num_samples = gi_samples;
+	float num_samples = gi_samples;
 
 	if (gi_bounces - recurse_count > 0) {
 		num_samples /= ((gi_bounces - recurse_count) * gi_ratio);
@@ -104,7 +104,7 @@ glm::vec3 BRDF::calculateGlobalIllumination(Scene &scene, Intersection &intersec
 	glm::vec3 axis = glm::cross(glm::vec3(0, 0, 1), intersection.normal);
 	glm::mat4 matrix = glm::rotate(glm::mat4(1.0f), angle, axis);	
    
-   float root_num_samples = std::sqrt(num_samples);
+   float root_num_samples = std::max(std::sqrt(num_samples), 0.01f);
    float ratio = root_num_samples / num_samples;
 
    // Stratified samples 
